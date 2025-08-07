@@ -1,0 +1,28 @@
+// src/styles.fbs
+// The updated schema now understands both pre-compiled styles and dynamic generator rules.
+
+namespace StyleSchema;
+
+// A pre-compiled style with a class name and its CSS.
+table Style {
+  name: string (key);
+  css: string;
+}
+
+// A rule for generating styles on the fly (e.g., p-4, m-10).
+table Generator {
+  prefix: string;
+  property: string;
+  multiplier: float;
+  unit: string;
+}
+
+// The root configuration object that holds everything.
+// It contains a list of pre-compiled styles and a list of generator rules.
+table Config {
+  styles: [Style];
+  generators: [Generator];
+}
+
+// We define 'Config' as the new root type for our styles.bin file.
+root_type Config;
