@@ -1,6 +1,42 @@
 # Dx
 Enhance Developer Experience
 
+```md
+# Project: Tailwind to dx-styles.toml Transformation
+
+**Task Assigned By:** manfromexistence
+**Date:** August 7, 2025
+**Status:** Awaiting `tailwind_classes.json` input file.
+
+## 1. Objective
+
+The primary goal is to process a comprehensive JSON file containing all Tailwind CSS utility classes and their corresponding CSS rules. This data must then be intelligently sorted and formatted into a new `dx-styles.toml` file, adhering to its specific structural rules for static, dynamic, and generated utilities.
+
+This task is a core part of building the `dx-styles` engine for the **dx** project.
+
+---
+
+## 2. Input Assets
+
+1.  **`tailwind_classes.json` (To be provided)**: A large JSON object where keys are the Tailwind CSS class names (e.g., `"p-4"`) and values are their complete CSS definitions (e.g., `"padding: 1rem;"`).
+2.  **`dx-styles.toml` (Target Schema)**: The output file must follow this TOML structure.
+
+### Target TOML Schema Example:
+
+```toml
+# [static]: For one-off, unchanging classes.
+[static]
+flex = "display: flex;"
+h-full = "height: 100%;"
+
+# [dynamic]: For classes with a common prefix and a non-numeric scale.
+[dynamic]
+"text|font-size" = { xs = "0.75rem", sm = "0.875rem", base = "1rem" }
+
+# [generators]: For classes generated from any number.
+[generators]
+"p|padding" = { multiplier = 0.25, unit = "rem" }
+```
 
 ```bash
 echo "Item                                     (Size)      (Files)     (Folders)"
