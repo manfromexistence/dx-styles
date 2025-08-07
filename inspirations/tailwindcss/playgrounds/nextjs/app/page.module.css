@@ -1,5 +1,0 @@
-@reference "./globals.css";
-
-.heading {
-  @apply skew-7;
-}
