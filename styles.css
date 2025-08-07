@@ -2,17 +2,23 @@
     display: flex;
 }
 .font-bold {
-    font-weight: 700;
+    font-weight: 700;;
+}
+.grid {
+    display: grid;
 }
 .h-full {
-    height: 100%;
+    height: 100%;;
 }
 .items-center {
-    align-items: center;
+    align-items: center;;
 }
 .justify-center {
-    justify-content: center;
+    justify-content: center;;
+}
+.text-3xl {
+    font-size: 1.875rem;;
 }
 .w-full {
-    width: 100%;
+    width: 100%;;
 }

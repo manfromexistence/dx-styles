@@ -1,4 +1,5 @@
 # A more efficient and powerful way to define your CSS utilities.
+# Generated from Tailwind CSS data for the dx project.
 
 # -----------------------------------------------------------------------------
 # [static]
@@ -6,47 +7,353 @@
 # Format: class-name = "css-rule"
 # -----------------------------------------------------------------------------
 [static]
-flex           = "display: flex;"
-border         = "border: 1px solid #e2e8f0;"
-shadow         = "box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);"
-h-full         = "height: 100%;"
-w-full         = "width: 100%;"
-items-center   = "align-items: center;"
-justify-center = "justify-content: center;"
-font-bold      = "font-weight: 700;"
+aspect-auto = "aspect-ratio: auto;"
+aspect-square = "aspect-ratio: 1 / 1;"
+aspect-video = "aspect-ratio: 16 / 9;"
+container = "width: 100%;"
+columns-auto = "columns: auto;"
+break-after-auto = "break-after: auto;"
+break-after-avoid = "break-after: avoid;"
+break-after-all = "break-after: all;"
+break-after-avoid-page = "break-after: avoid-page;"
+break-after-page = "break-after: page;"
+break-after-left = "break-after: left;"
+break-after-right = "break-after: right;"
+break-after-column = "break-after: column;"
+break-before-auto = "break-before: auto;"
+break-before-avoid = "break-before: avoid;"
+break-before-all = "break-before: all;"
+break-before-avoid-page = "break-before: avoid-page;"
+break-before-page = "break-before: page;"
+break-before-left = "break-before: left;"
+break-before-right = "break-before: right;"
+break-before-column = "break-before: column;"
+break-inside-auto = "break-inside: auto;"
+break-inside-avoid = "break-inside: avoid;"
+break-inside-avoid-page = "break-inside: avoid-page;"
+break-inside-column = "break-inside: column;"
+decoration-slice = "box-decoration-break: slice;"
+decoration-clone = "box-decoration-break: clone;"
+box-border = "box-sizing: border-box;"
+box-content = "box-sizing: content-box;"
+block = "display: block;"
+inline-block = "display: inline-block;"
+inline = "display: inline;"
+flex = "display: flex;"
+inline-flex = "display: inline-flex;"
+table = "display: table;"
+inline-table = "display: inline-table;"
+table-caption = "display: table-caption;"
+table-cell = "display: table-cell;"
+table-column = "display: table-column;"
+table-column-group = "display: table-column-group;"
+table-footer-group = "display: table-footer-group;"
+table-header-group = "display: table-header-group;"
+table-row-group = "display: table-row-group;"
+table-row = "display: table-row;"
+flow-root = "display: flow-root;"
+grid = "display: grid;"
+inline-grid = "display: inline-grid;"
+contents = "display: contents;"
+list-item = "display: list-item;"
+hidden = "display: none;"
+isolate = "isolation: isolate;"
+isolate-auto = "isolation: auto;"
+static = "position: static;"
+fixed = "position: fixed;"
+absolute = "position: absolute;"
+relative = "position: relative;"
+sticky = "position: sticky;"
+visible = "visibility: visible;"
+invisible = "visibility: hidden;"
+p-px = "padding: 1px;"
+py-px = "padding-top: 1px; padding-bottom: 1px;"
+px-px = "padding-left: 1px; padding-right: 1px;"
+pt-px = "padding-top: 1px;"
+pr-px = "padding-right: 1px;"
+pb-px = "padding-bottom: 1px;"
+pl-px = "padding-left: 1px;"
+m-px = "margin: 1px;"
+my-px = "margin-top: 1px; margin-bottom: 1px;"
+mx-px = "margin-left: 1px; margin-right: 1px;"
+mt-px = "margin-top: 1px;"
+mr-px = "margin-right: 1px;"
+mb-px = "margin-bottom: 1px;"
+ml-px = "margin-left: 1px;"
+"-m-px" = "margin: -1px;"
+"-my-px" = "margin-top: -1px; margin-bottom: -1px;"
+"-mx-px" = "margin-left: -1px; margin-right: -1px;"
+"-mt-px" = "margin-top: -1px;"
+"-mr-px" = "margin-right: -1px;"
+"-mb-px" = "margin-bottom: -1px;"
+"-ml-px" = "margin-left: -1px;"
+space-x-px = "margin-left: 1px;"
+"-space-x-px" = "margin-left: -1px;"
+space-y-px = "margin-top: 1px;"
+"-space-y-px" = "margin-top: -1px;"
+space-x-reverse = "--space-x-reverse: 1;"
+space-y-reverse = "--space-y-reverse: 1;"
+basis-auto = "flex-basis: auto;"
+basis-px = "flex-basis: 1px;"
+flex-row = "flex-direction: row;"
+flex-row-reverse = "flex-direction: row-reverse;"
+flex-col = "flex-direction: column;"
+flex-col-reverse = "flex-direction: column-reverse;"
+flex-nowrap = "flex-wrap: nowrap;"
+flex-wrap = "flex-wrap: wrap;"
+flex-wrap-reverse = "flex-wrap: wrap-reverse;"
+flex-1 = "flex: 1 1 0%;"
+flex-auto = "flex: 1 1 auto;"
+flex-initial = "flex: 0 1 auto;"
+flex-none = "flex: none;"
+grow = "flex-grow: 1;"
+grow-0 = "flex-grow: 0;"
+shrink = "flex-shrink: 1;"
+shrink-0 = "flex-shrink: 0;"
+col-auto = "grid-column: auto;"
+row-auto = "grid-row: auto;"
+antialiased = "-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;"
+subpixel-antialiased = "-webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto;"
+italic = "font-style: italic;"
+not-italic = "font-style: normal;"
+normal-nums = "font-variant-numeric: normal;"
+ordinal = "font-variant-numeric: ordinal;"
+slashed-zero = "font-variant-numeric: slashed-zero;"
+lining-nums = "font-variant-numeric: lining-nums;"
+oldstyle-nums = "font-variant-numeric: oldstyle-nums;"
+proportional-nums = "font-variant-numeric: proportional-nums;"
+tabular-nums = "font-variant-numeric: tabular-nums;"
+diagonal-fractions = "font-variant-numeric: diagonal-fractions;"
+stacked-fractions = "font-variant-numeric: stacked-fractions;"
+list-none = "list-style-type: none;"
+list-disc = "list-style-type: disc;"
+list-decimal = "list-style-type: decimal;"
+list-inside = "list-style-position: inside;"
+list-outside = "list-style-position: outside;"
+underline = "text-decoration: underline;"
+overline = "text-decoration: overline;"
+line-through = "text-decoration: line-through;"
+no-underline = "text-decoration: none;"
+uppercase = "text-transform: uppercase;"
+lowercase = "text-transform: lowercase;"
+capitalize = "text-transform: capitalize;"
+normal-case = "text-transform: none;"
+truncate = "overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+text-ellipsis = "text-overflow: ellipsis;"
+text-clip = "text-overflow: clip;"
+whitespace-normal = "white-space: normal;"
+whitespace-nowrap = "white-space: nowrap;"
+whitespace-pre = "white-space: pre;"
+whitespace-pre-line = "white-space: pre-line;"
+whitespace-pre-wrap = "white-space: pre-wrap;"
+break-normal = "overflow-wrap: normal; word-break: normal;"
+break-words = "overflow-wrap: break-word;"
+break-all = "word-break: break-all;"
+content-none = "content: none;"
+bg-fixed = "background-attachment: fixed;"
+bg-local = "background-attachment: local;"
+bg-scroll = "background-attachment: scroll;"
+bg-clip-border = "background-clip: border-box;"
+bg-clip-padding = "background-clip: padding-box;"
+bg-clip-content = "background-clip: content-box;"
+bg-clip-text = "background-clip: text;"
+bg-origin-border = "background-origin: border-box;"
+bg-origin-padding = "background-origin: padding-box;"
+bg-origin-content = "background-origin: content-box;"
+bg-repeat = "background-repeat: repeat;"
+bg-no-repeat = "background-repeat: no-repeat;"
+bg-repeat-x = "background-repeat: repeat-x;"
+bg-repeat-y = "background-repeat: repeat-y;"
+bg-repeat-round = "background-repeat: round;"
+bg-repeat-space = "background-repeat: space;"
+bg-auto = "background-size: auto;"
+bg-cover = "background-size: cover;"
+bg-contain = "background-size: contain;"
+bg-none = "background-image: none;"
+ring-inset = "--tw-ring-inset: inset;"
+border-collapse = "border-collapse: collapse;"
+border-separate = "border-collapse: separate;"
+table-auto = "table-layout: auto;"
+table-fixed = "table-layout: fixed;"
+appearance-none = "appearance: none;"
+resize-none = "resize: none;"
+resize = "resize: both;"
+resize-y = "resize: vertical;"
+resize-x = "resize: horizontal;"
+sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
+not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
 
 # -----------------------------------------------------------------------------
 # [dynamic]
-# For classes that have a non-numeric or irregular scale. This is much cleaner now!
+# For classes that have a non-numeric or irregular scale.
 # Format: "prefix|css-property" = { suffix = "css-value", ... }
-# Example: "text|font-size" with suffix "xl" generates ".text-xl { font-size: 1.25rem; }"
 # -----------------------------------------------------------------------------
 [dynamic]
-"text|font-size" = { xs = "0.75rem", sm = "0.875rem", base = "1rem", lg = "1.125rem", xl = "1.25rem" }
-"rounded|border-radius" = { sm = "0.125rem", md = "0.375rem", lg = "0.5rem", full = "9999px" }
+"float|float" = { right = "right;", left = "left;", none = "none;" }
+"clear|clear" = { left = "left;", right = "right;", both = "both;", none = "none;" }
+"object-fit|object-fit" = { contain = "contain;", cover = "cover;", fill = "fill;", none = "none;", "scale-down" = "scale-down;" }
+"object-position|object-position" = { bottom = "bottom;", center = "center;", left = "left;", "left-bottom" = "left bottom;", "left-top" = "left top;", right = "right;", "right-bottom" = "right bottom;", "right-top" = "right top;", top = "top;" }
+"overflow|overflow" = { auto = "auto;", hidden = "hidden;", visible = "visible;", scroll = "scroll;" }
+"overflow-x|overflow-x" = { auto = "auto;", hidden = "hidden;", visible = "visible;", scroll = "scroll;" }
+"overflow-y|overflow-y" = { auto = "auto;", hidden = "hidden;", visible = "visible;", scroll = "scroll;" }
+"scrolling|-webkit-overflow-scrolling" = { touch = "touch;", auto = "auto;" }
+"overscroll|overscroll-behavior" = { auto = "auto;", contain = "contain;", none = "none;" }
+"overscroll-y|overscroll-behavior-y" = { auto = "auto;", contain = "contain;", none = "none;" }
+"overscroll-x|overscroll-behavior-x" = { auto = "auto;", contain = "contain;", none = "none;" }
+"inset|top,right,bottom,left" = { auto = "auto; auto; auto; auto;", "1/2" = "50%; 50%; 50%; 50%;", "1/3" = "33.333333%; 33.333333%; 33.333333%; 33.333333%;", "2/3" = "66.666667%; 66.666667%; 66.666667%; 66.666667%;", "1/4" = "25%; 25%; 25%; 25%;", "2/4" = "50%; 50%; 50%; 50%;", "3/4" = "75%; 75%; 75%; 75%;", full = "100%; 100%; 100%; 100%;" }
+"inset-y|top,bottom" = { auto = "auto; auto;", "1/2" = "50%; 50%;", "1/3" = "33.333333%; 33.333333%;", "2/3" = "66.666667%; 66.666667%;", "1/4" = "25%; 25%;", "2/4" = "50%; 50%;", "3/4" = "75%; 75%;", full = "100%; 100%;" }
+"inset-x|right,left" = { auto = "auto; auto;", "1/2" = "50%; 50%;", "1/3" = "33.333333%; 33.333333%;", "2/3" = "66.666667%; 66.666667%;", "1/4" = "25%; 25%;", "2/4" = "50%; 50%;", "3/4" = "75%; 75%;", full = "100%; 100%;" }
+"top|top" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", full = "100%;" }
+"right|right" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", full = "100%;" }
+"bottom|bottom" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", full = "100%;" }
+"left|left" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", full = "100%;" }
+"z|z-index" = { auto = "auto;" }
+"basis|flex-basis" = { "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", "1/5" = "20%;", "2/5" = "40%;", "3/5" = "60%;", "4/5" = "80%;", "1/6" = "16.666667%;", "2/6" = "33.333333%;", "3/6" = "50%;", "4/6" = "66.666667%;", "5/6" = "83.333333%;", "1/12" = "8.333333%;", "2/12" = "16.666667%;", "3/12" = "25%;", "4/12" = "33.333333%;", "5/12" = "41.666667%;", "6/12" = "50%;", "7/12" = "58.333333%;", "8/12" = "66.666667%;", "9/12" = "75%;", "10/12" = "83.333333%;", "11/12" = "91.666667%;", full = "100%;" }
+"grid-cols|grid-template-columns" = { none = "none;" }
+"grid-rows|grid-template-rows" = { none = "none;" }
+"grid-flow|grid-auto-flow" = { row = "row;", col = "column;", "row-dense" = "row dense;", "col-dense" = "column dense;" }
+"auto-cols|grid-auto-columns" = { auto = "auto;", min = "min-content;", max = "max-content;", fr = "minmax(0, 1fr);" }
+"auto-rows|grid-auto-rows" = { auto = "auto;", min = "min-content;", max = "max-content;", fr = "minmax(0, 1fr);" }
+"justify|justify-content" = { start = "flex-start;", center = "center;", end = "flex-end;", between = "space-between;", around = "space-around;", evenly = "space-evenly;" }
+"justify-items|justify-items" = { stretch = "stretch;", start = "start;", center = "center;", end = "end;" }
+"justify-self|justify-self" = { stretch = "stretch;", start = "start;", center = "center;", end = "end;", auto = "auto;" }
+"content|align-content" = { start = "flex-start;", center = "center;", end = "flex-end;", between = "space-between;", around = "space-around;", evenly = "space-evenly;" }
+"items|align-items" = { stretch = "stretch;", start = "flex-start;", center = "center;", end = "flex-end;", baseline = "baseline;" }
+"self|align-self" = { auto = "auto;", start = "flex-start;", center = "center;", end = "flex-end;", stretch = "stretch;", baseline = "baseline;" }
+"place-content|place-content" = { start = "start;", center = "center;", end = "end;", between = "space-between;", around = "space-around;", evenly = "space-evenly;", stretch = "stretch;" }
+"place-items|place-items" = { stretch = "stretch;", start = "start;", center = "center;", end = "end;" }
+"place-self|place-self" = { auto = "auto;", start = "start;", center = "center;", end = "end;", stretch = "stretch;" }
+"w|width" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", "1/5" = "20%;", "2/5" = "40%;", "3/5" = "60%;", "4/5" = "80%;", "1/6" = "16.666667%;", "2/6" = "33.333333%;", "3/6" = "50%;", "4/6" = "66.666667%;", "5/6" = "83.333333%;", "1/12" = "8.333333%;", "2/12" = "16.666667%;", "3/12" = "25%;", "4/12" = "33.333333%;", "5/12" = "41.666667%;", "6/12" = "50%;", "7/12" = "58.333333%;", "8/12" = "66.666667%;", "9/12" = "75%;", "10/12" = "83.333333%;", "11/12" = "91.666667%;", full = "100%;", screen = "100vw;", min = "min-content;", max = "max-content;", fit = "fit-content;" }
+"min-w|min-width" = { "0" = "0px;", full = "100%;", min = "min-content;", max = "max-content;", fit = "fit-content;" }
+"max-w|max-width" = { "0" = "0rem;", none = "none;", xs = "20rem;", sm = "24rem;", md = "28rem;", lg = "32rem;", xl = "36rem;", "2xl" = "42rem;", "3xl" = "48rem;", "4xl" = "56rem;", "5xl" = "64rem;", "6xl" = "72rem;", "7xl" = "80rem;", full = "100%;", min = "min-content;", max = "max-content;", fit = "fit-content;", prose = "65ch;", "screen-sm" = "640px;", "screen-md" = "768px;", "screen-lg" = "1024px;", "screen-xl" = "1280px;", "screen-2xl" = "1536px;" }
+"h|height" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", "1/5" = "20%;", "2/5" = "40%;", "3/5" = "60%;", "4/5" = "80%;", "1/6" = "16.666667%;", "2/6" = "33.333333%;", "3/6" = "50%;", "4/6" = "66.666667%;", "5/6" = "83.333333%;", full = "100%;", screen = "100vh;", min = "min-content;", max = "max-content;", fit = "fit-content;" }
+"min-h|min-height" = { "0" = "0px;", full = "100%;", screen = "100vh;", min = "min-content;", max = "max-content;", fit = "fit-content;" }
+"max-h|max-height" = { full = "100%;", screen = "100vh;", min = "min-content;", max = "max-content;", fit = "fit-content;" }
+"font|font-family" = { sans = "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";", serif = "Georgia, Cambria, \"Times New Roman\", Times, serif;", mono = "Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;" }
+"text|font-size" = { xs = "0.75rem;", sm = "0.875rem;", base = "1rem;", lg = "1.125rem;", xl = "1.25rem;", "2xl" = "1.5rem;", "3xl" = "1.875rem;", "4xl" = "2.25rem;", "5xl" = "3rem;", "6xl" = "3.75rem;", "7xl" = "4.5rem;", "8xl" = "6rem;", "9xl" = "8rem;" }
+"font|font-weight" = { thin = "100;", extralight = "200;", light = "300;", normal = "400;", medium = "500;", semibold = "600;", bold = "700;", extrabold = "800;", black = "900;" }
+"tracking|letter-spacing" = { tighter = "-0.05em;", tight = "-0.025em;", normal = "0em;", wide = "0.025em;", wider = "0.05em;", widest = "0.1em;" }
+"leading|line-height" = { none = "1;", tight = "1.25;", snug = "1.375;", normal = "1.5;", relaxed = "1.625;", loose = "2;" }
+"text-align|text-align" = { left = "left;", center = "center;", right = "right;", justify = "justify;" }
+"decoration|text-decoration-style" = { solid = "solid;", double = "double;", dotted = "dotted;", dashed = "dashed;", wavy = "wavy;" }
+"align|vertical-align" = { baseline = "baseline;", top = "top;", middle = "middle;", bottom = "bottom;", "text-top" = "text-top;", "text-bottom" = "text-bottom;", sub = "sub;", super = "super;" }
+"bg-gradient-to|background-image" = { t = "linear-gradient(to top, var(--tw-gradient-stops));", tr = "linear-gradient(to top right, var(--tw-gradient-stops));", r = "linear-gradient(to right, var(--tw-gradient-stops));", br = "linear-gradient(to bottom right, var(--tw-gradient-stops));", b = "linear-gradient(to bottom, var(--tw-gradient-stops));", bl = "linear-gradient(to bottom left, var(--tw-gradient-stops));", l = "linear-gradient(to left, var(--tw-gradient-stops));", tl = "linear-gradient(to top left, var(--tw-gradient-stops));" }
+"transition|transition-property" = { "" = "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;", none = "none;", all = "all;", colors = "color, background-color, border-color, text-decoration-color, fill, stroke;", opacity = "opacity;", shadow = "box-shadow;", transform = "transform;" }
+"ease|transition-timing-function" = { linear = "linear;", in = "cubic-bezier(0.4, 0, 1, 1);", out = "cubic-bezier(0, 0, 0.2, 1);", "in-out" = "cubic-bezier(0.4, 0, 0.2, 1);" }
+"animate|animation" = { none = "none;", spin = "spin 1s linear infinite;", ping = "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;", pulse = "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;", bounce = "bounce 1s infinite;" }
+"origin|transform-origin" = { center = "center;", top = "top;", "top-right" = "top right;", right = "right;", "bottom-right" = "bottom right;", bottom = "bottom;", "bottom-left" = "bottom left;", left = "left;", "top-left" = "top left;" }
+"cursor|cursor" = { auto = "auto;", default = "default;", pointer = "pointer;", wait = "wait;", text = "text;", move = "move;", help = "help;", "not-allowed" = "not-allowed;", none = "none;", "context-menu" = "context-menu;", progress = "progress;", cell = "cell;", crosshair = "crosshair;", "vertical-text" = "vertical-text;", alias = "alias;", copy = "copy;", "no-drop" = "no-drop;", grab = "grab;", grabbing = "grabbing;", "all-scroll" = "all-scroll;", "col-resize" = "col-resize;", "row-resize" = "row-resize;", "n-resize" = "n-resize;", "e-resize" = "e-resize;", "s-resize" = "s-resize;", "w-resize" = "w-resize;", "ne-resize" = "ne-resize;", "nw-resize" = "nw-resize;", "se-resize" = "se-resize;", "sw-resize" = "sw-resize;", "ew-resize" = "ew-resize;", "ns-resize" = "ns-resize;", "nesw-resize" = "nesw-resize;", "nwse-resize" = "nwse-resize;", "zoom-in" = "zoom-in;", "zoom-out" = "zoom-out;" }
+"pointer-events|pointer-events" = { none = "none;", auto = "auto;" }
+"scroll|scroll-behavior" = { auto = "auto;", smooth = "smooth;" }
+"snap|scroll-snap-align" = { start = "start;", end = "end;", center = "center;", "align-none" = "none;" }
+"snap|scroll-snap-stop" = { normal = "normal;", always = "always;" }
+"snap|scroll-snap-type" = { none = "none;", x = "x var(--tw-scroll-snap-strictness);", y = "y var(--tw-scroll-snap-strictness);", both = "both var(--tw-scroll-snap-strictness);", mandatory = "--tw-scroll-snap-strictness: mandatory;", proximity = "--tw-scroll-snap-strictness: proximity;" }
+"touch|touch-action" = { auto = "auto;", none = "none;", "pan-x" = "pan-x;", "pan-left" = "pan-left;", "pan-right" = "pan-right;", "pan-y" = "pan-y;", "pan-up" = "pan-up;", "pan-down" = "pan-down;", "pinch-zoom" = "pinch-zoom;", manipulation = "manipulation;" }
+"select|user-select" = { none = "none;", text = "text;", all = "all;", auto = "auto;" }
+"will-change|will-change" = { auto = "auto;", scroll = "scroll-position;", contents = "contents;", transform = "transform;" }
+"fill|fill" = { current = "currentColor;" }
+"stroke|stroke" = { current = "currentColor;" }
+"border|border-style" = { solid = "solid;", dashed = "dashed;", dotted = "dotted;", double = "double;", hidden = "hidden;", none = "none;" }
+"divide|border-style" = { solid = "solid;", dashed = "dashed;", dotted = "dotted;", double = "double;", none = "none;" }
+"outline|outline-style" = { "" = "solid;", dashed = "dashed;", dotted = "dotted;", double = "double;", none = "2px solid transparent; outline-offset: 2px;" }
+"shadow|box-shadow" = { sm = "0 1px 2px 0 rgba(0, 0, 0, 0.05);", "" = "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);", md = "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);", lg = "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);", xl = "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);", "2xl" = "0 25px 50px -12px rgba(0, 0, 0, 0.25);", inner = "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);", none = "none;" }
+"mix-blend|mix-blend-mode" = { normal = "normal;", multiply = "multiply;", screen = "screen;", overlay = "overlay;", darken = "darken;", lighten = "lighten;", "color-dodge" = "color-dodge;", "color-burn" = "color-burn;", "hard-light" = "hard-light;", "soft-light" = "soft-light;", difference = "difference;", exclusion = "exclusion;", hue = "hue;", saturation = "saturation;", color = "color;", luminosity = "luminosity;" }
+"bg-blend|background-blend-mode" = { normal = "normal;", multiply = "multiply;", screen = "screen;", overlay = "overlay;", darken = "darken;", lighten = "lighten;", "color-dodge" = "color-dodge;", "color-burn" = "color-burn;", "hard-light" = "hard-light;", "soft-light" = "soft-light;", difference = "difference;", exclusion = "exclusion;", hue = "hue;", saturation = "saturation;", color = "color;", luminosity = "luminosity;" }
+"blur|filter" = { none = "blur(0);", sm = "blur(4px);", "" = "blur(8px);", md = "blur(12px);", lg = "blur(16px);", xl = "blur(24px);", "2xl" = "blur(40px);", "3xl" = "blur(64px);" }
+"grayscale|filter" = { "0" = "grayscale(0);", "" = "grayscale(100%);" }
+"invert|filter" = { "0" = "invert(0);", "" = "invert(100%);" }
+"sepia|filter" = { "0" = "sepia(0);", "" = "sepia(100%);" }
+"backdrop-blur|backdrop-filter" = { none = "blur(0);", sm = "blur(4px);", "" = "blur(8px);", md = "blur(12px);", lg = "blur(16px);", xl = "blur(24px);", "2xl" = "blur(40px);", "3xl" = "blur(64px);" }
+"backdrop-grayscale|backdrop-filter" = { "0" = "grayscale(0);", "" = "grayscale(100%);" }
+"backdrop-invert|backdrop-filter" = { "0" = "invert(0);", "" = "invert(100%);" }
+"backdrop-sepia|backdrop-filter" = { "0" = "sepia(0);", "" = "sepia(100%);" }
 
 # -----------------------------------------------------------------------------
 # [generators]
-# This is the super-powerful new part for your calculated styles!
 # For classes that are generated from any number you want.
 # Format: "prefix|css-property" = { multiplier = <number>, unit = "<css-unit>" }
-#
-# How it works:
-# A class like "p-10" will be calculated as: 10 * multiplier, with the unit appended.
-#
-# Example with the 'p' rule below (where 1 unit = 0.25rem, or 4px):
-# .p-4   -> padding: 1rem;   (because 4 * 0.25 = 1)
-# .p-10  -> padding: 2.5rem;  (because 10 * 0.25 = 2.5)
-# .p-100 -> padding: 25rem;   (because 100 * 0.25 = 25)
 # -----------------------------------------------------------------------------
 [generators]
-"p|padding"         = { multiplier = 0.25, unit = "rem" }
-"m|margin"          = { multiplier = 0.25, unit = "rem" }
-"w|width"           = { multiplier = 0.25, unit = "rem" } # For rem-based width
-"h|height"          = { multiplier = 0.25, unit = "rem" } # For rem-based height
-"gap|gap"           = { multiplier = 0.25, unit = "rem" }
-"top|top"           = { multiplier = 0.25, unit = "rem" }
-"left|left"         = { multiplier = 0.25, unit = "rem" }
-"right|right"       = { multiplier = 0.25, unit = "rem" }
-"bottom|bottom"     = { multiplier = 0.25, unit = "rem" }
-"text|font-size"    = { multiplier = 1, unit = "px" } # For arbitrary pixel sizes, e.g., .text-14
+"columns|columns" = { multiplier = 1, unit = "" }
+"p|padding" = { multiplier = 0.25, unit = "rem" }
+"pt|padding-top" = { multiplier = 0.25, unit = "rem" }
+"pr|padding-right" = { multiplier = 0.25, unit = "rem" }
+"pb|padding-bottom" = { multiplier = 0.25, unit = "rem" }
+"pl|padding-left" = { multiplier = 0.25, unit = "rem" }
+"m|margin" = { multiplier = 0.25, unit = "rem" }
+"mt|margin-top" = { multiplier = 0.25, unit = "rem" }
+"mr|margin-right" = { multiplier = 0.25, unit = "rem" }
+"mb|margin-bottom" = { multiplier = 0.25, unit = "rem" }
+"ml|margin-left" = { multiplier = 0.25, unit = "rem" }
+"-m|margin" = { multiplier = -0.25, unit = "rem" }
+"-mt|margin-top" = { multiplier = -0.25, unit = "rem" }
+"-mr|margin-right" = { multiplier = -0.25, unit = "rem" }
+"-mb|margin-bottom" = { multiplier = -0.25, unit = "rem" }
+"-ml|margin-left" = { multiplier = -0.25, unit = "rem" }
+"space-x|--space-x-reverse,margin-left" = { multiplier = 0.25, unit = "rem" }
+"space-y|--space-y-reverse,margin-top" = { multiplier = 0.25, unit = "rem" }
+"-space-x|--space-x-reverse,margin-left" = { multiplier = -0.25, unit = "rem" }
+"-space-y|--space-y-reverse,margin-top" = { multiplier = -0.25, unit = "rem" }
+"order|order" = { multiplier = 1, unit = "" }
+"col-span|grid-column" = { multiplier = 1, unit = "" }
+"col-start|grid-column-start" = { multiplier = 1, unit = "" }
+"col-end|grid-column-end" = { multiplier = 1, unit = "" }
+"row-span|grid-row" = { multiplier = 1, unit = "" }
+"row-start|grid-row-start" = { multiplier = 1, unit = "" }
+"row-end|grid-row-end" = { multiplier = 1, unit = "" }
+"gap|gap" = { multiplier = 0.25, unit = "rem" }
+"gap-x|column-gap" = { multiplier = 0.25, unit = "rem" }
+"gap-y|row-gap" = { multiplier = 0.25, unit = "rem" }
+"w|width" = { multiplier = 0.25, unit = "rem" }
+"h|height" = { multiplier = 0.25, unit = "rem" }
+"max-h|max-height" = { multiplier = 0.25, unit = "rem" }
+"leading|line-height" = { multiplier = 0.25, unit = "rem" }
+"border|border-width" = { multiplier = 1, unit = "px" }
+"border-t|border-top-width" = { multiplier = 1, unit = "px" }
+"border-r|border-right-width" = { multiplier = 1, unit = "px" }
+"border-b|border-bottom-width" = { multiplier = 1, unit = "px" }
+"border-l|border-left-width" = { multiplier = 1, unit = "px" }
+"divide-x|border-left-width" = { multiplier = 1, unit = "px" }
+"divide-y|border-top-width" = { multiplier = 1, unit = "px" }
+"outline|outline-width" = { multiplier = 1, unit = "px" }
+"outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
+"ring|--tw-ring-offset-shadow, --tw-ring-shadow, box-shadow" = { multiplier = 1, unit = "px" }
+"ring-offset|--tw-ring-offset-width" = { multiplier = 1, unit = "px" }
+"duration|transition-duration" = { multiplier = 1, unit = "ms" }
+"delay|transition-delay" = { multiplier = 1, unit = "ms" }
+"scale|--transform-scale-x, --transform-scale-y" = { multiplier = 0.01, unit = "" }
+"scale-x|--transform-scale-x" = { multiplier = 0.01, unit = "" }
+"scale-y|--transform-scale-y" = { multiplier = 0.01, unit = "" }
+"rotate|--transform-rotate" = { multiplier = 1, unit = "deg" }
+"-rotate|--transform-rotate" = { multiplier = -1, unit = "deg" }
+"translate-x|--transform-translate-x" = { multiplier = 0.25, unit = "rem" }
+"-translate-x|--transform-translate-x" = { multiplier = -0.25, unit = "rem" }
+"translate-y|--transform-translate-y" = { multiplier = 0.25, unit = "rem" }
+"-translate-y|--transform-translate-y" = { multiplier = -0.25, unit = "rem" }
+"skew-x|--transform-skew-x" = { multiplier = 1, unit = "deg" }
+"-skew-x|--transform-skew-x" = { multiplier = -1, unit = "deg" }
+"skew-y|--transform-skew-y" = { multiplier = 1, unit = "deg" }
+"-skew-y|--transform-skew-y" = { multiplier = -1, unit = "deg" }
+"scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
+"scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
+"scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
+"scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
+"scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
+"scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
+"scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
+"scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
+"scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
+"scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
+"stroke|stroke-width" = { multiplier = 1, unit = "" }
+"opacity|opacity" = { multiplier = 0.01, unit = "" }
+"brightness|filter" = { multiplier = 0.01, unit = "" }
+"contrast|filter" = { multiplier = 0.01, unit = "" }
+"hue-rotate|filter" = { multiplier = 1, unit = "deg" }
+"-hue-rotate|filter" = { multiplier = -1, unit = "deg" }
+"saturate|filter" = { multiplier = 0.01, unit = "" }
+"backdrop-opacity|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
+"-backdrop-hue-rotate|backdrop-filter" = { multiplier = -1, unit = "deg" }
+"backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
