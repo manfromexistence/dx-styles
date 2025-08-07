@@ -1,0 +1,54 @@
+{
+  "name": "@tailwindcss/upgrade",
+  "version": "4.1.11",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "packages/@tailwindcss-cli"
+  },
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "build": "tsup-node",
+    "dev": "pnpm run build -- --watch"
+  },
+  "bin": "./dist/index.mjs",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "dependencies": {
+    "@tailwindcss/node": "workspace:*",
+    "@tailwindcss/oxide": "workspace:*",
+    "braces": "^3.0.3",
+    "dedent": "1.6.0",
+    "enhanced-resolve": "^5.18.2",
+    "globby": "^14.1.0",
+    "jiti": "^2.0.0-beta.3",
+    "mri": "^1.2.0",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.4.41",
+    "postcss-import": "^16.1.1",
+    "postcss-selector-parser": "^7.1.0",
+    "prettier": "catalog:",
+    "semver": "^7.7.2",
+    "tailwindcss": "workspace:*",
+    "tree-sitter": "^0.22.4",
+    "tree-sitter-typescript": "^0.23.2"
+  },
+  "devDependencies": {
+    "@types/braces": "^3.0.5",
+    "@types/node": "catalog:",
+    "@types/postcss-import": "^14.0.3",
+    "@types/semver": "^7.7.0"
+  }
+}
