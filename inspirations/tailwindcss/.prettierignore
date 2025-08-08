@@ -1,8 +1,0 @@
-coverage/
-node_modules/
-pnpm-lock.yaml
-target/
-crates/node/index.d.ts
-crates/node/index.js
-.next
-.fingerprint
