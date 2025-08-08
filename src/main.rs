@@ -23,7 +23,7 @@ fn main() {
     println!("{}", "✅ Dx Styles initialized with new Style Engine.".bold().green());
 
     let dir = PathBuf::from("src");
-    let output_file = PathBuf::from(".").join("styles.css");
+    let output_file = PathBuf::from(".").join("src/www/styles/globals.css");
 
     let mut file_classnames: HashMap<PathBuf, HashSet<String>> = HashMap::new();
     let mut classname_counts: HashMap<String, u32> = HashMap::new();
