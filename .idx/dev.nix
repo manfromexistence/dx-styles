@@ -5,6 +5,7 @@
     pkgs.rustup
     pkgs.flatbuffers
     pkgs.bun
+    pkgs.pnpm
   ];
   env = { };
   idx = {
