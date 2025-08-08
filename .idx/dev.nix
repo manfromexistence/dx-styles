@@ -17,7 +17,7 @@
     ];
     workspace = {
       onCreate = {
-        install = "rustup default stable && rustup update && cargo run";
+        install = "rustup default stable && rustup update && rustup target add wasm32-wasip1-threads && cargo update -p ctor && cargo run";
         default.openFiles = [
           "README.md"
         ];
