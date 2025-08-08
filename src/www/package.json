@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"next dev --turbopack\" \"cd .. && cd .. && cargo run --release\" ",
-    "next": "next dev",
+    "next": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
