@@ -1,0 +1,21 @@
+.flex {
+    display: flex;
+}
+.flex-col {
+    flex-direction: column;
+}
+.font-bold {
+    font-weight: 700;;
+}
+.items-center {
+    align-items: center;;
+}
+.justify-center {
+    justify-content: center;;
+}
+.text-3xl {
+    font-size: 1.875rem;;
+}
+.underline {
+    text-decoration: underline;
+}
