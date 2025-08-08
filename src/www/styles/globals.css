@@ -1,7 +1,36 @@
-/* @import "./dx.css"; */
-
-*{
-    box-sizing: border-box;
-    background: #000;
-    color: blue;
+.flex {
+    display: flex;
+}
+.font-bold {
+    font-weight: 700;;
+}
+.grid {
+    display: grid;
+}
+.h-full {
+    height: 100%;;
+}
+.items-center {
+    align-items: center;;
+}
+.justify-center {
+    justify-content: center;;
+}
+.justify-start {
+    justify-content: flex-start;;
+}
+.m-1 {
+    margin: 0.25rem;
+}
+.p-10 {
+    padding: 2.5rem;
+}
+.p-2 {
+    padding: 0.5rem;
+}
+.text-3xl {
+    font-size: 1.875rem;;
+}
+.w-full {
+    width: 100%;;
 }
