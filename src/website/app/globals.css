@@ -19,6 +19,9 @@
 .text-3xl {
     font-size: 1.875rem;;
 }
+.text-5xl {
+    font-size: 3rem;;
+}
 .underline {
     text-decoration: underline;
 }

@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="flex items-center justify-start">
-      <span className="text-3xl font-bold">Dx Styles</span>
+      <span className="text-5xl font-bold">Dx Styles</span>
     </div>
   );
 }
