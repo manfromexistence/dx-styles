@@ -14,9 +14,9 @@ pub fn process_file_change(
     let start = Instant::now();
     let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
     let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate classnames");
-    
-    if new_classnames.is_empty() && file_classnames.get(path).map_or(true, |existing| existing == &new_classnames) {
-        return; // Skip if no changes
+
+    if new_classnames.is_empty() {
+        return; // Skip if no new classnames
     }
 
     cache.update_from_classnames(path, &new_classnames).expect("Failed to update cache");
@@ -27,8 +27,8 @@ pub fn process_file_change(
         classname_counts,
         global_classnames,
     );
-    
-    if added_file > 0 || removed_file > 0 {
+
+    if (added_file > 0 || removed_file > 0) && !global_classnames.is_empty() {
         generator::generate_css(global_classnames, output_path, engine, file_classnames);
         utils::log_change(
             path,
@@ -53,7 +53,7 @@ pub fn process_file_remove(
     let start = Instant::now();
     let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
     let empty_classnames = HashSet::new();
-    
+
     if file_classnames.contains_key(path) {
         cache.update_from_classnames(path, &empty_classnames).expect("Failed to update cache");
         let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
@@ -63,8 +63,8 @@ pub fn process_file_remove(
             classname_counts,
             global_classnames,
         );
-        
-        if removed_file > 0 {
+
+        if removed_file > 0 && !global_classnames.is_empty() {
             generator::generate_css(global_classnames, output_path, engine, file_classnames);
             utils::log_change(
                 path,

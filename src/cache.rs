@@ -61,7 +61,7 @@ impl ClassnameCache {
                 })
                 .collect();
 
-            let tsx_files: Vec<PathBuf> = walkdir::WalkDir::new("src")
+            let tsx_files: Vec<PathBuf> = walkdir::WalkDir::new("inspirations/website")
                 .into_iter()
                 .filter_map(Result::ok)
                 .filter(|e| e.path().extension().map_or(false, |ext| ext == "tsx"))
@@ -220,6 +220,10 @@ impl ClassnameCache {
             .difference(&cached_classnames)
             .cloned()
             .collect();
+        
+        if !new_classnames.is_empty() {
+            self.set(path, &current_classnames)?;
+        }
         
         Ok(new_classnames)
     }

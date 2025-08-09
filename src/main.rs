@@ -17,7 +17,6 @@ mod utils;
 mod watcher;
 
 fn main() {
-    // Ensure styles.toml and styles.bin exist
     let styles_toml_path = PathBuf::from("styles.toml");
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
     if !styles_toml_path.exists() {
@@ -47,7 +46,6 @@ fn main() {
         }
     }
 
-    // Verify styles.bin is readable
     if fs::metadata(&styles_bin_path).is_err() {
         println!("{} styles.bin is not accessible in .dx directory.", "Error:".red());
         return;
@@ -76,22 +74,50 @@ fn main() {
         let results: Vec<_> = files.par_iter()
             .filter_map(|file| {
                 let new_classnames = cache.compare_and_generate(file).expect("Failed to compare and generate classnames");
-                cache.update_from_classnames(file, &new_classnames).expect("Failed to update cache");
                 if new_classnames.is_empty() {
                     None
                 } else {
-                    Some((file, new_classnames))
+                    cache.update_from_classnames(file, &new_classnames).expect("Failed to update cache");
+                    Some((file.to_path_buf(), new_classnames))
                 }
             })
             .collect();
         let mut total_added_in_files = 0;
+        let mut total_added_global = 0;
         for (file, new_classnames) in results {
-            let (added, _, _, _) = data_manager::update_class_maps(file, &new_classnames, &mut file_classnames, &mut classname_counts, &mut global_classnames);
-            total_added_in_files += added;
+            let start = Instant::now();
+            let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
+                &file,
+                &new_classnames,
+                &mut file_classnames,
+                &mut classname_counts,
+                &mut global_classnames,
+            );
+            total_added_in_files += added_file;
+            total_added_global += added_global;
+            if removed_file > 0 || added_global > 0 {
+                utils::log_change(
+                    &file,
+                    added_file,
+                    removed_file,
+                    &output_file,
+                    added_global,
+                    removed_global,
+                    start.elapsed().as_micros(),
+                );
+            }
         }
-        if total_added_in_files > 0 {
+        if (total_added_in_files > 0 || total_added_global > 0) && !global_classnames.is_empty() {
             generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
-            utils::log_change(&dir, total_added_in_files, 0, &output_file, global_classnames.len(), 0, scan_start.elapsed().as_micros());
+            utils::log_change(
+                &dir,
+                total_added_in_files,
+                0,
+                &output_file,
+                total_added_global,
+                0,
+                scan_start.elapsed().as_micros(),
+            );
         }
     } else {
         println!("{}", "No .tsx or .jsx files found in inspirations/website/.".yellow());

@@ -1,1 +1,19 @@
+.justify-start {
+  justify-content: flex-start;
+}
 
+.items-start {
+  align-items: flex-start;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.flex {
+  display: flex;
+}
+
+.text-5xl {
+  font-size: 3rem;
+}
