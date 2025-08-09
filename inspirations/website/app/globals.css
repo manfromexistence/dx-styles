@@ -1,9 +1,13 @@
-.font-bold {
-  font-weight: 700;
+.text-5xl {
+  font-size: 3rem;
 }
 
 .items-center {
   align-items: center;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 .flex {
@@ -12,8 +16,4 @@
 
 .justify-start {
   justify-content: flex-start;
-}
-
-.text-5xl {
-  font-size: 3rem;
 }
