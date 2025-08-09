@@ -1,3 +1,7 @@
+.font-bold {
+  font-weight: 700;
+}
+
 .items-center {
   align-items: center;
 }
@@ -6,14 +10,10 @@
   display: flex;
 }
 
-.font-bold {
-  font-weight: 700;
+.justify-start {
+  justify-content: flex-start;
 }
 
 .text-5xl {
   font-size: 3rem;
-}
-
-.justify-start {
-  justify-content: flex-start;
 }
