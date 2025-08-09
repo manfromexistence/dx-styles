@@ -59,7 +59,7 @@ fn main() {
         let property = parts[1];
         for (suffix, value) in values {
             let name = format!("{}-{}", prefix, suffix);
-            let css = format!("{}: {};", property, value);
+            let css = format!("{}: {}", property, value);
             precompiled_styles.push(StyleRecord { name, css });
         }
     }
