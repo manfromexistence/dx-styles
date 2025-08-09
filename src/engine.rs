@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 use std::fs;
+use lru::LruCache;
+use std::num::NonZeroUsize;
+use std::sync::Mutex;
 
 mod styles_generated {
     #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn)]
@@ -10,6 +13,7 @@ use styles_generated::style_schema;
 pub struct StyleEngine {
     precompiled: HashMap<String, String>,
     buffer: Vec<u8>,
+    css_cache: Mutex<LruCache<String, String>>,
 }
 
 impl StyleEngine {
@@ -30,12 +34,20 @@ impl StyleEngine {
         Ok(Self {
             precompiled,
             buffer,
+            css_cache: Mutex::new(LruCache::new(NonZeroUsize::new(1000).unwrap())),
         })
     }
 
     pub fn generate_css_for_class(&self, class_name: &str) -> Option<String> {
+        let mut css_cache = self.css_cache.lock().unwrap();
+        if let Some(cached_css) = css_cache.get(class_name) {
+            return Some(cached_css.clone());
+        }
+
         if let Some(css) = self.precompiled.get(class_name) {
-            return Some(format!(".{} {{\n    {}\n}}", class_name, css));
+            let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+            css_cache.put(class_name.to_string(), css_rule.clone());
+            return Some(css_rule);
         }
 
         let config = unsafe { flatbuffers::root_unchecked::<style_schema::Config>(&self.buffer) };
@@ -51,7 +63,9 @@ impl StyleEngine {
                         if let Ok(num_val) = value_str.parse::<f32>() {
                             let final_value = num_val * generator.multiplier();
                             let css = format!("{}: {}{};", property, final_value, unit);
-                            return Some(format!(".{} {{\n    {}\n}}", class_name, css));
+                            let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+                            css_cache.put(class_name.to_string(), css_rule.clone());
+                            return Some(css_rule);
                         }
                     }
                 }

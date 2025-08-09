@@ -5,8 +5,13 @@ use oxc_allocator::Allocator;
 use oxc_ast::ast::{self, ExportDefaultDeclarationKind, JSXAttributeItem, JSXOpeningElement, Program};
 use oxc_parser::Parser;
 use oxc_span::SourceType;
+use crate::cache::ClassnameCache;
 
-pub fn parse_classnames(path: &Path) -> HashSet<String> {
+pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> {
+    if let Some(cached_classnames) = cache.get(path) {
+        return cached_classnames;
+    }
+
     let source_text = match fs::read_to_string(path) {
         Ok(text) => text,
         Err(_) => return HashSet::new(),
@@ -21,6 +26,8 @@ pub fn parse_classnames(path: &Path) -> HashSet<String> {
 
     let mut visitor = ClassNameVisitor { class_names: HashSet::new() };
     visitor.visit_program(&ret.program);
+    
+    cache.set(path, &visitor.class_names).expect("Failed to cache classnames");
     visitor.class_names
 }
 

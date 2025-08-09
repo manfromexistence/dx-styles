@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-
 use flatbuffers::{FlatBufferBuilder, WIPOffset};
 use serde::Deserialize;
 
@@ -46,6 +45,13 @@ fn main() {
     let toml_content = fs::read_to_string(toml_path).expect("Failed to read styles.toml");
     let toml_data: TomlConfig = toml::from_str(&toml_content).expect("Failed to parse styles.toml");
 
+    for (key, _values) in &toml_data.dynamic {
+        let parts: Vec<&str> = key.split('|').collect();
+        if parts.len() != 2 {
+            panic!("Invalid dynamic key format in styles.toml: '{}'. Expected 'prefix|property'.", key);
+        }
+    }
+
     let mut precompiled_styles = Vec::new();
 
     for (name, css) in toml_data.static_styles {
@@ -54,12 +60,11 @@ fn main() {
 
     for (key, values) in toml_data.dynamic {
         let parts: Vec<&str> = key.split('|').collect();
-        if parts.len() != 2 { continue; }
         let prefix = parts[0];
         let property = parts[1];
         for (suffix, value) in values {
             let name = format!("{}-{}", prefix, suffix);
-            let css = format!("{}: {}", property, value);
+            let css = format!("{}: {};", property, value);
             precompiled_styles.push(StyleRecord { name, css });
         }
     }
