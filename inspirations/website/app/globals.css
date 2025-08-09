@@ -1,9 +1,9 @@
-.justify-start {
-  justify-content: flex-start;
-}
-
 .flex {
   display: flex;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .font-bold {
