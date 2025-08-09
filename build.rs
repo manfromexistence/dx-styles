@@ -27,17 +27,21 @@ struct StyleRecord {
 }
 
 fn main() {
-    let fbs_file = "src/styles.fbs";
+    let fbs_files = ["src/styles.fbs", "src/cache.fbs"];
     let toml_path = "styles.toml";
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
-    println!("cargo:rerun-if-changed={}", fbs_file);
+    for fbs_file in fbs_files.iter() {
+        println!("cargo:rerun-if-changed={}", fbs_file);
+    }
     println!("cargo:rerun-if-changed={}", toml_path);
 
+    let includes = vec![Path::new("src")];
     flatc_rust::run(flatc_rust::Args {
         lang: "rust",
-        inputs: &[Path::new(fbs_file)],
+        inputs: &fbs_files.iter().map(|s| Path::new(s)).collect::<Vec<_>>(),
         out_dir: Path::new(&out_dir),
+        includes: includes.as_slice(),
         ..Default::default()
     })
     .expect("flatc schema compilation failed");

@@ -2,18 +2,23 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::RwLock;
-use bincode::{deserialize, serialize};
-use serde::{Deserialize, Serialize};
+use flatbuffers::FlatBufferBuilder;
+use crate::cache_generated::dx_cache::{Cache, CacheArgs, FileEntry, FileEntryArgs};
 
-#[derive(Serialize, Deserialize, Clone)]
-struct FileCache {
-    modified: u64,
-    classnames: HashSet<String>,
+mod cache_generated {
+    #![allow(dead_code, unused_imports)]
+    include!(concat!(env!("OUT_DIR"), "/cache_generated.rs"));
 }
 
 pub struct ClassnameCache {
     cache_dir: PathBuf,
     memory_cache: RwLock<HashMap<PathBuf, FileCache>>,
+}
+
+#[derive(Clone)]
+struct FileCache {
+    modified: u64,
+    classnames: HashSet<String>,
 }
 
 impl ClassnameCache {
@@ -31,15 +36,21 @@ impl ClassnameCache {
 
     fn load_from_disk(cache_dir: &Path) -> HashMap<PathBuf, FileCache> {
         let mut cache = HashMap::new();
-        if let Ok(entries) = fs::read_dir(cache_dir) {
-            for entry in entries.filter_map(Result::ok) {
-                if entry.path().extension().map_or(false, |ext| ext == "bin") {
-                    if let Ok(data) = fs::read(entry.path()) {
-                        if let Ok(file_cache) = deserialize(&data) {
-                            let path = entry.path().with_extension("").with_extension("tsx");
-                            cache.insert(path, file_cache);
-                        }
-                    }
+        let cache_path = cache_dir.join("cache.bin");
+        if let Ok(data) = fs::read(&cache_path) {
+            let cache_data = unsafe { flatbuffers::root_unchecked::<Cache>(&data) };
+            if let Some(entries) = cache_data.entries() {
+                for entry in entries {
+                    let path = PathBuf::from(entry.path().unwrap_or_default());
+                    let classnames = entry.classnames()
+                        .unwrap_or_default()
+                        .iter()
+                        .map(|s| s.to_string())
+                        .collect();
+                    cache.insert(path, FileCache {
+                        modified: entry.modified(),
+                        classnames,
+                    });
                 }
             }
         }
@@ -64,7 +75,6 @@ impl ClassnameCache {
     }
 
     pub fn set(&self, path: &Path, classnames: &HashSet<String>) -> Result<(), Box<dyn std::error::Error>> {
-        let cache_path = self.cache_dir.join(path.strip_prefix("src").unwrap_or(path).with_extension("bin"));
         let modified = fs::metadata(path)?
             .modified()?
             .duration_since(std::time::UNIX_EPOCH)?
@@ -80,8 +90,33 @@ impl ClassnameCache {
             memory_cache.insert(path.to_path_buf(), file_cache.clone());
         }
         
-        let data = serialize(&file_cache)?;
-        fs::write(&cache_path, data)?;
+        let mut builder = FlatBufferBuilder::new();
+        let entries: Vec<_> = {
+            let memory_cache = self.memory_cache.read().unwrap();
+            memory_cache.iter()
+                .map(|(path, cache)| {
+                    let path_str = path.to_string_lossy().into_owned();
+                    let path_offset = builder.create_string(&path_str);
+                    let classnames: Vec<_> = cache.classnames.iter()
+                        .map(|s| builder.create_string(s))
+                        .collect();
+                    let classnames_vec = builder.create_vector(&classnames);
+                    FileEntry::create(&mut builder, &FileEntryArgs {
+                        path: Some(path_offset),
+                        modified: cache.modified,
+                        classnames: Some(classnames_vec),
+                    })
+                })
+                .collect()
+        };
+        
+        let entries_vec = builder.create_vector(&entries);
+        let cache = Cache::create(&mut builder, &CacheArgs {
+            entries: Some(entries_vec),
+        });
+        
+        builder.finish(cache, None);
+        fs::write(self.cache_dir.join("cache.bin"), builder.finished_data())?;
         
         Ok(())
     }

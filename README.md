@@ -1,55 +1,35 @@
 # Dx
 Enhance Developer Experience
 
-## Improvements
-```md
-Optimize Cache Persistence:
+### Suggestions for Improving dx-styles
 
-Implement periodic disk writes to reduce I/O by batching cache updates.
-Use a background thread to sync memory cache to disk periodically.
+1. **Cache Optimization**:
+   - Implement a cache eviction policy (e.g., LRU) for the in-memory cache to manage memory usage.
+   - Periodically sync `cache.bin` to disk in a background thread to reduce I/O during active use.
 
+2. **Parallel Processing**:
+   - Optimize `generator.rs` to use Rayon for chunked CSS generation, reducing contention on large codebases.
+   - Parallelize file scanning in `utils.rs` with Rayon iterators for faster directory traversal.
 
-Parallel Processing Enhancements:
+3. **Performance Monitoring**:
+   - Add metrics (e.g., `prometheus` crate) to track cache hit/miss rates and serialization times.
+   - Profile FlatBuffers serialization vs. bincode in benchmarks to confirm performance gains.
 
-Use Rayon for CSS generation in generator.rs more effectively by parallelizing across file chunks.
-Implement a thread pool for parsing tasks to balance load.
+4. **Error Handling**:
+   - Use `thiserror` for custom error types to improve error handling across modules.
+   - Centralize error logging for better debugging.
 
+5. **Maintainability**:
+   - Refactor `parser.rs` into smaller modules (e.g., separate AST traversal logic).
+   - Use feature flags to enable/disable optional features like debugging logs.
 
-Memory Optimization:
+6. **Testing**:
+   - Add unit tests for `ClassnameCache` to validate FlatBuffers serialization.
+   - Create integration tests for file watching and cache consistency.
 
-Use Arc for shared immutable data (e.g., StyleEngine) to reduce cloning.
-Compress in-memory cache using compact data structures like dashmap for concurrent access.
-
-
-Error Handling:
-
-Centralize error handling with a custom error type for better maintainability.
-Use thiserror crate for structured errors.
-
-
-Configuration Management:
-
-Allow runtime configuration reload for styles.toml without restarting.
-Cache parsed TOML config in memory to avoid repeated disk reads.
-
-
-Performance Monitoring:
-
-Add metrics collection (e.g., prometheus crate) to track parsing and generation times.
-Log cache hit/miss ratios to optimize cache size.
-
-
-Code Maintainability:
-
-Split large modules (e.g., parser.rs) into smaller, focused modules.
-Use feature flags for optional dependencies to reduce binary size.
-
-
-Testing:
-
-Add unit tests for ClassnameCache and StyleEngine to ensure reliability.
-Implement integration tests for file watching and CSS generation.
-```
+7. **Configuration**:
+   - Support dynamic reloading of `styles.toml` and `cache.fbs` without restarting.
+   - Cache parsed configurations in memory to avoid repeated parsing.
 
 ### Setup
 ```md
