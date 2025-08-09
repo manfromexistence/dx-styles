@@ -1,9 +1,9 @@
-.items-center {
-  align-items: center;
+.grid {
+  display: grid;
 }
 
-.flex {
-  display: flex;
+.items-center {
+  align-items: center;
 }
 
 .font-bold {

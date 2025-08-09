@@ -1,10 +1,10 @@
 {
-  "modified": 1754666351,
+  "modified": 1754717250,
   "classnames": [
-    "text-5xl",
-    "items-center",
     "font-bold",
-    "flex",
-    "justify-start"
+    "items-center",
+    "text-5xl",
+    "justify-start",
+    "grid"
   ]
 }
