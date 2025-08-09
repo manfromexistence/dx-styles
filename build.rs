@@ -36,12 +36,11 @@ fn main() {
     }
     println!("cargo:rerun-if-changed={}", toml_path);
 
-    let includes = vec![Path::new("src")];
     flatc_rust::run(flatc_rust::Args {
         lang: "rust",
         inputs: &fbs_files.iter().map(|s| Path::new(s)).collect::<Vec<_>>(),
-        out_dir: Path::new(&out_dir),
-        includes: includes.as_slice(),
+        out_dir: &Path::new(&out_dir).join(".dx_cache"),
+        includes: &[Path::new("src")],
         ..Default::default()
     })
     .expect("flatc schema compilation failed");

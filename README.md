@@ -2,7 +2,7 @@
 Enhance Developer Experience
 
 ```bash
-tree -I "inspirations|target"
+tree -a -I "inspirations|target|.git"
 ```
 
 ### Suggestions for Improving dx-styles

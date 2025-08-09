@@ -3,11 +3,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::RwLock;
 use flatbuffers::FlatBufferBuilder;
-use crate::cache_generated::dx_cache::{Cache, CacheArgs, FileEntry, FileEntryArgs};
+use dx_cache::{Cache, CacheArgs, FileEntry, FileEntryArgs};
 
 mod cache_generated {
     #![allow(dead_code, unused_imports)]
-    include!(concat!(env!("OUT_DIR"), "/cache_generated.rs"));
+    include!(concat!(env!("OUT_DIR"), "/.dx_cache/cache_generated.rs"));
 }
 
 pub struct ClassnameCache {
