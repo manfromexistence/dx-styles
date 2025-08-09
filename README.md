@@ -1,6 +1,10 @@
 # Dx
 Enhance Developer Experience
 
+```bash
+tree -I "inspirations|target"
+```
+
 ### Suggestions for Improving dx-styles
 
 1. **Cache Optimization**:

@@ -6,6 +6,7 @@
     pkgs.flatbuffers
     pkgs.bun
     pkgs.pnpm
+    pkgs.tree
   ];
   env = { };
   idx = {
