@@ -2,16 +2,16 @@
   display: grid;
 }
 
-.items-center {
-  align-items: center;
+.text-5xl {
+  font-size: 3rem;
 }
 
 .font-bold {
   font-weight: 700;
 }
 
-.text-5xl {
-  font-size: 3rem;
+.items-center {
+  align-items: center;
 }
 
 .justify-start {
