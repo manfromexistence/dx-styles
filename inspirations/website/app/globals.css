@@ -1,19 +1,19 @@
-.text-5xl {
-  font-size: 3rem;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.font-bold {
-  font-weight: 700;
+.justify-start {
+  justify-content: flex-start;
 }
 
 .flex {
   display: flex;
 }
 
-.justify-start {
-  justify-content: flex-start;
+.font-bold {
+  font-weight: 700;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.text-5xl {
+  font-size: 3rem;
 }

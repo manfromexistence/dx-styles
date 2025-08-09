@@ -3,12 +3,13 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::RwLock;
 use flatbuffers::FlatBufferBuilder;
-use dx_cache::{Cache, CacheArgs, FileEntry, FileEntryArgs};
 
 mod cache_generated {
-    #![allow(dead_code, unused_imports)]
-    include!(concat!(env!("OUT_DIR"), "/.dx_cache/cache_generated.rs"));
+    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn)]
+    include!(concat!(env!("OUT_DIR"), "/dx_cache/cache_generated.rs"));
 }
+
+use cache_generated::{Cache, CacheArgs, FileEntry, FileEntryArgs};
 
 pub struct ClassnameCache {
     cache_dir: PathBuf,
