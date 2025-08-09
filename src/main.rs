@@ -75,7 +75,8 @@ fn main() {
     if !files.is_empty() {
         let results: Vec<_> = files.par_iter()
             .filter_map(|file| {
-                let new_classnames = parser::parse_classnames(file, &cache);
+                let new_classnames = cache.compare_and_generate(file).expect("Failed to compare and generate classnames");
+                cache.update_from_classnames(file, &new_classnames).expect("Failed to update cache");
                 if new_classnames.is_empty() {
                     None
                 } else {
@@ -88,8 +89,10 @@ fn main() {
             let (added, _, _, _) = data_manager::update_class_maps(file, &new_classnames, &mut file_classnames, &mut classname_counts, &mut global_classnames);
             total_added_in_files += added;
         }
-        generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
-        utils::log_change(&dir, total_added_in_files, 0, &output_file, global_classnames.len(), 0, scan_start.elapsed().as_micros());
+        if total_added_in_files > 0 {
+            generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
+            utils::log_change(&dir, total_added_in_files, 0, &output_file, global_classnames.len(), 0, scan_start.elapsed().as_micros());
+        }
     } else {
         println!("{}", "No .tsx or .jsx files found in inspirations/website/.".yellow());
     }
