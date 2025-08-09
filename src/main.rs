@@ -54,7 +54,7 @@ fn main() {
         generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
         utils::log_change(&dir, total_added_in_files, 0, &output_file, global_classnames.len(), 0, scan_start.elapsed().as_micros());
     } else {
-        println!("{}", "No .tsx or .jsx files found in src/.".yellow());
+        println!("{}", "No .tsx or .jsx files found in inspirations/website/.".yellow());
     }
 
     println!("{}", "Dx Styles is watching for file changes...".bold().cyan());

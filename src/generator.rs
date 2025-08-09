@@ -40,8 +40,10 @@ pub fn generate_css(
 
     let css_content = css_rules.join("\n");
     let stylesheet = StyleSheet::parse(&css_content, ParserOptions::default()).expect("Failed to parse CSS");
+
+    let is_production = std::env::var("DX_ENV").map(|v| v == "production").unwrap_or(false);
     let minified_css = stylesheet.to_css(PrinterOptions {
-        minify: true,
+        minify: is_production,
         ..PrinterOptions::default()
     }).expect("Failed to minify CSS").code;
 
