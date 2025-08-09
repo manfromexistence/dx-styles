@@ -12,7 +12,9 @@ pub fn process_file_change(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
-    let new_classnames = parser::parse_classnames(path, &crate::cache::ClassnameCache::new(".dx_cache"));
+    let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
+    let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate classnames");
+    cache.update_from_classnames(path, &new_classnames).expect("Failed to update cache");
     let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
         path,
         &new_classnames,
@@ -41,7 +43,9 @@ pub fn process_file_remove(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
+    let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
     let empty_classnames = HashSet::new();
+    cache.update_from_classnames(path, &empty_classnames).expect("Failed to update cache");
     let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
         path,
         &empty_classnames,

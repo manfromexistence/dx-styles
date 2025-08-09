@@ -25,7 +25,7 @@ fn main() {
     };
     println!("{}", "✅ Dx Styles initialized with new Style Engine.".bold().green());
 
-    let cache = ClassnameCache::new(".dx_cache");
+    let cache = ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
     let dir = PathBuf::from("inspirations/website");
     let output_file = PathBuf::from("inspirations/website/app/globals.css");
 

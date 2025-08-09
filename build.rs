@@ -119,7 +119,9 @@ fn main() {
     builder.finish(config_root, None);
 
     let buf = builder.finished_data();
-    fs::write("styles.bin", buf).expect("Failed to write styles.bin");
+    let styles_bin_path = Path::new(".dx/styles.bin");
+    fs::create_dir_all(styles_bin_path.parent().unwrap()).expect("Failed to create .dx directory");
+    fs::write(styles_bin_path, buf).expect("Failed to write styles.bin");
 
-    println!("✅ Successfully generated styles.bin from styles.toml");
+    println!("✅ Successfully generated .dx/styles.bin from styles.toml");
 }
