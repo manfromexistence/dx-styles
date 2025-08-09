@@ -5,7 +5,33 @@ Enhance Developer Experience
 tree -a -I "inspirations|target|.git"
 ```
 
-### Suggestions for Improving dx-styles
+### Suggestions for Improving dx-styles 1
+
+1. **Cache Optimization**:
+   - Replace `RwLock` with `dashmap` in `cache.rs` for better concurrency.
+   - Use a background thread for periodic `cache.bin` writes to reduce I/O.
+
+2. **Parallel Processing**:
+   - Parallelize `parser.rs` classname extraction with Rayon for multiple `.tsx` files.
+   - Optimize `generator.rs` CSS generation with Rayon for new classnames.
+
+3. **Performance Monitoring**:
+   - Add `prometheus` crate to track cache hit/miss rates and parsing times.
+   - Log metrics for `compare_and_generate` and CSS generation.
+
+4. **Error Handling**:
+   - Use `thiserror` for custom error types in `cache.rs` and `engine.rs`.
+   - Centralize logging for cache and parsing errors.
+
+5. **Maintainability**:
+   - Split `parser.rs` into modules for AST traversal and classname extraction.
+   - Use feature flags for debugging or performance logging.
+
+6. **Testing**:
+   - Add unit tests for `compare_and_generate` and `update_from_classnames`.
+   - Implement integration tests for watcher, cache, and CSS generation consistency.
+
+### Suggestions for Improving dx-styles 2
 
 1. **Cache Optimization**:
    - Implement a cache eviction policy (e.g., LRU) for the in-memory cache to manage memory usage.
