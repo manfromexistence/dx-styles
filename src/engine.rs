@@ -18,7 +18,7 @@ pub struct StyleEngine {
 
 impl StyleEngine {
     pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        let buffer = fs::read("styles.bin")?;
+        let buffer = fs::read(".dx/styles.bin")?;
         let config = unsafe { flatbuffers::root_unchecked::<style_schema::Config>(&buffer) };
 
         let mut precompiled = HashMap::new();

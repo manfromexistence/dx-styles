@@ -1,4 +1,5 @@
 use std::collections::{HashMap, HashSet};
+use std::fs;
 use std::path::PathBuf;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
@@ -16,10 +17,46 @@ mod utils;
 mod watcher;
 
 fn main() {
+    // Ensure styles.toml and styles.bin exist
+    let styles_toml_path = PathBuf::from("styles.toml");
+    let styles_bin_path = PathBuf::from(".dx/styles.bin");
+    if !styles_toml_path.exists() {
+        println!("{}", "styles.toml not found, creating default...".yellow());
+        fs::write(&styles_toml_path, r#"
+[static]
+# Add static styles here
+[dynamic]
+# Add dynamic styles here
+[generators]
+# Add generators here
+"#).expect("Failed to create styles.toml");
+    }
+    if !styles_bin_path.exists() {
+        println!("{}", "styles.bin not found, running cargo build to generate it...".yellow());
+        let output = std::process::Command::new("cargo")
+            .arg("build")
+            .output()
+            .expect("Failed to run cargo build");
+        if !output.status.success() {
+            println!("{} Failed to generate styles.bin: {}", "Error:".red(), String::from_utf8_lossy(&output.stderr));
+            return;
+        }
+        if !styles_bin_path.exists() {
+            println!("{} styles.bin still not found after cargo build.", "Error:".red());
+            return;
+        }
+    }
+
+    // Verify styles.bin is readable
+    if fs::metadata(&styles_bin_path).is_err() {
+        println!("{} styles.bin is not accessible in .dx directory.", "Error:".red());
+        return;
+    }
+
     let style_engine = match engine::StyleEngine::new() {
         Ok(engine) => engine,
         Err(e) => {
-            println!("{} Failed to initialize StyleEngine: {}. Please run 'cargo build' to generate it.", "Error:".red(), e);
+            println!("{} Failed to initialize StyleEngine: {}. Ensure styles.bin in .dx is valid.", "Error:".red(), e);
             return;
         }
     };

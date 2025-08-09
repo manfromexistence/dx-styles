@@ -16,6 +16,7 @@ use cache_generated::cache::{Cache, CacheArgs, FileEntry, FileEntryArgs};
 pub struct ClassnameCache {
     cache_dir: PathBuf,
     memory_cache: RwLock<HashMap<PathBuf, FileCache>>,
+    #[allow(dead_code)]
     css_path: PathBuf,
 }
 
@@ -31,7 +32,6 @@ impl ClassnameCache {
         let css_path = PathBuf::from(css_path);
         fs::create_dir_all(&cache_dir).expect("Failed to create cache directory");
         
-        // Validate css_path
         if !css_path.exists() {
             fs::write(&css_path, "").expect("Failed to create initial CSS file");
         }
