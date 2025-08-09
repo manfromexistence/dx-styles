@@ -4,6 +4,7 @@
 cargo run --release
 cargo add notify oxc_parser oxc_allocator oxc_span oxc_ast colored walkdir flatbuffers serde toml flatc_rust
 
+git clone https://github.com/parcel-bundler/lightningcss && cd lightningcss && rm -rf .git && cd ..
 git clone https://github.com/oxc-project/oxc && cd oxc && rm -rf .git && cd ..
 git clone https://github.com/biomejs/biome && cd biome && rm -rf .git && cd ..
 git clone https://github.com/TanStack/query && cd query && rm -rf .git && cd ..
