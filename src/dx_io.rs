@@ -106,7 +106,7 @@ fn dx_io() -> io::Result<()> {
     delete_files(&file_paths)?;
     let delete_time = start.elapsed().as_millis();
 
-    println!("Smart times (ms): Create: {}, Read: {}, Update: {}, Delete: {}", create_time, read_time, update_time, delete_time);
+    println!("I/O operation times (ms): Create: {}, Read: {}, Update: {}, Delete: {}", create_time, read_time, update_time, delete_time);
     println!("Total: {} ms", create_time + read_time + update_time + delete_time);
     Ok(())
 }
@@ -115,7 +115,7 @@ fn main() -> io::Result<()> {
     let dir_path = get_dir();
     fs::create_dir_all(&dir_path)?;
 
-    println!("\nRunning dx_io (mmap Update Only)...");
+    println!("\nRunning dx_io...");
     run_in_pinned_pool(dx_io)?;
 
     fs::remove_dir_all(&dir_path)?;
