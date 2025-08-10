@@ -2,13 +2,14 @@ use std::env;
 use std::fs::{self, File, OpenOptions};
 use std::io::{self, BufWriter, Read, Write};
 use std::path::PathBuf;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-use libc::{sched_setaffinity, cpu_set_t, CPU_SET};
+use libc::{cpu_set_t, sched_setaffinity, CPU_SET};
 use memmap2::MmapMut;
 use rayon::prelude::*;
 
 const NUM_FILES: usize = 10000;
+const BATCH_SIZE: usize = 1024;
 const CONTENT: &[u8] = b"initial content padded to simulate dx-check workload....................100 bytes..";
 const UPDATE_CONTENT: &[u8] = b"updated content padded to simulate dx-check workload....................100 bytes..";
 
@@ -43,9 +44,11 @@ where
         .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
 
     pool.install(|| {
-        (0..rayon::current_num_threads()).into_par_iter().for_each(|id| {
-            let _ = pin_thread(id);
-        });
+        (0..rayon::current_num_threads())
+            .into_par_iter()
+            .for_each(|id| {
+                let _ = pin_thread(id);
+            });
         benchmark_fn()
     })
 }
@@ -88,26 +91,50 @@ fn delete_files(paths: &[PathBuf]) -> io::Result<()> {
 
 fn dx_io() -> io::Result<()> {
     let dir_path = get_dir();
-    let file_paths: Vec<_> = (0..NUM_FILES).map(|i| dir_path.join(format!("file_{}.txt", i))).collect();
+    let file_paths: Vec<_> = (0..NUM_FILES)
+        .map(|i| dir_path.join(format!("file_{}.txt", i)))
+        .collect();
 
-    let start = Instant::now();
-    create_files(&file_paths)?;
-    let create_time = start.elapsed().as_millis();
+    let mut total_create_time = Duration::new(0, 0);
+    for batch in file_paths.chunks(BATCH_SIZE) {
+        let start = Instant::now();
+        create_files(batch)?;
+        total_create_time += start.elapsed();
+    }
+    let create_time = total_create_time.as_millis();
 
-    let start = Instant::now();
-    read_files(&file_paths)?;
-    let read_time = start.elapsed().as_millis();
+    let mut total_read_time = Duration::new(0, 0);
+    for batch in file_paths.chunks(BATCH_SIZE) {
+        let start = Instant::now();
+        read_files(batch)?;
+        total_read_time += start.elapsed();
+    }
+    let read_time = total_read_time.as_millis();
 
-    let start = Instant::now();
-    update_files_smartly(&file_paths)?;
-    let update_time = start.elapsed().as_millis();
+    let mut total_update_time = Duration::new(0, 0);
+    for batch in file_paths.chunks(BATCH_SIZE) {
+        let start = Instant::now();
+        update_files_smartly(batch)?;
+        total_update_time += start.elapsed();
+    }
+    let update_time = total_update_time.as_millis();
 
-    let start = Instant::now();
-    delete_files(&file_paths)?;
-    let delete_time = start.elapsed().as_millis();
+    let mut total_delete_time = Duration::new(0, 0);
+    for batch in file_paths.chunks(BATCH_SIZE) {
+        let start = Instant::now();
+        delete_files(batch)?;
+        total_delete_time += start.elapsed();
+    }
+    let delete_time = total_delete_time.as_millis();
 
-    println!("I/O operation times (ms): Create: {}, Read: {}, Update: {}, Delete: {}", create_time, read_time, update_time, delete_time);
-    println!("Total: {} ms", create_time + read_time + update_time + delete_time);
+    println!(
+        "I/O operation times (ms): Create: {}, Read: {}, Update: {}, Delete: {}",
+        create_time, read_time, update_time, delete_time
+    );
+    println!(
+        "Total: {} ms",
+        create_time + read_time + update_time + delete_time
+    );
     Ok(())
 }
 
