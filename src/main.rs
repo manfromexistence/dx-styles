@@ -60,9 +60,9 @@ fn main() {
     };
     println!("{}", "✅ Dx Styles initialized with new Style Engine.".bold().green());
 
-    let cache = ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
-    let dir = PathBuf::from("inspirations/website");
-    let output_file = PathBuf::from("inspirations/website/app/globals.css");
+    let cache = ClassnameCache::new(".dx", "playgrounds/nextjs/app/globals.css");
+    let dir = PathBuf::from("playgrounds/nextjs");
+    let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
 
     let mut file_classnames: HashMap<PathBuf, HashSet<String>> = HashMap::new();
     let mut classname_counts: HashMap<String, u32> = HashMap::new();
@@ -120,7 +120,7 @@ fn main() {
             );
         }
     } else {
-        println!("{}", "No .tsx or .jsx files found in inspirations/website/.".yellow());
+        println!("{}", "No .tsx or .jsx files found in playgrounds/nextjs/.".yellow());
     }
 
     println!("{}", "Dx Styles is watching for file changes...".bold().cyan());

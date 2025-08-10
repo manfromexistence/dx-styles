@@ -61,7 +61,7 @@ impl ClassnameCache {
                 })
                 .collect();
 
-            let tsx_files: Vec<PathBuf> = walkdir::WalkDir::new("inspirations/website")
+            let tsx_files: Vec<PathBuf> = walkdir::WalkDir::new("playgrounds/nextjs")
                 .into_iter()
                 .filter_map(Result::ok)
                 .filter(|e| e.path().extension().map_or(false, |ext| ext == "tsx"))
