@@ -1,5 +1,5 @@
-.font-bold {
-  font-weight: 700;
+.justify-start {
+  justify-content: flex-start;
 }
 
 .text-5xl {
@@ -10,10 +10,10 @@
   display: flex;
 }
 
-.items-start {
-  align-items: flex-start;
+.font-bold {
+  font-weight: 700;
 }
 
-.justify-start {
-  justify-content: flex-start;
+.items-start {
+  align-items: flex-start;
 }

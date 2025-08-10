@@ -14,7 +14,7 @@ const UPDATE_CONTENT: &[u8] = b"updated content padded to simulate dx-check work
 
 fn get_dir() -> PathBuf {
     let mut path = env::temp_dir();
-    path.push("bench_files");
+    path.push("modules");
     path
 }
 
