@@ -27,7 +27,7 @@ struct StyleRecord {
 }
 
 fn main() {
-    let fbs_files = ["src/styles.fbs", "src/cache.fbs"];
+    let fbs_files = ["styles.fbs", "cache.fbs"];
     let toml_path = "styles.toml";
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
