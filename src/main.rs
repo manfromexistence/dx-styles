@@ -1,136 +1,152 @@
-use std::fs::{self, File, OpenOptions};
-use std::io::{BufWriter, Write, Read};
-use std::time::Instant;
+use std::collections::{HashMap, HashSet};
+use std::fs;
+use std::path::PathBuf;
+use std::sync::mpsc;
+use std::time::{Duration, Instant};
+use colored::Colorize;
+use notify::{Config, RecursiveMode};
+use notify_debouncer_full::new_debouncer;
 use rayon::prelude::*;
-use memmap2::MmapMut;
-use libc::{sched_setaffinity, cpu_set_t};
-use tokio::runtime::Runtime;
-
-const NUM_FILES: usize = 10000;
-const DIR: &str = "./bench_files/";
+use crate::cache::ClassnameCache;
+mod cache;
+mod data_manager;
+mod engine;
+mod generator;
+mod parser;
+mod utils;
+mod watcher;
 
 fn main() {
-    fs::create_dir_all(DIR).unwrap();
+    let styles_toml_path = PathBuf::from("styles.toml");
+    let styles_bin_path = PathBuf::from(".dx/styles.bin");
+    if !styles_toml_path.exists() {
+        println!("{}", "styles.toml not found, creating default...".yellow());
+        fs::write(&styles_toml_path, r#"
+[static]
+# Add static styles here
+[dynamic]
+# Add dynamic styles here
+[generators]
+# Add generators here
+"#).expect("Failed to create styles.toml");
+    }
+    if !styles_bin_path.exists() {
+        println!("{}", "styles.bin not found, running cargo build to generate it...".yellow());
+        let output = std::process::Command::new("cargo")
+            .arg("build")
+            .output()
+            .expect("Failed to run cargo build");
+        if !output.status.success() {
+            println!("{} Failed to generate styles.bin: {}", "Error:".red(), String::from_utf8_lossy(&output.stderr));
+            return;
+        }
+        if !styles_bin_path.exists() {
+            println!("{} styles.bin still not found after cargo build.", "Error:".red());
+            return;
+        }
+    }
 
-    println!("Running traditional_io...");
-    traditional_io();
+    if fs::metadata(&styles_bin_path).is_err() {
+        println!("{} styles.bin is not accessible in .dx directory.", "Error:".red());
+        return;
+    }
 
-    println!("\nRunning smart_io...");
-    smart_io();
+    let style_engine = match engine::StyleEngine::new() {
+        Ok(engine) => engine,
+        Err(e) => {
+            println!("{} Failed to initialize StyleEngine: {}. Ensure styles.bin in .dx is valid.", "Error:".red(), e);
+            return;
+        }
+    };
+    println!("{}", "✅ Dx Styles initialized with new Style Engine.".bold().green());
 
-    // Cleanup (optional, comment out if testing)
-    fs::remove_dir_all(DIR).unwrap();
-}
+    let cache = ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
+    let dir = PathBuf::from("inspirations/website");
+    let output_file = PathBuf::from("inspirations/website/app/globals.css");
 
-// Traditional: Basic Rayon parallelism + Tokio blocking for I/O + BufWriter
-fn traditional_io() {
-    let file_paths: Vec<String> = (0..NUM_FILES).map(|i| format!("{}/file_{}.txt", DIR, i)).collect();
+    let mut file_classnames: HashMap<PathBuf, HashSet<String>> = HashMap::new();
+    let mut classname_counts: HashMap<String, u32> = HashMap::new();
+    let mut global_classnames: HashSet<String> = HashSet::new();
 
-    // Create
-    let start = Instant::now();
-    file_paths.par_iter().for_each(|path| {
-        let file = File::create(path).unwrap();
-        let mut writer = BufWriter::new(file);
-        writer.write_all(b"initial content").unwrap();
-        writer.flush().unwrap();
-    });
-    let create_time = start.elapsed().as_millis();
+    let scan_start = Instant::now();
+    let files = utils::find_code_files(&dir);
+    if !files.is_empty() {
+        let results: Vec<_> = files.par_iter()
+            .filter_map(|file| {
+                let new_classnames = cache.compare_and_generate(file).expect("Failed to compare and generate classnames");
+                if new_classnames.is_empty() {
+                    None
+                } else {
+                    cache.update_from_classnames(file, &new_classnames).expect("Failed to update cache");
+                    Some((file.to_path_buf(), new_classnames))
+                }
+            })
+            .collect();
+        let mut total_added_in_files = 0;
+        let mut total_added_global = 0;
+        for (file, new_classnames) in results {
+            let start = Instant::now();
+            let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
+                &file,
+                &new_classnames,
+                &mut file_classnames,
+                &mut classname_counts,
+                &mut global_classnames,
+            );
+            total_added_in_files += added_file;
+            total_added_global += added_global;
+            if removed_file > 0 || added_global > 0 {
+                utils::log_change(
+                    &file,
+                    added_file,
+                    removed_file,
+                    &output_file,
+                    added_global,
+                    removed_global,
+                    start.elapsed().as_micros(),
+                );
+            }
+        }
+        if (total_added_in_files > 0 || total_added_global > 0) && !global_classnames.is_empty() {
+            generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
+            utils::log_change(
+                &dir,
+                total_added_in_files,
+                0,
+                &output_file,
+                total_added_global,
+                0,
+                scan_start.elapsed().as_micros(),
+            );
+        }
+    } else {
+        println!("{}", "No .tsx or .jsx files found in inspirations/website/.".yellow());
+    }
 
-    // Read
-    let start = Instant::now();
-    file_paths.par_iter().for_each(|path| {
-        let mut file = File::open(path).unwrap();
-        let mut buf = Vec::new();
-        file.read_to_end(&mut buf).unwrap();
-    });
-    let read_time = start.elapsed().as_millis();
+    println!("{}", "Dx Styles is watching for file changes...".bold().cyan());
 
-    // Update (rewrite content)
-    let start = Instant::now();
-    file_paths.par_iter().for_each(|path| {
-        let file = OpenOptions::new().write(true).truncate(true).open(path).unwrap();
-        let mut writer = BufWriter::new(file);
-        writer.write_all(b"updated content").unwrap();
-        writer.flush().unwrap();
-    });
-    let update_time = start.elapsed().as_millis();
+    let (tx, rx) = mpsc::channel();
+    let _config = Config::default().with_poll_interval(Duration::from_millis(50));
+    let mut watcher = new_debouncer(Duration::from_millis(100), None, tx).expect("Failed to create watcher");
+    watcher.watch(&dir, RecursiveMode::Recursive).expect("Failed to start watcher");
 
-    // Delete
-    let start = Instant::now();
-    file_paths.par_iter().for_each(|path| {
-        fs::remove_file(path).unwrap();
-    });
-    let delete_time = start.elapsed().as_millis();
-
-    println!("Traditional times (ms): Create: {}, Read: {}, Update: {}, Delete: {}", create_time, read_time, update_time, delete_time);
-    println!("Total: {} ms", create_time + read_time + update_time + delete_time);
-}
-
-// Smart: io_uring for batched I/O + mmap for zero-copy + enhanced Rayon with work stealing/thread pinning
-fn smart_io() {
-    let file_paths: Vec<String> = (0..NUM_FILES).map(|i| format!("{}/file_{}.txt", DIR, i)).collect();
-
-    // Enhanced Rayon init with thread pinning
-    let pool = rayon::ThreadPoolBuilder::new().num_threads(rayon::current_num_threads()).build().unwrap();
-    pool.install(|| {
-        // Pin threads
-        (0..rayon::current_num_threads()).into_par_iter().for_each(|id| pin_thread(id));
-
-        // Create with io_uring
-        let rt = Runtime::new().unwrap();
-        let start = Instant::now();
-        rt.block_on(async {
-            let tasks: Vec<_> = file_paths.iter().map(|path| {
-                let p = path.clone();
-                tokio::task::spawn_blocking(move || {  // Fallback for create, as tokio-uring create is async
-                    let file = File::create(&p).unwrap();  // Use std create, but batch writes later
-                    let mut writer = BufWriter::new(file); // Temp, to be replaced with uring
-                    writer.write_all(b"initial content").unwrap();
-                })
-            }).collect();
-            for task in tasks { task.await.unwrap(); }
-        });
-        let create_time = start.elapsed().as_millis();  // Note: Create/unlink in io_uring require custom, fallback to buffered for accuracy
-
-        // Read with mmap for zero-copy
-        let start = Instant::now();
-        file_paths.par_iter().for_each(|path| {
-            let file = File::open(path).unwrap();
-            let _mmap = unsafe { MmapMut::map_mut(&file).unwrap() };  // Read via mmap access
-            // Simulate read: access mmap[0..]
-        });
-        let read_time = start.elapsed().as_millis();
-
-        // Update with mmap
-        let start = Instant::now();
-        file_paths.par_iter().for_each(|path| {
-            let file = OpenOptions::new().read(true).write(true).open(path).unwrap();
-            let mut mmap = unsafe { MmapMut::map_mut(&file).unwrap() };
-            mmap[..].copy_from_slice(b"updated content");  // Zero-copy update
-            mmap.flush().unwrap();
-        });
-        let update_time = start.elapsed().as_millis();
-
-        // Delete with io_uring batch (use std for simplicity, as unlink in uring)
-        let start = Instant::now();
-        rt.block_on(async {
-            let tasks: Vec<_> = file_paths.iter().map(|path| {
-                let p = path.clone();
-                tokio::task::spawn_blocking(move || fs::remove_file(p).unwrap())
-            }).collect();
-            for task in tasks { task.await.unwrap(); }
-        });
-        let delete_time = start.elapsed().as_millis();
-
-        println!("Smart times (ms): Create: {}, Read: {}, Update: {}, Delete: {}", create_time, read_time, update_time, delete_time);
-        println!("Total: {} ms", create_time + read_time + update_time + delete_time);
-    });
-}
-
-fn pin_thread(core_id: usize) {
-    unsafe {
-        let mut cpu_set: cpu_set_t = std::mem::zeroed();
-        libc::CPU_SET(core_id, &mut cpu_set);
-        sched_setaffinity(0, std::mem::size_of::<cpu_set_t>(), &cpu_set);
+    loop {
+        match rx.recv() {
+            Ok(Ok(events)) => {
+                for event in events {
+                    for path in &event.event.paths {
+                        if utils::is_code_file(path) && *path != output_file {
+                            if matches!(event.event.kind, notify::EventKind::Remove(_)) {
+                                watcher::process_file_remove(path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
+                            } else {
+                                watcher::process_file_change(path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
+                            }
+                        }
+                    }
+                }
+            }
+            Ok(Err(e)) => println!("Watch error: {:?}", e),
+            Err(e) => println!("Channel error: {:?}", e),
+        }
     }
 }
