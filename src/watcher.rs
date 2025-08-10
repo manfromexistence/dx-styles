@@ -12,7 +12,7 @@ pub fn process_file_change(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
-    let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
+    let cache = crate::cache::ClassnameCache::new(".dx", "playgrounds/nextjs/app/globals.css");
     let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate classnames");
 
     if new_classnames.is_empty() {
@@ -51,7 +51,7 @@ pub fn process_file_remove(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
-    let cache = crate::cache::ClassnameCache::new(".dx", "inspirations/website/app/globals.css");
+    let cache = crate::cache::ClassnameCache::new(".dx", "playgrounds/nextjs/app/globals.css");
     let empty_classnames = HashSet::new();
 
     if file_classnames.contains_key(path) {
