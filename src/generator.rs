@@ -1,10 +1,10 @@
-use std::collections::{HashMap, HashSet};
-use std::fs::{self, File};
-use std::io::Write;
-use std::path::{Path, PathBuf};
 use lightningcss::stylesheet::{ParserOptions, StyleSheet, PrinterOptions};
-use rayon::prelude::*;
+use std::collections::{HashMap, HashSet};
 use crate::engine::StyleEngine;
+use std::path::{Path, PathBuf};
+use std::fs::{self, File};
+use rayon::prelude::*;
+use std::io::Write;
 
 pub fn generate_css(
     class_names: &HashSet<String>,

@@ -28,7 +28,7 @@ fn main() {
         # Add dynamic styles here
         [generators]
         # Add generators here
-    "#).expect("Failed to create styles.toml");
+    "#).expect("Failed to create styles.toml!");
     }
     if !styles_bin_path.exists() {
         println!("{}", "styles.bin not found, running cargo build to generate it...".yellow());

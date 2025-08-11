@@ -1,8 +1,8 @@
 use std::collections::HashMap;
-use std::fs;
-use lru::LruCache;
 use std::num::NonZeroUsize;
 use std::sync::Mutex;
+use lru::LruCache;
+use std::fs;
 
 mod styles_generated {
     #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn, mismatched_lifetime_syntaxes)]

@@ -1,10 +1,10 @@
 use std::collections::{HashMap, HashSet};
-use std::fs;
+use crate::parser::parse_classnames;
+use flatbuffers::FlatBufferBuilder;
 use std::path::{Path, PathBuf};
 use std::sync::{Mutex, RwLock};
-use flatbuffers::FlatBufferBuilder;
 use rayon::prelude::*;
-use crate::parser::parse_classnames;
+use std::fs;
 
 mod cache_generated {
     #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn, mismatched_lifetime_syntaxes)]

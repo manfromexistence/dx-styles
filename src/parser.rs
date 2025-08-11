@@ -1,11 +1,11 @@
-use std::collections::HashSet;
-use std::fs;
-use std::path::Path;
-use oxc_allocator::Allocator;
 use oxc_ast::ast::{self, ExportDefaultDeclarationKind, JSXAttributeItem, JSXOpeningElement, Program};
-use oxc_parser::Parser;
-use oxc_span::SourceType;
 use crate::cache::ClassnameCache;
+use std::collections::HashSet;
+use oxc_allocator::Allocator;
+use oxc_span::SourceType;
+use oxc_parser::Parser;
+use std::path::Path;
+use std::fs;
 
 pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> {
     if let Some(cached_classnames) = cache.get(path) {

@@ -44,13 +44,13 @@ pub fn log_change(
     );
 
     let time_str = if time_us < 1000 {
-        format!("{}µs", time_us)
+        format!("{}U+00b5s", time_us)
     } else {
         format!("{}ms", time_us / 1000)
     };
 
     println!(
-        "{} {} -> {} {} · {}",
+        "{} {} -> {} {} U+00b7 {}",
         source_str.bright_cyan(),
         file_changes,
         output_str.bright_magenta(),
