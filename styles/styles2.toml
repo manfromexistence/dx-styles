@@ -3,61 +3,16 @@
 # Even more static utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [static]
-border-t-transparent = "border-top-color: transparent;"
-border-r-transparent = "border-right-color: transparent;"
-border-b-transparent = "border-bottom-color: transparent;"
-border-l-transparent = "border-left-color: transparent;"
-placeholder-transparent = "color: transparent;"
-ring-transparent = "box-shadow: 0 0 0 2px transparent;"
-ring-offset-transparent = "--tw-ring-offset-color: transparent;"
-from-transparent = "--tw-gradient-from: transparent;"
-to-transparent = "--tw-gradient-to: transparent;"
-via-transparent = "--tw-gradient-stops: var(--tw-gradient-from), transparent, var(--tw-gradient-to);"
-divide-transparent = "border-color: transparent;"
-accent-transparent = "accent-color: transparent;"
-caret-transparent = "caret-color: transparent;"
-decoration-transparent = "text-decoration-color: transparent;"
-shadow-transparent = "--tw-shadow-color: transparent;"
-stroke-transparent = "stroke: transparent;"
-fill-transparent = "fill: transparent;"
+
 
 # -----------------------------------------------------------------------------
 # [dynamic]
 # Even more dynamic utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [dynamic]
-"placeholder|color" = { "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
-"ring|box-shadow" = { "gray-50" = "0 0 0 2px #f9fafb", "gray-100" = "0 0 0 2px #f3f4f6", "gray-200" = "0 0 0 2px #e5e7eb", "gray-300" = "0 0 0 2px #d1d5db", "gray-400" = "0 0 0 2px #9ca3af", "gray-500" = "0 0 0 2px #6b7280", "gray-600" = "0 0 0 2px #4b5563", "gray-700" = "0 0 0 2px #374151", "gray-800" = "0 0 0 2px #1f2937", "gray-900" = "0 0 0 2px #111827", "red-50" = "0 0 0 2px #fef2f2", "red-100" = "0 0 0 2px #fee2e2", "red-200" = "0 0 0 2px #fecaca", "red-300" = "0 0 0 2px #fca5a5", "red-400" = "0 0 0 2px #f87171", "red-500" = "0 0 0 2px #ef4444", "red-600" = "0 0 0 2px #dc2626", "red-700" = "0 0 0 2px #b91c1c", "red-800" = "0 0 0 2px #991b1b", "red-900" = "0 0 0 2px #7f1d1d", "yellow-50" = "0 0 0 2px #fffbeb", "yellow-100" = "0 0 0 2px #fef3c7", "yellow-200" = "0 0 0 2px #fde68a", "yellow-300" = "0 0 0 2px #fcd34d", "yellow-400" = "0 0 0 2px #fbbf24", "yellow-500" = "0 0 0 2px #f59e0b", "yellow-600" = "0 0 0 2px #d97706", "yellow-700" = "0 0 0 2px #b45309", "yellow-800" = "0 0 0 2px #92400e", "yellow-900" = "0 0 0 2px #78350f", "green-50" = "0 0 0 2px #f0fdf4", "green-100" = "0 0 0 2px #dcfce7", "green-200" = "0 0 0 2px #bbf7d0", "green-300" = "0 0 0 2px #86efac", "green-400" = "0 0 0 2px #4ade80", "green-500" = "0 0 0 2px #22c55e", "green-600" = "0 0 0 2px #16a34a", "green-700" = "0 0 0 2px #15803d", "green-800" = "0 0 0 2px #166534", "green-900" = "0 0 0 2px #14532d", "blue-50" = "0 0 0 2px #eff6ff", "blue-100" = "0 0 0 2px #dbeafe", "blue-200" = "0 0 0 2px #bfdbfe", "blue-300" = "0 0 0 2px #93c5fd", "blue-400" = "0 0 0 2px #60a5fa", "blue-500" = "0 0 0 2px #3b82f6", "blue-600" = "0 0 0 2px #2563eb", "blue-700" = "0 0 0 2px #1d4ed8", "blue-800" = "0 0 0 2px #1e40af", "blue-900" = "0 0 0 2px #1e3a8a", "indigo-50" = "0 0 0 2px #eef2ff", "indigo-100" = "0 0 0 2px #e0e7ff", "indigo-200" = "0 0 0 2px #c7d2fe", "indigo-300" = "0 0 0 2px #a5b4fc", "indigo-400" = "0 0 0 2px #818cf8", "indigo-500" = "0 0 0 2px #6366f1", "indigo-600" = "0 0 0 2px #4f46e5", "indigo-700" = "0 0 0 2px #4338ca", "indigo-800" = "0 0 0 2px #3730a3", "indigo-900" = "0 0 0 2px #312e81", "purple-50" = "0 0 0 2px #f5f3ff", "purple-100" = "0 0 0 2px #ede9fe", "purple-200" = "0 0 0 2px #ddd6fe", "purple-300" = "0 0 0 2px #c4b5fd", "purple-400" = "0 0 0 2px #a78bfa", "purple-500" = "0 0 0 2px #8b5cf6", "purple-600" = "0 0 0 2px #7c3aed", "purple-700" = "0 0 0 2px #6d28d9", "purple-800" = "0 0 0 2px #5b21b6", "purple-900" = "0 0 0 2px #4c1d95", "pink-50" = "0 0 0 2px #fdf2f8", "pink-100" = "0 0 0 2px #fce7f3", "pink-200" = "0 0 0 2px #fbcfe8", "pink-300" = "0 0 0 2px #f9a8d4", "pink-400" = "0 0 0 2px #f472b6", "pink-500" = "0 0 0 2px #ec4899", "pink-600" = "0 0 0 2px #db2777", "pink-700" = "0 0 0 2px #be185d", "pink-800" = "0 0 0 2px #9d174d", "pink-900" = "0 0 0 2px #831843" }
 
 # -----------------------------------------------------------------------------
 # [generators]
 # Even more generators for your dx-styles project.
 # -----------------------------------------------------------------------------
 [generators]
-"border-w|border-width" = { multiplier = 1, unit = "px" }
-"border-t-w|border-top-width" = { multiplier = 1, unit = "px" }
-"border-r-w|border-right-width" = { multiplier = 1, unit = "px" }
-"border-b-w|border-bottom-width" = { multiplier = 1, unit = "px" }
-"border-l-w|border-left-width" = { multiplier = 1, unit = "px" }
-"divide-x-w|border-left-width" = { multiplier = 1, unit = "px" }
-"divide-y-w|border-top-width" = { multiplier = 1, unit = "px" }
-"outline-w|outline-width" = { multiplier = 1, unit = "px" }
-"outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
-"ring-w|--tw-ring-offset-shadow, --tw-ring-shadow, box-shadow" = { multiplier = 1, unit = "px" }
-"ring-offset-w|--tw-ring-offset-width" = { multiplier = 1, unit = "px" }
-"blur|filter" = { multiplier = 1, unit = "px" }
-"brightness|filter" = { multiplier = 0.01, unit = "" }
-"contrast|filter" = { multiplier = 0.01, unit = "" }
-"grayscale|filter" = { multiplier = 0.01, unit = "" }
-"hue-rotate|filter" = { multiplier = 1, unit = "deg" }
-"invert|filter" = { multiplier = 0.01, unit = "" }
-"saturate|filter" = { multiplier = 0.01, unit = "" }
-"sepia|filter" = { multiplier = 0.01, unit = "" }
-"backdrop-blur|backdrop-filter" = { multiplier = 1, unit = "px" }
-"backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-grayscale|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
-"backdrop-invert|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-sepia|backdrop-filter" = { multiplier = 0.01, unit = "" }

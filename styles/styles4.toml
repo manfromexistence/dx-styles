@@ -3,53 +3,17 @@
 # Innovative and powerful static utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [static]
-# Container Queries
-container-type-size = "container-type: size;"
-container-type-inline-size = "container-type: inline-size;"
-container-type-normal = "container-type: normal;"
 
-# View Transitions
-view-transition-none = "view-transition-name: none;"
-
-# Overscroll Behavior
-overscroll-contain = "overscroll-behavior: contain;"
-overscroll-none = "overscroll-behavior: none;"
-overscroll-auto = "overscroll-behavior: auto;"
-overscroll-y-contain = "overscroll-behavior-y: contain;"
-overscroll-y-none = "overscroll-behavior-y: none;"
-overscroll-y-auto = "overscroll-behavior-y: auto;"
-overscroll-x-contain = "overscroll-behavior-x: contain;"
-overscroll-x-none = "overscroll-behavior-x: none;"
-overscroll-x-auto = "overscroll-behavior-x: auto;"
-
-# Writing Mode
-writing-mode-vertical-rl = "writing-mode: vertical-rl;"
-writing-mode-vertical-lr = "writing-mode: vertical-lr;"
-writing-mode-horizontal-tb = "writing-mode: horizontal-tb;"
 
 # -----------------------------------------------------------------------------
 # [dynamic]
 # Innovative and powerful dynamic utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [dynamic]
-"container|container-name" = { "none" = "none", "xs" = "xs", "sm" = "sm", "md" = "md", "lg" = "lg", "xl" = "xl", "2xl" = "2xl" }
-"view-transition|view-transition-name" = { "none" = "none", "slide" = "slide", "fade" = "fade", "scale" = "scale", "flip" = "flip" }
-"text-orientation|text-orientation" = { "mixed" = "mixed", "upright" = "upright", "sideways" = "sideways" }
-"scroll-margin|scroll-margin" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
-"scroll-padding|scroll-padding" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
 
 # -----------------------------------------------------------------------------
 # [generators]
 # Innovative and powerful generators for your dx-styles project.
 # -----------------------------------------------------------------------------
 [generators]
-"scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
-"scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
-"scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
-"scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
-"scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
-"scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
-"scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
-"scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
-"scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
-"scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
+

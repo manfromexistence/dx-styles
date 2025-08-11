@@ -3,59 +3,16 @@
 # Creative and advanced static utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [static]
-# Text Rendering & Hyphenation
-text-rendering-optimize-legibility = "text-rendering: optimizeLegibility;"
-text-rendering-optimize-speed = "text-rendering: optimizeSpeed;"
-text-rendering-geometric-precision = "text-rendering: geometricPrecision;"
-hyphens-none = "hyphens: none;"
-hyphens-manual = "hyphens: manual;"
-hyphens-auto = "hyphens: auto;"
-
-# Scroll Behavior
-scroll-smooth = "scroll-behavior: smooth;"
-scroll-auto = "scroll-behavior: auto;"
-scrollbar-none = "::-webkit-scrollbar { display: none; } -ms-overflow-style: none; scrollbar-width: none;"
-scrollbar-thin = "::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 4px; }"
-
-# Creative Text Utilities
-text-gradient = "background-clip: text; -webkit-background-clip: text; color: transparent;"
-text-balance = "text-wrap: balance;"
-text-pretty = "text-wrap: pretty;"
-
-# List Styling
-list-image-none = "list-style-image: none;"
-
-# Table Styling
-border-spacing-0 = "border-spacing: 0;"
-caption-top = "caption-side: top;"
-caption-bottom = "caption-side: bottom;"
-
-# Screen Reader Utilities
-sr-only-focusable = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; clip-path: inset(50%);"
 
 # -----------------------------------------------------------------------------
 # [dynamic]
 # Creative and advanced dynamic utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [dynamic]
-"accent|accent-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
-"caret|caret-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
-"decoration|text-decoration-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
-"from|--tw-gradient-from" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
-"to|--tw-gradient-to" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
-"via|--tw-gradient-stops" = { "current" = "var(--tw-gradient-from), currentColor, var(--tw-gradient-to)", black = "var(--tw-gradient-from), #000, var(--tw-gradient-to)", white = "var(--tw-gradient-from), #fff, var(--tw-gradient-to)", "gray-500" = "var(--tw-gradient-from), #6b7280, var(--tw-gradient-to)", "red-500" = "var(--tw-gradient-from), #ef4444, var(--tw-gradient-to)", "yellow-500" = "var(--tw-gradient-from), #f59e0b, var(--tw-gradient-to)", "green-500" = "var(--tw-gradient-from), #22c55e, var(--tw-gradient-to)", "blue-500" = "var(--tw-gradient-from), #3b82f6, var(--tw-gradient-to)", "indigo-500" = "var(--tw-gradient-from), #6366f1, var(--tw-gradient-to)", "purple-500" = "var(--tw-gradient-from), #8b5cf6, var(--tw-gradient-to)", "pink-500" = "var(--tw-gradient-from), #ec4899, var(--tw-gradient-to)" }
-"text-fluid|font-size" = { "xs" = "clamp(0.75rem, 1.5vw + 0.5rem, 0.875rem)", "sm" = "clamp(0.875rem, 2vw + 0.5rem, 1rem)", "base" = "clamp(1rem, 2.5vw + 0.5rem, 1.125rem)", "lg" = "clamp(1.125rem, 3vw + 0.5rem, 1.25rem)", "xl" = "clamp(1.25rem, 4vw + 0.5rem, 1.5rem)", "2xl" = "clamp(1.5rem, 5vw + 0.5rem, 1.875rem)", "3xl" = "clamp(1.875rem, 6vw + 0.5rem, 2.25rem)" }
 
 # -----------------------------------------------------------------------------
 # [generators]
 # Creative and advanced generators for your dx-styles project.
 # -----------------------------------------------------------------------------
 [generators]
-"aspect|aspect-ratio" = { multiplier = 1, unit = "" } # e.g., aspect-16/9 for aspect-ratio: 16 / 9
-"grid-cols-fit|grid-template-columns" = { multiplier = 1, unit = "rem" } # e.g., grid-cols-fit-10 -> repeat(auto-fit, minmax(10rem, 1fr))
-"grid-cols-fill|grid-template-columns" = { multiplier = 1, unit = "rem" } # e.g., grid-cols-fill-10 -> repeat(auto-fill, minmax(10rem, 1fr))
-"line-clamp|--webkit-line-clamp" = { multiplier = 1, unit = "" } # e.g., line-clamp-3
-"border-spacing-x|border-spacing" = { multiplier = 0.25, unit = "rem" }
-"border-spacing-y|border-spacing" = { multiplier = 0.25, unit = "rem" }
-"decoration-thickness|text-decoration-thickness" = { multiplier = 1, unit = "px" }
-"underline-offset|text-underline-offset" = { multiplier = 1, unit = "px" }
+

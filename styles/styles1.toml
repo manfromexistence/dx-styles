@@ -3,99 +3,17 @@
 # New static utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [static]
-rounded-none = "border-radius: 0px;"
-rounded-sm = "border-radius: 0.125rem;"
-rounded = "border-radius: 0.25rem;"
-rounded-md = "border-radius: 0.375rem;"
-rounded-lg = "border-radius: 0.5rem;"
-rounded-xl = "border-radius: 0.75rem;"
-rounded-2xl = "border-radius: 1rem;"
-rounded-3xl = "border-radius: 1.5rem;"
-rounded-full = "border-radius: 9999px;"
-border-solid = "border-style: solid;"
-border-dashed = "border-style: dashed;"
-border-dotted = "border-style: dotted;"
-border-double = "border-style: double;"
-border-hidden = "border-style: hidden;"
-border-none = "border-style: none;"
-divide-solid = "border-style: solid;"
-divide-dashed = "border-style: dashed;"
-divide-dotted = "border-style: dotted;"
-divide-double = "border-style: double;"
-divide-none = "border-style: none;"
-outline-none = "outline: 2px solid transparent; outline-offset: 2px;"
-outline = "outline-style: solid;"
-outline-dashed = "outline-style: dashed;"
-outline-dotted = "outline-style: dotted;"
-outline-double = "outline-style: double;"
-shadow-sm = "box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"
-shadow = "box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);"
-shadow-md = "box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);"
-shadow-lg = "box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);"
-shadow-xl = "box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);"
-shadow-2xl = "box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);"
-shadow-inner = "box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);"
-shadow-none = "box-shadow: 0 0 #0000;"
-opacity-0 = "opacity: 0;"
-opacity-5 = "opacity: 0.05;"
-opacity-10 = "opacity: 0.1;"
-opacity-20 = "opacity: 0.2;"
-opacity-25 = "opacity: 0.25;"
-opacity-30 = "opacity: 0.3;"
-opacity-40 = "opacity: 0.4;"
-opacity-50 = "opacity: 0.5;"
-opacity-60 = "opacity: 0.6;"
-opacity-70 = "opacity: 0.7;"
-opacity-75 = "opacity: 0.75;"
-opacity-80 = "opacity: 0.8;"
-opacity-90 = "opacity: 0.9;"
-opacity-95 = "opacity: 0.95;"
-opacity-100 = "opacity: 1;"
-mix-blend-normal = "mix-blend-mode: normal;"
-mix-blend-multiply = "mix-blend-mode: multiply;"
-mix-blend-screen = "mix-blend-mode: screen;"
-mix-blend-overlay = "mix-blend-mode: overlay;"
-mix-blend-darken = "mix-blend-mode: darken;"
-mix-blend-lighten = "mix-blend-mode: lighten;"
-mix-blend-color-dodge = "mix-blend-mode: color-dodge;"
-mix-blend-color-burn = "mix-blend-mode: color-burn;"
-mix-blend-hard-light = "mix-blend-mode: hard-light;"
-mix-blend-soft-light = "mix-blend-mode: soft-light;"
-mix-blend-difference = "mix-blend-mode: difference;"
-mix-blend-exclusion = "mix-blend-mode: exclusion;"
-mix-blend-hue = "mix-blend-mode: hue;"
-mix-blend-saturation = "mix-blend-mode: saturation;"
-mix-blend-color = "mix-blend-mode: color;"
-mix-blend-luminosity = "mix-blend-mode: luminosity;"
+
 
 # -----------------------------------------------------------------------------
 # [dynamic]
 # New dynamic utility classes for your dx-styles project.
 # -----------------------------------------------------------------------------
 [dynamic]
-"rounded-t|border-top-left-radius, border-top-right-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
-"rounded-r|border-top-right-radius, border-bottom-right-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
-"rounded-b|border-bottom-right-radius, border-bottom-left-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
-"rounded-l|border-top-left-radius, border-bottom-left-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
-"text|color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
-"bg|background-color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
-"border|border-color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
 
 # -----------------------------------------------------------------------------
 # [generators]
 # New generators for your dx-styles project.
 # -----------------------------------------------------------------------------
 [generators]
-"py|padding-top, padding-bottom" = { multiplier = 0.25, unit = "rem" }
-"px|padding-left, padding-right" = { multiplier = 0.25, unit = "rem" }
-"my|margin-top, margin-bottom" = { multiplier = 0.25, unit = "rem" }
-"mx|margin-left, margin-right" = { multiplier = 0.25, unit = "rem" }
-"text-opacity|--tw-text-opacity" = { multiplier = 0.01, unit = "" }
-"bg-opacity|--tw-bg-opacity" = { multiplier = 0.01, unit = "" }
-"border-opacity|--tw-border-opacity" = { multiplier = 0.01, unit = "" }
-"divide-opacity|--tw-divide-opacity" = { multiplier = 0.01, unit = "" }
-"placeholder-opacity|--tw-placeholder-opacity" = { multiplier = 0.01, unit = "" }
-"ring-opacity|--tw-ring-opacity" = { multiplier = 0.01, unit = "" }
-"ring-offset-opacity|--tw-ring-offset-opacity" = { multiplier = 0.01, unit = "" }
-"shadow-opacity|--tw-shadow-opacity" = { multiplier = 0.01, unit = "" }
-"drop-shadow|filter" = { multiplier = 1, unit = "px" }
+

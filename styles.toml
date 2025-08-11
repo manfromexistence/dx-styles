@@ -1,12 +1,138 @@
-# A more efficient and powerful way to define your CSS utilities.
-# Generated from Tailwind CSS data for the dx project.
-
 # -----------------------------------------------------------------------------
 # [static]
 # For simple, one-off classes that have a single, unchanging CSS rule.
 # Format: class-name = "css-rule"
 # -----------------------------------------------------------------------------
 [static]
+rounded-none = "border-radius: 0px;"
+rounded-sm = "border-radius: 0.125rem;"
+rounded = "border-radius: 0.25rem;"
+rounded-md = "border-radius: 0.375rem;"
+rounded-lg = "border-radius: 0.5rem;"
+rounded-xl = "border-radius: 0.75rem;"
+rounded-2xl = "border-radius: 1rem;"
+rounded-3xl = "border-radius: 1.5rem;"
+rounded-full = "border-radius: 9999px;"
+border-solid = "border-style: solid;"
+border-dashed = "border-style: dashed;"
+border-dotted = "border-style: dotted;"
+border-double = "border-style: double;"
+border-hidden = "border-style: hidden;"
+border-none = "border-style: none;"
+divide-solid = "border-style: solid;"
+divide-dashed = "border-style: dashed;"
+divide-dotted = "border-style: dotted;"
+divide-double = "border-style: double;"
+divide-none = "border-style: none;"
+outline-none = "outline: 2px solid transparent; outline-offset: 2px;"
+outline = "outline-style: solid;"
+outline-dashed = "outline-style: dashed;"
+outline-dotted = "outline-style: dotted;"
+outline-double = "outline-style: double;"
+shadow-sm = "box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"
+shadow = "box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);"
+shadow-md = "box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);"
+shadow-lg = "box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);"
+shadow-xl = "box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);"
+shadow-2xl = "box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);"
+shadow-inner = "box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);"
+shadow-none = "box-shadow: 0 0 #0000;"
+opacity-0 = "opacity: 0;"
+opacity-5 = "opacity: 0.05;"
+opacity-10 = "opacity: 0.1;"
+opacity-20 = "opacity: 0.2;"
+opacity-25 = "opacity: 0.25;"
+opacity-30 = "opacity: 0.3;"
+opacity-40 = "opacity: 0.4;"
+opacity-50 = "opacity: 0.5;"
+opacity-60 = "opacity: 0.6;"
+opacity-70 = "opacity: 0.7;"
+opacity-75 = "opacity: 0.75;"
+opacity-80 = "opacity: 0.8;"
+opacity-90 = "opacity: 0.9;"
+opacity-95 = "opacity: 0.95;"
+opacity-100 = "opacity: 1;"
+mix-blend-normal = "mix-blend-mode: normal;"
+mix-blend-multiply = "mix-blend-mode: multiply;"
+mix-blend-screen = "mix-blend-mode: screen;"
+mix-blend-overlay = "mix-blend-mode: overlay;"
+mix-blend-darken = "mix-blend-mode: darken;"
+mix-blend-lighten = "mix-blend-mode: lighten;"
+mix-blend-color-dodge = "mix-blend-mode: color-dodge;"
+mix-blend-color-burn = "mix-blend-mode: color-burn;"
+mix-blend-hard-light = "mix-blend-mode: hard-light;"
+mix-blend-soft-light = "mix-blend-mode: soft-light;"
+mix-blend-difference = "mix-blend-mode: difference;"
+mix-blend-exclusion = "mix-blend-mode: exclusion;"
+mix-blend-hue = "mix-blend-mode: hue;"
+mix-blend-saturation = "mix-blend-mode: saturation;"
+mix-blend-color = "mix-blend-mode: color;"
+mix-blend-luminosity = "mix-blend-mode: luminosity;"
+
+border-t-transparent = "border-top-color: transparent;"
+border-r-transparent = "border-right-color: transparent;"
+border-b-transparent = "border-bottom-color: transparent;"
+border-l-transparent = "border-left-color: transparent;"
+placeholder-transparent = "color: transparent;"
+ring-transparent = "box-shadow: 0 0 0 2px transparent;"
+ring-offset-transparent = "--tw-ring-offset-color: transparent;"
+from-transparent = "--tw-gradient-from: transparent;"
+to-transparent = "--tw-gradient-to: transparent;"
+via-transparent = "--tw-gradient-stops: var(--tw-gradient-from), transparent, var(--tw-gradient-to);"
+divide-transparent = "border-color: transparent;"
+accent-transparent = "accent-color: transparent;"
+caret-transparent = "caret-color: transparent;"
+decoration-transparent = "text-decoration-color: transparent;"
+shadow-transparent = "--tw-shadow-color: transparent;"
+stroke-transparent = "stroke: transparent;"
+fill-transparent = "fill: transparent;"
+
+text-rendering-optimize-legibility = "text-rendering: optimizeLegibility;"
+text-rendering-optimize-speed = "text-rendering: optimizeSpeed;"
+text-rendering-geometric-precision = "text-rendering: geometricPrecision;"
+hyphens-none = "hyphens: none;"
+hyphens-manual = "hyphens: manual;"
+hyphens-auto = "hyphens: auto;"
+scroll-smooth = "scroll-behavior: smooth;"
+scroll-auto = "scroll-behavior: auto;"
+scrollbar-none = "::-webkit-scrollbar { display: none; } -ms-overflow-style: none; scrollbar-width: none;"
+scrollbar-thin = "::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 4px; }"
+text-gradient = "background-clip: text; -webkit-background-clip: text; color: transparent;"
+text-balance = "text-wrap: balance;"
+text-pretty = "text-wrap: pretty;"
+list-image-none = "list-style-image: none;"
+border-spacing-0 = "border-spacing: 0;"
+caption-top = "caption-side: top;"
+caption-bottom = "caption-side: bottom;"
+sr-only-focusable = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; clip-path: inset(50%);"
+
+container-type-size = "container-type: size;"
+container-type-inline-size = "container-type: inline-size;"
+container-type-normal = "container-type: normal;"
+view-transition-none = "view-transition-name: none;"
+overscroll-contain = "overscroll-behavior: contain;"
+overscroll-none = "overscroll-behavior: none;"
+overscroll-auto = "overscroll-behavior: auto;"
+overscroll-y-contain = "overscroll-behavior-y: contain;"
+overscroll-y-none = "overscroll-behavior-y: none;"
+overscroll-y-auto = "overscroll-behavior-y: auto;"
+overscroll-x-contain = "overscroll-behavior-x: contain;"
+overscroll-x-none = "overscroll-behavior-x: none;"
+overscroll-x-auto = "overscroll-behavior-x: auto;"
+writing-mode-vertical-rl = "writing-mode: vertical-rl;"
+writing-mode-vertical-lr = "writing-mode: vertical-lr;"
+writing-mode-horizontal-tb = "writing-mode: horizontal-tb;"
+
+pointer-events-none = "pointer-events: none;"
+pointer-events-auto = "pointer-events: auto;"
+select-none = "user-select: none;"
+select-text = "user-select: text;"
+select-all = "user-select: all;"
+select-auto = "user-select: auto;"
+appearance-none = "appearance: none;"
+sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
+not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
+
 aspect-auto = "aspect-ratio: auto;"
 aspect-square = "aspect-ratio: 1 / 1;"
 aspect-video = "aspect-ratio: 16 / 9;"
@@ -175,13 +301,13 @@ border-collapse = "border-collapse: collapse;"
 border-separate = "border-collapse: separate;"
 table-auto = "table-layout: auto;"
 table-fixed = "table-layout: fixed;"
-appearance-none = "appearance: none;"
 resize-none = "resize: none;"
 resize = "resize: both;"
 resize-y = "resize: vertical;"
 resize-x = "resize: horizontal;"
-sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
-not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
+# appearance-none = "appearance: none;"
+# sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
+# not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
 
 # -----------------------------------------------------------------------------
 # [dynamic]
@@ -189,6 +315,37 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 # Format: "prefix|css-property" = { suffix = "css-value", ... }
 # -----------------------------------------------------------------------------
 [dynamic]
+"rounded-t|border-top-left-radius, border-top-right-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
+"rounded-r|border-top-right-radius, border-bottom-right-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
+"rounded-b|border-bottom-right-radius, border-bottom-left-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
+"rounded-l|border-top-left-radius, border-bottom-left-radius" = { none = "0px", sm = "0.125rem", "" = "0.25rem", md = "0.375rem", lg = "0.5rem", xl = "0.75rem", "2xl" = "1rem", "3xl" = "1.5rem", full = "9999px" }
+"text|color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
+"bg|background-color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
+"border|border-color" = { transparent = "transparent", current = "currentColor", black = "#000", white = "#fff", "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
+
+"placeholder|color" = { "gray-50" = "#f9fafb", "gray-100" = "#f3f4f6", "gray-200" = "#e5e7eb", "gray-300" = "#d1d5db", "gray-400" = "#9ca3af", "gray-500" = "#6b7280", "gray-600" = "#4b5563", "gray-700" = "#374151", "gray-800" = "#1f2937", "gray-900" = "#111827", "red-50" = "#fef2f2", "red-100" = "#fee2e2", "red-200" = "#fecaca", "red-300" = "#fca5a5", "red-400" = "#f87171", "red-500" = "#ef4444", "red-600" = "#dc2626", "red-700" = "#b91c1c", "red-800" = "#991b1b", "red-900" = "#7f1d1d", "yellow-50" = "#fffbeb", "yellow-100" = "#fef3c7", "yellow-200" = "#fde68a", "yellow-300" = "#fcd34d", "yellow-400" = "#fbbf24", "yellow-500" = "#f59e0b", "yellow-600" = "#d97706", "yellow-700" = "#b45309", "yellow-800" = "#92400e", "yellow-900" = "#78350f", "green-50" = "#f0fdf4", "green-100" = "#dcfce7", "green-200" = "#bbf7d0", "green-300" = "#86efac", "green-400" = "#4ade80", "green-500" = "#22c55e", "green-600" = "#16a34a", "green-700" = "#15803d", "green-800" = "#166534", "green-900" = "#14532d", "blue-50" = "#eff6ff", "blue-100" = "#dbeafe", "blue-200" = "#bfdbfe", "blue-300" = "#93c5fd", "blue-400" = "#60a5fa", "blue-500" = "#3b82f6", "blue-600" = "#2563eb", "blue-700" = "#1d4ed8", "blue-800" = "#1e40af", "blue-900" = "#1e3a8a", "indigo-50" = "#eef2ff", "indigo-100" = "#e0e7ff", "indigo-200" = "#c7d2fe", "indigo-300" = "#a5b4fc", "indigo-400" = "#818cf8", "indigo-500" = "#6366f1", "indigo-600" = "#4f46e5", "indigo-700" = "#4338ca", "indigo-800" = "#3730a3", "indigo-900" = "#312e81", "purple-50" = "#f5f3ff", "purple-100" = "#ede9fe", "purple-200" = "#ddd6fe", "purple-300" = "#c4b5fd", "purple-400" = "#a78bfa", "purple-500" = "#8b5cf6", "purple-600" = "#7c3aed", "purple-700" = "#6d28d9", "purple-800" = "#5b21b6", "purple-900" = "#4c1d95", "pink-50" = "#fdf2f8", "pink-100" = "#fce7f3", "pink-200" = "#fbcfe8", "pink-300" = "#f9a8d4", "pink-400" = "#f472b6", "pink-500" = "#ec4899", "pink-600" = "#db2777", "pink-700" = "#be185d", "pink-800" = "#9d174d", "pink-900" = "#831843" }
+"ring|box-shadow" = { "gray-50" = "0 0 0 2px #f9fafb", "gray-100" = "0 0 0 2px #f3f4f6", "gray-200" = "0 0 0 2px #e5e7eb", "gray-300" = "0 0 0 2px #d1d5db", "gray-400" = "0 0 0 2px #9ca3af", "gray-500" = "0 0 0 2px #6b7280", "gray-600" = "0 0 0 2px #4b5563", "gray-700" = "0 0 0 2px #374151", "gray-800" = "0 0 0 2px #1f2937", "gray-900" = "0 0 0 2px #111827", "red-50" = "0 0 0 2px #fef2f2", "red-100" = "0 0 0 2px #fee2e2", "red-200" = "0 0 0 2px #fecaca", "red-300" = "0 0 0 2px #fca5a5", "red-400" = "0 0 0 2px #f87171", "red-500" = "0 0 0 2px #ef4444", "red-600" = "0 0 0 2px #dc2626", "red-700" = "0 0 0 2px #b91c1c", "red-800" = "0 0 0 2px #991b1b", "red-900" = "0 0 0 2px #7f1d1d", "yellow-50" = "0 0 0 2px #fffbeb", "yellow-100" = "0 0 0 2px #fef3c7", "yellow-200" = "0 0 0 2px #fde68a", "yellow-300" = "0 0 0 2px #fcd34d", "yellow-400" = "0 0 0 2px #fbbf24", "yellow-500" = "0 0 0 2px #f59e0b", "yellow-600" = "0 0 0 2px #d97706", "yellow-700" = "0 0 0 2px #b45309", "yellow-800" = "0 0 0 2px #92400e", "yellow-900" = "0 0 0 2px #78350f", "green-50" = "0 0 0 2px #f0fdf4", "green-100" = "0 0 0 2px #dcfce7", "green-200" = "0 0 0 2px #bbf7d0", "green-300" = "0 0 0 2px #86efac", "green-400" = "0 0 0 2px #4ade80", "green-500" = "0 0 0 2px #22c55e", "green-600" = "0 0 0 2px #16a34a", "green-700" = "0 0 0 2px #15803d", "green-800" = "0 0 0 2px #166534", "green-900" = "0 0 0 2px #14532d", "blue-50" = "0 0 0 2px #eff6ff", "blue-100" = "0 0 0 2px #dbeafe", "blue-200" = "0 0 0 2px #bfdbfe", "blue-300" = "0 0 0 2px #93c5fd", "blue-400" = "0 0 0 2px #60a5fa", "blue-500" = "0 0 0 2px #3b82f6", "blue-600" = "0 0 0 2px #2563eb", "blue-700" = "0 0 0 2px #1d4ed8", "blue-800" = "0 0 0 2px #1e40af", "blue-900" = "0 0 0 2px #1e3a8a", "indigo-50" = "0 0 0 2px #eef2ff", "indigo-100" = "0 0 0 2px #e0e7ff", "indigo-200" = "0 0 0 2px #c7d2fe", "indigo-300" = "0 0 0 2px #a5b4fc", "indigo-400" = "0 0 0 2px #818cf8", "indigo-500" = "0 0 0 2px #6366f1", "indigo-600" = "0 0 0 2px #4f46e5", "indigo-700" = "0 0 0 2px #4338ca", "indigo-800" = "0 0 0 2px #3730a3", "indigo-900" = "0 0 0 2px #312e81", "purple-50" = "0 0 0 2px #f5f3ff", "purple-100" = "0 0 0 2px #ede9fe", "purple-200" = "0 0 0 2px #ddd6fe", "purple-300" = "0 0 0 2px #c4b5fd", "purple-400" = "0 0 0 2px #a78bfa", "purple-500" = "0 0 0 2px #8b5cf6", "purple-600" = "0 0 0 2px #7c3aed", "purple-700" = "0 0 0 2px #6d28d9", "purple-800" = "0 0 0 2px #5b21b6", "purple-900" = "0 0 0 2px #4c1d95", "pink-50" = "0 0 0 2px #fdf2f8", "pink-100" = "0 0 0 2px #fce7f3", "pink-200" = "0 0 0 2px #fbcfe8", "pink-300" = "0 0 0 2px #f9a8d4", "pink-400" = "0 0 0 2px #f472b6", "pink-500" = "0 0 0 2px #ec4899", "pink-600" = "0 0 0 2px #db2777", "pink-700" = "0 0 0 2px #be185d", "pink-800" = "0 0 0 2px #9d174d", "pink-900" = "0 0 0 2px #831843" }
+
+"accent|accent-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
+"caret|caret-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
+"decoration|text-decoration-color" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
+"from|--tw-gradient-from" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
+"to|--tw-gradient-to" = { "current" = "currentColor", black = "#000", white = "#fff", "gray-500" = "#6b7280", "red-500" = "#ef4444", "yellow-500" = "#f59e0b", "green-500" = "#22c55e", "blue-500" = "#3b82f6", "indigo-500" = "#6366f1", "purple-500" = "#8b5cf6", "pink-500" = "#ec4899" }
+"via|--tw-gradient-stops" = { "current" = "var(--tw-gradient-from), currentColor, var(--tw-gradient-to)", black = "var(--tw-gradient-from), #000, var(--tw-gradient-to)", white = "var(--tw-gradient-from), #fff, var(--tw-gradient-to)", "gray-500" = "var(--tw-gradient-from), #6b7280, var(--tw-gradient-to)", "red-500" = "var(--tw-gradient-from), #ef4444, var(--tw-gradient-to)", "yellow-500" = "var(--tw-gradient-from), #f59e0b, var(--tw-gradient-to)", "green-500" = "var(--tw-gradient-from), #22c55e, var(--tw-gradient-to)", "blue-500" = "var(--tw-gradient-from), #3b82f6, var(--tw-gradient-to)", "indigo-500" = "var(--tw-gradient-from), #6366f1, var(--tw-gradient-to)", "purple-500" = "var(--tw-gradient-from), #8b5cf6, var(--tw-gradient-to)", "pink-500" = "var(--tw-gradient-from), #ec4899, var(--tw-gradient-to)" }
+"text-fluid|font-size" = { "xs" = "clamp(0.75rem, 1.5vw + 0.5rem, 0.875rem)", "sm" = "clamp(0.875rem, 2vw + 0.5rem, 1rem)", "base" = "clamp(1rem, 2.5vw + 0.5rem, 1.125rem)", "lg" = "clamp(1.125rem, 3vw + 0.5rem, 1.25rem)", "xl" = "clamp(1.25rem, 4vw + 0.5rem, 1.5rem)", "2xl" = "clamp(1.5rem, 5vw + 0.5rem, 1.875rem)", "3xl" = "clamp(1.875rem, 6vw + 0.5rem, 2.25rem)" }
+
+"container|container-name" = { "none" = "none", "xs" = "xs", "sm" = "sm", "md" = "md", "lg" = "lg", "xl" = "xl", "2xl" = "2xl" }
+"view-transition|view-transition-name" = { "none" = "none", "slide" = "slide", "fade" = "fade", "scale" = "scale", "flip" = "flip" }
+"text-orientation|text-orientation" = { "mixed" = "mixed", "upright" = "upright", "sideways" = "sideways" }
+"scroll-margin|scroll-margin" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+"scroll-padding|scroll-padding" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+
+"grid-cols|grid-template-columns" = { "1" = "repeat(1, minmax(0, 1fr))", "2" = "repeat(2, minmax(0, 1fr))", "3" = "repeat(3, minmax(0, 1fr))", "4" = "repeat(4, minmax(0, 1fr))", "5" = "repeat(5, minmax(0, 1fr))", "6" = "repeat(6, minmax(0, 1fr))", "7" = "repeat(7, minmax(0, 1fr))", "8" = "repeat(8, minmax(0, 1fr))", "9" = "repeat(9, minmax(0, 1fr))", "10" = "repeat(10, minmax(0, 1fr))", "11" = "repeat(11, minmax(0, 1fr))", "12" = "repeat(12, minmax(0, 1fr))", "none" = "none" }
+"grid-rows|grid-template-rows" = { "1" = "repeat(1, minmax(0, 1fr))", "2" = "repeat(2, minmax(0, 1fr))", "3" = "repeat(3, minmax(0, 1fr))", "4" = "repeat(4, minmax(0, 1fr))", "5" = "repeat(5, minmax(0, 1fr))", "6" = "repeat(6, minmax(0, 1fr))", "none" = "none" }
+"gap|gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+"gap-x|column-gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+"gap-y|row-gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+
 "float|float" = { right = "right;", left = "left;", none = "none;" }
 "clear|clear" = { left = "left;", right = "right;", both = "both;", none = "none;" }
 "object-fit|object-fit" = { contain = "contain;", cover = "cover;", fill = "fill;", none = "none;", "scale-down" = "scale-down;" }
@@ -209,8 +366,6 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 "left|left" = { auto = "auto;", "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", full = "100%;" }
 "z|z-index" = { auto = "auto;" }
 "basis|flex-basis" = { "1/2" = "50%;", "1/3" = "33.333333%;", "2/3" = "66.666667%;", "1/4" = "25%;", "2/4" = "50%;", "3/4" = "75%;", "1/5" = "20%;", "2/5" = "40%;", "3/5" = "60%;", "4/5" = "80%;", "1/6" = "16.666667%;", "2/6" = "33.333333%;", "3/6" = "50%;", "4/6" = "66.666667%;", "5/6" = "83.333333%;", "1/12" = "8.333333%;", "2/12" = "16.666667%;", "3/12" = "25%;", "4/12" = "33.333333%;", "5/12" = "41.666667%;", "6/12" = "50%;", "7/12" = "58.333333%;", "8/12" = "66.666667%;", "9/12" = "75%;", "10/12" = "83.333333%;", "11/12" = "91.666667%;", full = "100%;" }
-"grid-cols|grid-template-columns" = { none = "none;" }
-"grid-rows|grid-template-rows" = { none = "none;" }
 "grid-flow|grid-auto-flow" = { row = "row;", col = "column;", "row-dense" = "row dense;", "col-dense" = "column dense;" }
 "auto-cols|grid-auto-columns" = { auto = "auto;", min = "min-content;", max = "max-content;", fr = "minmax(0, 1fr);" }
 "auto-rows|grid-auto-rows" = { auto = "auto;", min = "min-content;", max = "max-content;", fr = "minmax(0, 1fr);" }
@@ -267,6 +422,8 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 "backdrop-grayscale|backdrop-filter" = { "0" = "grayscale(0);", "" = "grayscale(100%);" }
 "backdrop-invert|backdrop-filter" = { "0" = "invert(0);", "" = "invert(100%);" }
 "backdrop-sepia|backdrop-filter" = { "0" = "sepia(0);", "" = "sepia(100%);" }
+# "grid-cols|grid-template-columns" = { none = "none;" }
+# "grid-rows|grid-template-rows" = { none = "none;" }
 
 # -----------------------------------------------------------------------------
 # [generators]
@@ -274,6 +431,74 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 # Format: "prefix|css-property" = { multiplier = <number>, unit = "<css-unit>" }
 # -----------------------------------------------------------------------------
 [generators]
+"py|padding-top, padding-bottom" = { multiplier = 0.25, unit = "rem" }
+"px|padding-left, padding-right" = { multiplier = 0.25, unit = "rem" }
+"my|margin-top, margin-bottom" = { multiplier = 0.25, unit = "rem" }
+"mx|margin-left, margin-right" = { multiplier = 0.25, unit = "rem" }
+"text-opacity|--tw-text-opacity" = { multiplier = 0.01, unit = "" }
+"bg-opacity|--tw-bg-opacity" = { multiplier = 0.01, unit = "" }
+"border-opacity|--tw-border-opacity" = { multiplier = 0.01, unit = "" }
+"divide-opacity|--tw-divide-opacity" = { multiplier = 0.01, unit = "" }
+"placeholder-opacity|--tw-placeholder-opacity" = { multiplier = 0.01, unit = "" }
+"ring-opacity|--tw-ring-opacity" = { multiplier = 0.01, unit = "" }
+"ring-offset-opacity|--tw-ring-offset-opacity" = { multiplier = 0.01, unit = "" }
+"shadow-opacity|--tw-shadow-opacity" = { multiplier = 0.01, unit = "" }
+"drop-shadow|filter" = { multiplier = 1, unit = "px" }
+
+"border-w|border-width" = { multiplier = 1, unit = "px" }
+"border-t-w|border-top-width" = { multiplier = 1, unit = "px" }
+"border-r-w|border-right-width" = { multiplier = 1, unit = "px" }
+"border-b-w|border-bottom-width" = { multiplier = 1, unit = "px" }
+"border-l-w|border-left-width" = { multiplier = 1, unit = "px" }
+"divide-x-w|border-left-width" = { multiplier = 1, unit = "px" }
+"divide-y-w|border-top-width" = { multiplier = 1, unit = "px" }
+"outline-w|outline-width" = { multiplier = 1, unit = "px" }
+"outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
+"ring-w|--tw-ring-offset-shadow, --tw-ring-shadow, box-shadow" = { multiplier = 1, unit = "px" }
+"ring-offset-w|--tw-ring-offset-width" = { multiplier = 1, unit = "px" }
+"blur|filter" = { multiplier = 1, unit = "px" }
+"brightness|filter" = { multiplier = 0.01, unit = "" }
+"contrast|filter" = { multiplier = 0.01, unit = "" }
+"grayscale|filter" = { multiplier = 0.01, unit = "" }
+"hue-rotate|filter" = { multiplier = 1, unit = "deg" }
+"invert|filter" = { multiplier = 0.01, unit = "" }
+"saturate|filter" = { multiplier = 0.01, unit = "" }
+"sepia|filter" = { multiplier = 0.01, unit = "" }
+"backdrop-blur|backdrop-filter" = { multiplier = 1, unit = "px" }
+"backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-grayscale|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
+"backdrop-invert|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
+"backdrop-sepia|backdrop-filter" = { multiplier = 0.01, unit = "" }
+
+"aspect|aspect-ratio" = { multiplier = 1, unit = "" }
+"grid-cols-fit|grid-template-columns" = { multiplier = 1, unit = "rem" }
+"grid-cols-fill|grid-template-columns" = { multiplier = 1, unit = "rem" }
+"line-clamp|--webkit-line-clamp" = { multiplier = 1, unit = "" }
+"border-spacing-x|border-spacing" = { multiplier = 0.25, unit = "rem" }
+"border-spacing-y|border-spacing" = { multiplier = 0.25, unit = "rem" }
+"decoration-thickness|text-decoration-thickness" = { multiplier = 1, unit = "px" }
+"underline-offset|text-underline-offset" = { multiplier = 1, unit = "px" }
+
+"scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
+"scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
+"scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
+"scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
+"scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
+"scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
+"scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
+"scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
+"scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
+"scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
+
+"flex-basis|flex-basis" = { multiplier = 0.25, unit = "rem" }
+"order|order" = { multiplier = 1, unit = "" }
+"z|z-index" = { multiplier = 10, unit = "" }
+"stroke|stroke-width" = { multiplier = 1, unit = "" }
+"fill|fill" = { multiplier = 1, unit = "" }
+
 "columns|columns" = { multiplier = 1, unit = "" }
 "p|padding" = { multiplier = 0.25, unit = "rem" }
 "pt|padding-top" = { multiplier = 0.25, unit = "rem" }
@@ -294,7 +519,6 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 "space-y|--space-y-reverse,margin-top" = { multiplier = 0.25, unit = "rem" }
 "-space-x|--space-x-reverse,margin-left" = { multiplier = -0.25, unit = "rem" }
 "-space-y|--space-y-reverse,margin-top" = { multiplier = -0.25, unit = "rem" }
-"order|order" = { multiplier = 1, unit = "" }
 "col-span|grid-column" = { multiplier = 1, unit = "" }
 "col-start|grid-column-start" = { multiplier = 1, unit = "" }
 "col-end|grid-column-end" = { multiplier = 1, unit = "" }
@@ -316,7 +540,6 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 "divide-x|border-left-width" = { multiplier = 1, unit = "px" }
 "divide-y|border-top-width" = { multiplier = 1, unit = "px" }
 "outline|outline-width" = { multiplier = 1, unit = "px" }
-"outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
 "ring|--tw-ring-offset-shadow, --tw-ring-shadow, box-shadow" = { multiplier = 1, unit = "px" }
 "ring-offset|--tw-ring-offset-width" = { multiplier = 1, unit = "px" }
 "duration|transition-duration" = { multiplier = 1, unit = "ms" }
@@ -334,26 +557,28 @@ not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 
 "-skew-x|--transform-skew-x" = { multiplier = -1, unit = "deg" }
 "skew-y|--transform-skew-y" = { multiplier = 1, unit = "deg" }
 "-skew-y|--transform-skew-y" = { multiplier = -1, unit = "deg" }
-"scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
-"scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
-"scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
-"scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
-"scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
-"scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
-"scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
-"scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
-"scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
-"scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
-"stroke|stroke-width" = { multiplier = 1, unit = "" }
 "opacity|opacity" = { multiplier = 0.01, unit = "" }
-"brightness|filter" = { multiplier = 0.01, unit = "" }
-"contrast|filter" = { multiplier = 0.01, unit = "" }
-"hue-rotate|filter" = { multiplier = 1, unit = "deg" }
 "-hue-rotate|filter" = { multiplier = -1, unit = "deg" }
-"saturate|filter" = { multiplier = 0.01, unit = "" }
 "backdrop-opacity|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
-"backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
 "-backdrop-hue-rotate|backdrop-filter" = { multiplier = -1, unit = "deg" }
-"backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
+# "scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
+# "scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
+# "scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
+# "scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
+# "scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
+# "scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
+# "scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
+# "scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
+# "scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
+# "scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
+# "saturate|filter" = { multiplier = 0.01, unit = "" }
+# "backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
+# "backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
+# "backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
+# "backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
+# "outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
+# "brightness|filter" = { multiplier = 0.01, unit = "" }
+# "contrast|filter" = { multiplier = 0.01, unit = "" }
+# "hue-rotate|filter" = { multiplier = 1, unit = "deg" }
+# "order|order" = { multiplier = 1, unit = "" }
+# "stroke|stroke-width" = { multiplier = 1, unit = "" }
