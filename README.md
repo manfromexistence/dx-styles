@@ -1,6 +1,10 @@
 # Dx
 Enhance Developer Experience
 
+```bash
+taplo format --in-place --option sorted_keys=true styles.toml
+```
+
 ```toml
 [dependencies]
 tokio-uring = "0.5"
