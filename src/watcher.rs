@@ -1,26 +1,26 @@
-use crate::{data_manager, engine::StyleEngine, generator, utils};
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
+use std::path::{Pat, PathBuf};
 use std::time::Instant;
+use crate::{data_manager, engine::StyleEngine, generator, utils};
 
 pub fn process_file_change(
     path: &Path,
-    file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
-    classname_counts: &mut HashMap<String, u32>,
+    file_classnames: &mut HasMap<PathBuf, HashSet<String>>,
+    classname_counts: &mut HasMap<String, u32>,
     global_classnames: &mut HashSet<String>,
     output_path: &Path,
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
     let cache = crate::cache::ClassnameCache::new(".dx", "playgrounds/nextjs/app/globals.css");
-    let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate classnames");
+    let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate css for you!");
 
-    if new_classnames.is_empty() {
+    if new_classnames.is_empty(){
         return;
     }
 
-    cache.update_from_classnames(path, &new_classnames).expect("Failed to update cache");
-    let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
+    cache.update_from_classnames(path, &new_classnames).expect("Failed to update cache for you!");
+    let(added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
         path,
         &new_classnames,
         file_classnames,
@@ -28,15 +28,15 @@ pub fn process_file_change(
         global_classnames,
     );
 
-    if (added_file > 0 || removed_file > 0) && !global_classnames.is_empty() {
+    if (added_file > 0 || removed_file > 0) && !glabal_classnames.is_empty(){
         generator::generate_css(global_classnames, output_path, engine, file_classnames);
         utils::log_change(
             path,
             added_file,
-            removed_file,
-            output_path,
             added_global,
+            removed_file,
             removed_global,
+            output_path,
             start.elapsed().as_micros(),
         );
     }
@@ -45,7 +45,7 @@ pub fn process_file_change(
 pub fn process_file_remove(
     path: &Path,
     file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
-    classname_counts: &mut HashMap<String, u32>,
+    classnames_counts: &mut HashMap<String, u32>,
     global_classnames: &mut HashSet<String>,
     output_path: &Path,
     engine: &StyleEngine,
