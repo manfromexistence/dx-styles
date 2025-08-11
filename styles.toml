@@ -1,4 +1,81 @@
 # -----------------------------------------------------------------------------
+# [screens]
+# Defines named breakpoints for creating responsive designs.
+# These are used to prefix any utility class, e.g., "md:text-lg".
+# Format: name = "min-width value"
+# -----------------------------------------------------------------------------
+[screens]
+xs = "480px"
+sm = "640px"
+md = "768px"
+lg = "1024px"
+xl = "1280px"
+"2xl" = "1536px"
+
+# -----------------------------------------------------------------------------
+# [states]
+# Defines pseudo-class variants that can be prefixed to any utility.
+# e.g., "hover:bg-blue-500", "focus:ring-2", "first-child:p-0"
+# Format: name = "pseudo-class"
+# -----------------------------------------------------------------------------
+[states]
+hover = ":hover"
+focus = ":focus"
+focus-within = ":focus-within"
+focus-visible = ":focus-visible"
+active = ":active"
+visited = ":visited"
+disabled = ":disabled"
+checked = ":checked"
+first = ":first-child"
+last = ":last-child"
+odd = ":nth-child(odd)"
+even = ":nth-child(even)"
+required = ":required"
+optional = ":optional"
+valid = ":valid"
+invalid = ":invalid"
+read-only = ":read-only"
+before = "::before"
+after = "::after"
+placeholder = "::placeholder"
+file = "::file-selector-button"
+marker = "::marker"
+selection = "::selection"
+group-hover = ".group:hover &"
+group-focus = ".group:focus &"
+group-active = ".group:active &"
+group-visited = ".group:visited &"
+peer-checked = ".peer:checked ~ &"
+peer-focus = ".peer:focus ~ &"
+peer-active = ".peer:active &"
+peer-hover = ".peer:hover &"
+empty = ":empty"
+target = ":target"
+
+# -----------------------------------------------------------------------------
+# [container_queries]
+# Defines named container query breakpoints.
+# These are prefixed with '@' to distinguish them from screen breakpoints.
+# e.g., "@md:text-lg"
+# Format: name = "min-width value"
+# -----------------------------------------------------------------------------
+[container_queries]
+"@xs" = "20rem"   # 320px
+"@sm" = "24rem"   # 384px
+"@md" = "28rem"   # 448px
+"@lg" = "32rem"   # 512px
+"@xl" = "36rem"   # 576px
+"@2xl" = "42rem"  # 672px
+"@3xl" = "48rem"  # 768px
+"@4xl" = "56rem"  # 896px
+"@5xl" = "64rem"  # 1024px
+"@6xl" = "72rem"  # 1152px
+"@7xl" = "80rem"  # 1280px
+"@8xl" = "88rem"  # 1408px
+"@9xl" = "96rem"  # 1536px
+
+# -----------------------------------------------------------------------------
 # [static]
 # For simple, one-off classes that have a single, unchanging CSS rule.
 # Format: class-name = "css-rule"
