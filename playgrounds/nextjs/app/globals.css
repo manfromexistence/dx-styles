@@ -1,7 +1,7 @@
-.absolute {
-  position: absolute;
+.grid {
+  display: grid;
 }
 
-.flex {
-  display: flex;
+.absolute {
+  position: absolute;
 }

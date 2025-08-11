@@ -7,7 +7,7 @@ use rayon::prelude::*;
 use crate::parser::parse_classnames;
 
 mod cache_generated {
-    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn)]
+    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn, mismatched_lifetime_syntaxes)]
     include!(concat!(env!("OUT_DIR"), "/cache/cache_generated.rs"));
 }
 

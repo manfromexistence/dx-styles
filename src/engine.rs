@@ -5,7 +5,7 @@ use std::num::NonZeroUsize;
 use std::sync::Mutex;
 
 mod styles_generated {
-    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn)]
+    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn, mismatched_lifetime_syntaxes)]
     include!(concat!(env!("OUT_DIR"), "/cache/styles_generated.rs"));
 }
 use styles_generated::style_schema;
@@ -43,17 +43,16 @@ impl StyleEngine {
         if let Some(cached_css) = css_cache.get(class_name) {
             return Some(cached_css.clone());
         }
-    
+
         if let Some(css) = self.precompiled.get(class_name) {
             let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
             css_cache.put(class_name.to_string(), css_rule.clone());
             return Some(css_rule);
         }
-    
+
         let config = unsafe { flatbuffers::root_unchecked::<style_schema::Config>(&self.buffer) };
         if let Some(generators) = config.generators() {
             for generator in generators {
-                // FIX: Changed the pattern to match the types
                 if let (prefix, Some(property), Some(unit)) = (
                     generator.prefix(),
                     generator.property(),
@@ -74,5 +73,4 @@ impl StyleEngine {
         }
         None
     }
-    
 }
