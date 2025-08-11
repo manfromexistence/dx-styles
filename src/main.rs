@@ -22,13 +22,13 @@ fn main() {
     if !styles_toml_path.exists() {
         println!("{}", "styles.toml not found, creating default...".yellow());
         fs::write(&styles_toml_path, r#"
-[static]
-# Add static styles here
-[dynamic]
-# Add dynamic styles here
-[generators]
-# Add generators here
-"#).expect("Failed to create styles.toml");
+        [static]
+        # Add static styles here
+        [dynamic]
+        # Add dynamic styles here
+        [generators]
+        # Add generators here
+    "#).expect("Failed to create styles.toml");
     }
     if !styles_bin_path.exists() {
         println!("{}", "styles.bin not found, running cargo build to generate it...".yellow());
