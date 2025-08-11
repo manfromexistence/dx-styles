@@ -1,9 +1,9 @@
-// src/styles.fbs
-// The updated schema now understands both pre-compiled styles and dynamic generator rules.
+// styles.fbs
+// The schema is now upgraded to support responsive screens, states, and container queries.
 
 namespace StyleSchema;
 
-// A pre-compiled style with a class name and its CSS.
+// A pre-compiled static style with a class name and its CSS.
 table Style {
   name: string (key);
   css: string;
@@ -11,17 +11,50 @@ table Style {
 
 // A rule for generating styles on the fly (e.g., p-4, m-10).
 table Generator {
-  prefix: string;
+  prefix: string (key);
   property: string;
   multiplier: float;
   unit: string;
 }
 
-// The root configuration object that holds everything.
-// It contains a list of pre-compiled styles and a list of generator rules.
+// A dynamic style with a map of suffixes to CSS values.
+table Dynamic {
+  key: string (key);
+  property: string;
+  values: [DynamicValue];
+}
+
+table DynamicValue {
+    suffix: string (key);
+    value: string;
+}
+
+// A responsive breakpoint for media queries.
+table Screen {
+    name: string (key);
+    value: string;
+}
+
+// A pseudo-class state variant (e.g., :hover, :focus).
+table State {
+    name: string (key);
+    value: string;
+}
+
+// A container query breakpoint.
+table ContainerQuery {
+    name: string (key);
+    value: string;
+}
+
+// The root configuration object that holds the entire style system's configuration.
 table Config {
   styles: [Style];
   generators: [Generator];
+  dynamics: [Dynamic];
+  screens: [Screen];
+  states: [State];
+  container_queries: [ContainerQuery];
 }
 
 // We define 'Config' as the new root type for our styles.bin file.
