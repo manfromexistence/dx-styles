@@ -1,0 +1,43 @@
+# -----------------------------------------------------------------------------
+# [static]
+# More innovative and powerful static utility classes for your dx-styles project.
+# -----------------------------------------------------------------------------
+[static]
+# Pointer Events
+pointer-events-none = "pointer-events: none;"
+pointer-events-auto = "pointer-events: auto;"
+
+# User Select
+select-none = "user-select: none;"
+select-text = "user-select: text;"
+select-all = "user-select: all;"
+select-auto = "user-select: auto;"
+
+# Appearance
+appearance-none = "appearance: none;"
+
+# Screen Reader
+sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
+not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
+
+# -----------------------------------------------------------------------------
+# [dynamic]
+# More innovative and powerful dynamic utility classes for your dx-styles project.
+# -----------------------------------------------------------------------------
+[dynamic]
+"grid-cols|grid-template-columns" = { "1" = "repeat(1, minmax(0, 1fr))", "2" = "repeat(2, minmax(0, 1fr))", "3" = "repeat(3, minmax(0, 1fr))", "4" = "repeat(4, minmax(0, 1fr))", "5" = "repeat(5, minmax(0, 1fr))", "6" = "repeat(6, minmax(0, 1fr))", "7" = "repeat(7, minmax(0, 1fr))", "8" = "repeat(8, minmax(0, 1fr))", "9" = "repeat(9, minmax(0, 1fr))", "10" = "repeat(10, minmax(0, 1fr))", "11" = "repeat(11, minmax(0, 1fr))", "12" = "repeat(12, minmax(0, 1fr))", "none" = "none" }
+"grid-rows|grid-template-rows" = { "1" = "repeat(1, minmax(0, 1fr))", "2" = "repeat(2, minmax(0, 1fr))", "3" = "repeat(3, minmax(0, 1fr))", "4" = "repeat(4, minmax(0, 1fr))", "5" = "repeat(5, minmax(0, 1fr))", "6" = "repeat(6, minmax(0, 1fr))", "none" = "none" }
+"gap|gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+"gap-x|column-gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+"gap-y|row-gap" = { "0" = "0px", "px" = "1px", "0.5" = "0.125rem", "1" = "0.25rem", "1.5" = "0.375rem", "2" = "0.5rem", "2.5" = "0.625rem", "3" = "0.75rem", "3.5" = "0.875rem", "4" = "1rem" }
+
+# -----------------------------------------------------------------------------
+# [generators]
+# More innovative and powerful generators for your dx-styles project.
+# -----------------------------------------------------------------------------
+[generators]
+"flex-basis|flex-basis" = { multiplier = 0.25, unit = "rem" }
+"order|order" = { multiplier = 1, unit = "" }
+"z|z-index" = { multiplier = 10, unit = "" }
+"stroke|stroke-width" = { multiplier = 1, unit = "" }
+"fill|fill" = { multiplier = 1, unit = "" }
