@@ -1,7 +1,7 @@
-.flex {
-  display: flex;
-}
-
 .absolute {
   position: absolute;
+}
+
+.flex {
+  display: flex;
 }

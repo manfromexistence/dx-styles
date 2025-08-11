@@ -4,10 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bincode = "1.3.3"
 colored = "3.0.0"
-flatbuffers = "25.2.10"
-flatc-rust = "0.2.0"
 lightningcss = "1.0.0-alpha.67"
 lru = "0.16.0"
 notify = "8.2.0"
@@ -16,23 +13,25 @@ oxc_allocator = "0.80.0"
 oxc_ast = "0.80.0"
 oxc_parser = "0.80.0"
 oxc_span = "0.80.0"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.142"
-toml = "0.9.5"
 walkdir = "2.5.0"
 crossbeam-deque = "0.8.6"
 futures = "0.3.31"
-libc = "0.2.174"
 memmap2 = "0.9.7"
 rayon = "1.10.0"
-tokio = { version = "1.47.1", features = ["rt-multi-thread", "fs", "io-util", "full"] }
-sysinfo = "0.36.1"
-tokio-uring = "0.5.0"
-
+flatbuffers = "25.2.10"
+flatc-rust = "0.2.0"
+# sysinfo = "0.36.1"
+# libc = "0.2.174"
+# tokio-uring = "0.5.0"
+# tokio = { version = "1.47.1", features = ["rt-multi-thread", "fs", "io-util", "full"] }
+# serde = { version = "1.0.219", features = ["derive"] }
+# serde_json = "1.0.142"
+# toml = "0.9.5"
+# bincode = "1.3.3"
 
 [build-dependencies]
 flatc-rust = "0.2.0"
 toml = "0.9.5"
-serde = { version = "1.0.219", features = ["derive"] }
 flatbuffers = "25.2.10"
 cc = "1.2.31"
+serde = { version = "1.0.219", features = ["derive"] }
