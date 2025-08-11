@@ -16,7 +16,7 @@ pub fn process_file_change(
     let new_classnames = cache.compare_and_generate(path).expect("Failed to compare and generate classnames");
 
     if new_classnames.is_empty() {
-        return; // Skip if no new classnames
+        return;
     }
 
     cache.update_from_classnames(path, &new_classnames).expect("Failed to update cache");
