@@ -1,19 +1,7 @@
-.font-bold {
-  font-weight: 700;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.text-5xl {
-  font-size: 3rem;
-}
-
-.items-start {
-  align-items: flex-start;
-}
-
 .flex {
   display: flex;
+}
+
+.absolute {
+  position: absolute;
 }
