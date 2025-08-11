@@ -305,9 +305,6 @@ resize-none = "resize: none;"
 resize = "resize: both;"
 resize-y = "resize: vertical;"
 resize-x = "resize: horizontal;"
-# appearance-none = "appearance: none;"
-# sr-only = "position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"
-# not-sr-only = "position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: normal;"
 
 # -----------------------------------------------------------------------------
 # [dynamic]
@@ -422,8 +419,6 @@ resize-x = "resize: horizontal;"
 "backdrop-grayscale|backdrop-filter" = { "0" = "grayscale(0);", "" = "grayscale(100%);" }
 "backdrop-invert|backdrop-filter" = { "0" = "invert(0);", "" = "invert(100%);" }
 "backdrop-sepia|backdrop-filter" = { "0" = "sepia(0);", "" = "sepia(100%);" }
-# "grid-cols|grid-template-columns" = { none = "none;" }
-# "grid-rows|grid-template-rows" = { none = "none;" }
 
 # -----------------------------------------------------------------------------
 # [generators]
@@ -561,24 +556,3 @@ resize-x = "resize: horizontal;"
 "-hue-rotate|filter" = { multiplier = -1, unit = "deg" }
 "backdrop-opacity|backdrop-filter" = { multiplier = 0.01, unit = "" }
 "-backdrop-hue-rotate|backdrop-filter" = { multiplier = -1, unit = "deg" }
-# "scroll-m|scroll-margin" = { multiplier = 0.25, unit = "rem" }
-# "scroll-mt|scroll-margin-top" = { multiplier = 0.25, unit = "rem" }
-# "scroll-mr|scroll-margin-right" = { multiplier = 0.25, unit = "rem" }
-# "scroll-mb|scroll-margin-bottom" = { multiplier = 0.25, unit = "rem" }
-# "scroll-ml|scroll-margin-left" = { multiplier = 0.25, unit = "rem" }
-# "scroll-p|scroll-padding" = { multiplier = 0.25, unit = "rem" }
-# "scroll-pt|scroll-padding-top" = { multiplier = 0.25, unit = "rem" }
-# "scroll-pr|scroll-padding-right" = { multiplier = 0.25, unit = "rem" }
-# "scroll-pb|scroll-padding-bottom" = { multiplier = 0.25, unit = "rem" }
-# "scroll-pl|scroll-padding-left" = { multiplier = 0.25, unit = "rem" }
-# "saturate|filter" = { multiplier = 0.01, unit = "" }
-# "backdrop-brightness|backdrop-filter" = { multiplier = 0.01, unit = "" }
-# "backdrop-contrast|backdrop-filter" = { multiplier = 0.01, unit = "" }
-# "backdrop-hue-rotate|backdrop-filter" = { multiplier = 1, unit = "deg" }
-# "backdrop-saturate|backdrop-filter" = { multiplier = 0.01, unit = "" }
-# "outline-offset|outline-offset" = { multiplier = 1, unit = "px" }
-# "brightness|filter" = { multiplier = 0.01, unit = "" }
-# "contrast|filter" = { multiplier = 0.01, unit = "" }
-# "hue-rotate|filter" = { multiplier = 1, unit = "deg" }
-# "order|order" = { multiplier = 1, unit = "" }
-# "stroke|stroke-width" = { multiplier = 1, unit = "" }
