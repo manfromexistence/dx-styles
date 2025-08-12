@@ -136,7 +136,7 @@ fn main() {
                 );
             }
         }
-        if (total_added_global > 0 || total_removed_global > 0) && !global_classnames.is_empty() {
+        if (total_added_global > 0 || total_removed_global > 0) || !global_classnames.is_empty() {
             generator::generate_css(
                 &global_classnames,
                 &output_file,
@@ -167,7 +167,7 @@ fn main() {
 
     let (tx, rx) = mpsc::channel();
     let mut watcher =
-        new_debouncer(Duration::from_millis(100), None, tx).expect("Failed to create watcher");
+        new_debouncer(Duration::from_millis(50), None, tx).expect("Failed to create watcher");
     watcher
         .watch(&dir, RecursiveMode::Recursive)
         .expect("Failed to start watcher");

@@ -1,12 +1,17 @@
+use lru::LruCache;
 use std::collections::HashMap;
+use std::fs;
 use std::num::NonZeroUsize;
 use std::sync::Mutex;
-use lru::LruCache;
-use std::fs;
 
 mod styles_generated {
-    #![allow(dead_code, unused_imports, unsafe_op_in_unsafe_fn, mismatched_lifetime_syntaxes)]
-    include!(concat!(env!("OUT_DIR"), "/cache/styles_generated.rs"));
+    #![allow(
+        dead_code,
+        unused_imports,
+        unsafe_op_in_unsafe_fn,
+        mismatched_lifetime_syntaxes
+    )]
+    include!(concat!(env!("OUT_DIR"), "/styles_generated.rs"));
 }
 use styles_generated::style_schema;
 
@@ -24,10 +29,7 @@ impl StyleEngine {
         let mut precompiled = HashMap::new();
         if let Some(styles) = config.styles() {
             for style in styles {
-                let name = style.name();
-                if let Some(css) = style.css() {
-                    precompiled.insert(name.to_string(), css.to_string());
-                }
+                precompiled.insert(style.name().to_string(), style.css().to_string());
             }
         }
 
@@ -39,13 +41,16 @@ impl StyleEngine {
     }
 
     pub fn generate_css_for_class(&self, class_name: &str) -> Option<String> {
-        let mut css_cache = self.css_cache.lock().unwrap();
-        if let Some(cached_css) = css_cache.get(class_name) {
-            return Some(cached_css.clone());
+        {
+            let mut css_cache = self.css_cache.lock().unwrap();
+            if let Some(cached_css) = css_cache.get(class_name) {
+                return Some(cached_css.clone());
+            }
         }
 
         if let Some(css) = self.precompiled.get(class_name) {
             let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+            let mut css_cache = self.css_cache.lock().unwrap();
             css_cache.put(class_name.to_string(), css_rule.clone());
             return Some(css_rule);
         }
@@ -53,20 +58,19 @@ impl StyleEngine {
         let config = unsafe { flatbuffers::root_unchecked::<style_schema::Config>(&self.buffer) };
         if let Some(generators) = config.generators() {
             for generator in generators {
-                if let (prefix, Some(property), Some(unit)) = (
-                    generator.prefix(),
-                    generator.property(),
-                    generator.unit(),
-                ) {
-                    if class_name.starts_with(&format!("{}-", prefix)) {
-                        let value_str = &class_name[prefix.len() + 1..];
-                        if let Ok(num_val) = value_str.parse::<f32>() {
-                            let final_value = num_val * generator.multiplier();
-                            let css = format!("{}: {}{};", property, final_value, unit);
-                            let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
-                            css_cache.put(class_name.to_string(), css_rule.clone());
-                            return Some(css_rule);
-                        }
+                let prefix = generator.prefix();
+                let property = generator.property();
+                let unit = generator.unit();
+
+                if class_name.starts_with(&format!("{}-", prefix)) {
+                    let value_str = &class_name[prefix.len() + 1..];
+                    if let Ok(num_val) = value_str.parse::<f32>() {
+                        let final_value = num_val * generator.multiplier();
+                        let css = format!("{}: {}{};", property, final_value, unit);
+                        let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+                        let mut css_cache = self.css_cache.lock().unwrap();
+                        css_cache.put(class_name.to_string(), css_rule.clone());
+                        return Some(css_rule);
                     }
                 }
             }
