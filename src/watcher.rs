@@ -1,12 +1,12 @@
 use std::collections::{HashMap, HashSet};
-use std::path::{Pat, PathBuf};
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 use crate::{data_manager, engine::StyleEngine, generator, utils};
 
 pub fn process_file_change(
     path: &Path,
-    file_classnames: &mut HasMap<PathBuf, HashSet<String>>,
-    classname_counts: &mut HasMap<String, u32>,
+    file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
+    classnames_counts: &mut HashMap<String, u32>,
     global_classnames: &mut HashSet<String>,
     output_path: &Path,
     engine: &StyleEngine,
@@ -24,21 +24,20 @@ pub fn process_file_change(
         path,
         &new_classnames,
         file_classnames,
-        classname_counts,
+        classnames_counts,
         global_classnames,
     );
 
-    if (added_file > 0 || removed_file > 0) && !glabal_classnames.is_empty(){
+    if (added_file > 0 || removed_file > 0) && !global_classnames.is_empty() {
         generator::generate_css(global_classnames, output_path, engine, file_classnames);
         utils::log_change(
-            path,
-            added_file,
-            added_global,
-            removed_file,
-            removed_global,
-            output_path,
-            start.elapsed().as_micros(),
-        );
+            path, 
+            added_file, 
+            added_global, 
+            output_path, 
+            removed_global, 
+            removed_file, 
+            start.elapsed().as_micros());
     }
 }
 
@@ -60,7 +59,7 @@ pub fn process_file_remove(
             path,
             &empty_classnames,
             file_classnames,
-            classname_counts,
+            classnames_counts,
             global_classnames,
         );
 

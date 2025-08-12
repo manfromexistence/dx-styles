@@ -34,9 +34,9 @@ pub fn process_file_change(
             path,
             added_file,
             removed_file,
+            removed_global,
             output_path,
             added_global,
-            removed_global,
             start.elapsed().as_micros(),
         );
     }
