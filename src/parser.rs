@@ -1,4 +1,3 @@
-use crate::cache::ClassnameCache;
 use oxc_allocator::Allocator;
 use oxc_ast::ast::{
     self, ExportDefaultDeclarationKind, JSXAttributeItem, JSXOpeningElement, Program,
@@ -9,15 +8,8 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 
-pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> {
-    if let Ok(Some(cached_classnames)) = cache.get(path) {
-        return cached_classnames;
-    }
-
-    let source_text = match fs::read_to_string(path) {
-        Ok(text) => text,
-        Err(_) => return HashSet::new(),
-    };
+pub fn parse_classnames(path: &Path) -> HashSet<String> {
+    let source_text = fs::read_to_string(path).unwrap_or_default();
     if source_text.is_empty() {
         return HashSet::new();
     }
@@ -32,10 +24,6 @@ pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> 
         class_names: HashSet::new(),
     };
     visitor.visit_program(&ret.program);
-
-    cache
-        .set(path, &visitor.class_names)
-        .expect("Failed to cache classnames");
     visitor.class_names
 }
 

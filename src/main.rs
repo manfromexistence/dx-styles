@@ -99,11 +99,9 @@ fn main() {
     if !files.is_empty() {
         let results: Vec<_> = files
             .par_iter()
-            .filter_map(|file| {
-                cache
-                    .compare_and_generate(file)
-                    .ok()
-                    .map(|c| (file.clone(), c))
+            .filter_map(|file| match cache.compare_and_generate(file) {
+                Ok(Some(classnames)) => Some((file.clone(), classnames)),
+                _ => None,
             })
             .collect();
 

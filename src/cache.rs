@@ -1,12 +1,17 @@
 use crate::parser::parse_classnames;
-use bincode::{config::standard, error::{DecodeError, EncodeError}, Decode, Encode};
+use bincode::{
+    config::standard,
+    error::{DecodeError, EncodeError},
+    Decode, Encode,
+};
 use serde::{Deserialize, Serialize};
 use sled::Db;
-use std::collections::HashSet;
-use std::error::Error;
-use std::fmt;
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::{
+    collections::HashSet,
+    error::Error,
+    fmt, fs,
+    path::{Path, PathBuf},
+};
 
 #[derive(Debug)]
 pub enum CacheError {
@@ -14,6 +19,7 @@ pub enum CacheError {
     Io(std::io::Error),
     Encode(EncodeError),
     Decode(DecodeError),
+    Time(std::time::SystemTimeError),
 }
 
 impl fmt::Display for CacheError {
@@ -23,33 +29,35 @@ impl fmt::Display for CacheError {
             CacheError::Io(e) => write!(f, "IO error: {}", e),
             CacheError::Encode(e) => write!(f, "Encoding error: {}", e),
             CacheError::Decode(e) => write!(f, "Decoding error: {}", e),
+            CacheError::Time(e) => write!(f, "System time error: {}", e),
         }
     }
 }
 
 impl Error for CacheError {}
-
 impl From<sled::Error> for CacheError {
     fn from(e: sled::Error) -> Self {
         CacheError::Sled(e)
     }
 }
-
 impl From<std::io::Error> for CacheError {
     fn from(e: std::io::Error) -> Self {
         CacheError::Io(e)
     }
 }
-
 impl From<EncodeError> for CacheError {
     fn from(e: EncodeError) -> Self {
         CacheError::Encode(e)
     }
 }
-
 impl From<DecodeError> for CacheError {
     fn from(e: DecodeError) -> Self {
         CacheError::Decode(e)
+    }
+}
+impl From<std::time::SystemTimeError> for CacheError {
+    fn from(e: std::time::SystemTimeError) -> Self {
+        CacheError::Time(e)
     }
 }
 
@@ -64,7 +72,7 @@ pub struct ClassnameCache {
 }
 
 impl ClassnameCache {
-    pub fn new(db_path: &str) -> Result<Self, CacheError> {
+    pub fn new(db_path: &str) -> Result<Self, sled::Error> {
         let db = sled::open(db_path)?;
         Ok(Self { db })
     }
@@ -74,14 +82,10 @@ impl ClassnameCache {
         let Some(data) = self.db.get(path_key.as_bytes())? else {
             return Ok(None);
         };
-
-        let (cached, _): (FileCache, usize) =
-            bincode::decode_from_slice(&data, standard())?;
-        let metadata = fs::metadata(path)?;
-        let modified = metadata
+        let (cached, _): (FileCache, usize) = bincode::decode_from_slice(&data, standard())?;
+        let modified = fs::metadata(path)?
             .modified()?
-            .duration_since(std::time::UNIX_EPOCH)
-            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?
+            .duration_since(std::time::UNIX_EPOCH)?
             .as_secs();
 
         if cached.modified == modified {
@@ -96,8 +100,7 @@ impl ClassnameCache {
         let modified = if path.exists() {
             fs::metadata(path)?
                 .modified()?
-                .duration_since(std::time::UNIX_EPOCH)
-                .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?
+                .duration_since(std::time::UNIX_EPOCH)?
                 .as_secs()
         } else {
             0
@@ -111,7 +114,6 @@ impl ClassnameCache {
         let encoded = bincode::encode_to_vec(&file_cache, standard())?;
         self.db.insert(path_key.as_bytes(), encoded)?;
         self.db.flush()?;
-
         Ok(())
     }
 
@@ -132,15 +134,16 @@ impl ClassnameCache {
         })
     }
 
-    pub fn compare_and_generate(&self, path: &Path) -> Result<HashSet<String>, CacheError> {
-        if let Ok(Some(classnames)) = self.get(path) {
-            if !classnames.is_empty() {
-                return Ok(HashSet::new());
-            }
+    pub fn compare_and_generate(
+        &self,
+        path: &Path,
+    ) -> Result<Option<HashSet<String>>, CacheError> {
+        if self.get(path)?.is_some() {
+            return Ok(None);
         }
 
-        let current_classnames = parse_classnames(path, self);
+        let current_classnames = parse_classnames(path);
         self.set(path, &current_classnames)?;
-        Ok(current_classnames)
+        Ok(Some(current_classnames))
     }
 }
