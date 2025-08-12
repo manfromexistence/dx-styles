@@ -3,6 +3,8 @@ use std::path::{Path, PathBuf};
 use std::time::Instant;
 use crate::{cache::ClassnameCache, data_manager, engine::StyleEngine, generator, utils};
 
+/// Processes a file change event (create or modify).
+/// It uses the cache to determine what has changed and updates the global CSS if necessary.
 pub fn process_file_change(
     cache: &ClassnameCache,
     path: &Path,
@@ -13,6 +15,7 @@ pub fn process_file_change(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
+    // This call now uses the sled-backed cache seamlessly.
     let current_classnames = match cache.compare_and_generate(path) {
         Ok(names) => names,
         Err(_) => return,
@@ -40,6 +43,8 @@ pub fn process_file_change(
     }
 }
 
+/// Processes a file removal event.
+/// It removes the file's classnames from the global state and regenerates the CSS.
 pub fn process_file_remove(
     cache: &ClassnameCache,
     path: &Path,
@@ -64,6 +69,7 @@ pub fn process_file_remove(
         global_classnames,
     );
 
+    // This call now uses the sled-backed cache to remove the entry.
     cache.remove(path).ok();
 
     if added_global > 0 || removed_global > 0 {

@@ -1,14 +1,16 @@
-use oxc_ast::ast::{self, ExportDefaultDeclarationKind, JSXAttributeItem, JSXOpeningElement, Program};
 use crate::cache::ClassnameCache;
-use std::collections::HashSet;
 use oxc_allocator::Allocator;
-use oxc_span::SourceType;
+use oxc_ast::ast::{
+    self, ExportDefaultDeclarationKind, JSXAttributeItem, JSXOpeningElement, Program,
+};
 use oxc_parser::Parser;
-use std::path::Path;
+use oxc_span::SourceType;
+use std::collections::HashSet;
 use std::fs;
+use std::path::Path;
 
 pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> {
-    if let Some(cached_classnames) = cache.get(path) {
+    if let Ok(Some(cached_classnames)) = cache.get(path) {
         return cached_classnames;
     }
 
@@ -21,13 +23,19 @@ pub fn parse_classnames(path: &Path, cache: &ClassnameCache) -> HashSet<String> 
     }
 
     let allocator = Allocator::default();
-    let source_type = SourceType::from_path(path).unwrap_or_default().with_jsx(true);
+    let source_type = SourceType::from_path(path)
+        .unwrap_or_default()
+        .with_jsx(true);
     let ret = Parser::new(&allocator, &source_text, source_type).parse();
 
-    let mut visitor = ClassNameVisitor { class_names: HashSet::new() };
+    let mut visitor = ClassNameVisitor {
+        class_names: HashSet::new(),
+    };
     visitor.visit_program(&ret.program);
-    
-    cache.set(path, &visitor.class_names).expect("Failed to cache classnames");
+
+    cache
+        .set(path, &visitor.class_names)
+        .expect("Failed to cache classnames");
     visitor.class_names
 }
 
@@ -74,7 +82,9 @@ impl ClassNameVisitor {
                     self.visit_declaration(decl);
                 }
             }
-            ast::Statement::ExportDefaultDeclaration(decl) => self.visit_export_default_declaration(decl),
+            ast::Statement::ExportDefaultDeclaration(decl) => {
+                self.visit_export_default_declaration(decl)
+            }
             _ => {}
         }
     }
@@ -92,7 +102,7 @@ impl ClassNameVisitor {
             _ => {}
         }
     }
-    
+
     fn visit_export_default_declaration(&mut self, decl: &ast::ExportDefaultDeclaration) {
         match &decl.declaration {
             ExportDefaultDeclarationKind::FunctionDeclaration(func) => self.visit_function(func),
@@ -130,7 +140,9 @@ impl ClassNameVisitor {
                     self.visit_statement(stmt);
                 }
             }
-            ast::Expression::ParenthesizedExpression(expr) => self.visit_expression(&expr.expression),
+            ast::Expression::ParenthesizedExpression(expr) => {
+                self.visit_expression(&expr.expression)
+            }
             _ => {}
         }
     }

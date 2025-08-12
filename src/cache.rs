@@ -1,136 +1,103 @@
-// cache.rs
-use std::collections::{HashMap, HashSet};
 use crate::parser::parse_classnames;
-use std::path::{Path, PathBuf};
-use std::sync::{Mutex, RwLock};
-use rayon::prelude::*;
+use bincode::{config::standard, error::{DecodeError, EncodeError}, Decode, Encode};
+use serde::{Deserialize, Serialize};
+use sled::Db;
+use std::collections::HashSet;
+use std::error::Error;
+use std::fmt;
 use std::fs;
-use rkyv::{Archive, Serialize as RkyvSerialize, Deserialize as RkyvDeserialize, rancor::Error};
+use std::path::{Path, PathBuf};
 
-// FIXED: Made the struct public so it can be accessed from other modules like `main.rs`.
-#[derive(Clone, Archive, RkyvSerialize, RkyvDeserialize)]
+#[derive(Debug)]
+pub enum CacheError {
+    Sled(sled::Error),
+    Io(std::io::Error),
+    Encode(EncodeError),
+    Decode(DecodeError),
+}
+
+impl fmt::Display for CacheError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            CacheError::Sled(e) => write!(f, "Database error: {}", e),
+            CacheError::Io(e) => write!(f, "IO error: {}", e),
+            CacheError::Encode(e) => write!(f, "Encoding error: {}", e),
+            CacheError::Decode(e) => write!(f, "Decoding error: {}", e),
+        }
+    }
+}
+
+impl Error for CacheError {}
+
+impl From<sled::Error> for CacheError {
+    fn from(e: sled::Error) -> Self {
+        CacheError::Sled(e)
+    }
+}
+
+impl From<std::io::Error> for CacheError {
+    fn from(e: std::io::Error) -> Self {
+        CacheError::Io(e)
+    }
+}
+
+impl From<EncodeError> for CacheError {
+    fn from(e: EncodeError) -> Self {
+        CacheError::Encode(e)
+    }
+}
+
+impl From<DecodeError> for CacheError {
+    fn from(e: DecodeError) -> Self {
+        CacheError::Decode(e)
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, Encode, Decode)]
 pub struct FileCache {
     pub modified: u64,
     pub classnames: HashSet<String>,
 }
 
 pub struct ClassnameCache {
-    cache_dir: PathBuf,
-    pub memory_cache: RwLock<HashMap<String, FileCache>>,
-    // REMOVED: This field was unused.
-    // css_path: PathBuf,
+    db: Db,
 }
 
 impl ClassnameCache {
-    pub fn new(cache_dir: &str, css_path: &str) -> Self {
-        let cache_dir_path = PathBuf::from(cache_dir);
-        let css_path_buf = PathBuf::from(css_path);
-        fs::create_dir_all(&cache_dir_path).expect("Failed to create cache directory");
+    pub fn new(db_path: &str) -> Result<Self, CacheError> {
+        let db = sled::open(db_path)?;
+        Ok(Self { db })
+    }
 
-        if !css_path_buf.exists() {
-            fs::write(&css_path_buf, "").expect("Failed to create initial CSS file");
-        }
-
-        let memory_cache = if cache_dir_path.join("cache.bin").exists() {
-            Self::load_from_disk(&cache_dir_path)
-        } else {
-            Self::build_cache_from_css(&cache_dir_path, &css_path_buf)
+    pub fn get(&self, path: &Path) -> Result<Option<HashSet<String>>, CacheError> {
+        let path_key = path.to_string_lossy();
+        let Some(data) = self.db.get(path_key.as_bytes())? else {
+            return Ok(None);
         };
 
-        Self {
-            cache_dir: cache_dir_path,
-            memory_cache: RwLock::new(memory_cache),
-            // REMOVED: Removed the unused field from initialization.
-            // css_path: css_path_buf,
+        let (cached, _): (FileCache, usize) =
+            bincode::decode_from_slice(&data, standard())?;
+        let metadata = fs::metadata(path)?;
+        let modified = metadata
+            .modified()?
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?
+            .as_secs();
+
+        if cached.modified == modified {
+            Ok(Some(cached.classnames))
+        } else {
+            Ok(None)
         }
     }
 
-    fn build_cache_from_css(cache_dir: &Path, css_path: &Path) -> HashMap<String, FileCache> {
-        let cache = Mutex::new(HashMap::new());
-
-        if css_path.exists() {
-            let css_content = fs::read_to_string(css_path).unwrap_or_default();
-            let css_classnames: HashSet<String> = css_content
-                .lines()
-                .filter_map(|line| {
-                    line.trim().strip_prefix('.').and_then(|s| s.split('{').next()).map(str::to_string)
-                })
-                .collect();
-
-            let tsx_files: Vec<PathBuf> = walkdir::WalkDir::new("playgrounds/nextjs")
-                .into_iter()
-                .filter_map(Result::ok)
-                .filter(|e| e.path().extension().map_or(false, |ext| ext == "tsx"))
-                .map(|e| e.path().to_path_buf())
-                .collect();
-
-            tsx_files.par_iter().for_each(|path| {
-                // This temporary instance creation is a bit unusual but required by the function signature.
-                // It's not causing the current error, so we'll leave it as is.
-                let temp_cache_instance = Self {
-                    cache_dir: cache_dir.to_path_buf(),
-                    memory_cache: RwLock::new(HashMap::new()),
-                };
-                let classnames = parse_classnames(path, &temp_cache_instance);
-                let intersection: HashSet<String> = classnames
-                    .intersection(&css_classnames)
-                    .cloned()
-                    .collect();
-                if !intersection.is_empty() {
-                    if let Ok(metadata) = fs::metadata(path) {
-                        if let Ok(modified) = metadata.modified().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)).and_then(|m| m.duration_since(std::time::UNIX_EPOCH).map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))).map(|d| d.as_secs()) {
-                            let path_str = path.to_string_lossy().into_owned();
-                            let mut cache_guard = cache.lock().unwrap();
-                            cache_guard.insert(path_str, FileCache {
-                                modified,
-                                classnames: intersection,
-                            });
-                        }
-                    }
-                }
-            });
-        }
-
-        let cache_data = cache.into_inner().unwrap();
-        let bytes = rkyv::to_bytes::<Error>(&cache_data).unwrap();
-        fs::write(cache_dir.join("cache.bin"), bytes).expect("Failed to write cache.bin");
-
-        cache_data
-    }
-
-    fn load_from_disk(cache_dir: &Path) -> HashMap<String, FileCache> {
-        let cache_path = cache_dir.join("cache.bin");
-        if let Ok(data) = fs::read(&cache_path) {
-            if let Ok(cache_data) = rkyv::from_bytes::<HashMap<String, FileCache>, Error>(&data) {
-                return cache_data;
-            }
-        }
-        HashMap::new()
-    }
-
-    pub fn get(&self, path: &Path) -> Option<HashSet<String>> {
-        let path_str = path.to_string_lossy().into_owned();
-        let memory_cache = self.memory_cache.read().unwrap();
-        if let Some(cached) = memory_cache.get(&path_str) {
-            if let Ok(metadata) = fs::metadata(path) {
-                if let Ok(modified) = metadata.modified().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)).and_then(|m| m.duration_since(std::time::UNIX_EPOCH).map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))).map(|d| d.as_secs()) {
-                    if cached.modified == modified {
-                        return Some(cached.classnames.clone());
-                    }
-                }
-            }
-        }
-        None
-    }
-
-    pub fn set(&self, path: &Path, classnames: &HashSet<String>) -> Result<(), Box<dyn std::error::Error>> {
-        let path_str = path.to_string_lossy().into_owned();
+    pub fn set(&self, path: &Path, classnames: &HashSet<String>) -> Result<(), CacheError> {
+        let path_key = path.to_string_lossy();
         let modified = if path.exists() {
             fs::metadata(path)?
-                .modified()
-                .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?
+                .modified()?
                 .duration_since(std::time::UNIX_EPOCH)
-                .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?
+                .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?
                 .as_secs()
         } else {
             0
@@ -141,37 +108,37 @@ impl ClassnameCache {
             classnames: classnames.clone(),
         };
 
-        {
-            let mut memory_cache = self.memory_cache.write().unwrap();
-            memory_cache.insert(path_str, file_cache);
-        }
-
-        self.save_to_disk()?;
+        let encoded = bincode::encode_to_vec(&file_cache, standard())?;
+        self.db.insert(path_key.as_bytes(), encoded)?;
+        self.db.flush()?;
 
         Ok(())
     }
 
-    fn save_to_disk(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let memory_cache = self.memory_cache.read().unwrap();
-        let bytes = rkyv::to_bytes::<Error>(&*memory_cache).unwrap();
-        fs::write(self.cache_dir.join("cache.bin"), bytes)?;
+    pub fn remove(&self, path: &Path) -> Result<(), CacheError> {
+        let path_key = path.to_string_lossy();
+        self.db.remove(path_key.as_bytes())?;
+        self.db.flush()?;
         Ok(())
     }
 
-    pub fn remove(&self, path: &Path) -> Result<(), Box<dyn std::error::Error>> {
-        let path_str = path.to_string_lossy().into_owned();
-        {
-            let mut memory_cache = self.memory_cache.write().unwrap();
-            memory_cache.remove(&path_str);
-        }
-        self.save_to_disk()?;
-        Ok(())
+    pub fn iter(&self) -> impl Iterator<Item = (PathBuf, FileCache)> {
+        self.db.iter().filter_map(|item| {
+            let (key, value) = item.ok()?;
+            let path = PathBuf::from(String::from_utf8_lossy(&key).to_string());
+            let file_cache: Result<(FileCache, usize), _> =
+                bincode::decode_from_slice(&value, standard());
+            file_cache.ok().map(|(fc, _)| (path, fc))
+        })
     }
 
-    pub fn compare_and_generate(&self, path: &Path) -> Result<HashSet<String>, Box<dyn std::error::Error>> {
-        if self.get(path).is_some() {
-            return Ok(HashSet::new());
+    pub fn compare_and_generate(&self, path: &Path) -> Result<HashSet<String>, CacheError> {
+        if let Ok(Some(classnames)) = self.get(path) {
+            if !classnames.is_empty() {
+                return Ok(HashSet::new());
+            }
         }
+
         let current_classnames = parse_classnames(path, self);
         self.set(path, &current_classnames)?;
         Ok(current_classnames)
