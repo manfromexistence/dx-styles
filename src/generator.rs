@@ -2,8 +2,7 @@ use crate::engine::StyleEngine;
 use lightningcss::stylesheet::{ParserOptions, PrinterOptions, StyleSheet};
 use rayon::prelude::*;
 use std::collections::{HashMap, HashSet};
-use std::fs::{self, File};
-use std::io::{BufWriter, Write};
+use std::fs;
 use std::path::{Path, PathBuf};
 
 pub fn generate_css(
@@ -12,34 +11,19 @@ pub fn generate_css(
     engine: &StyleEngine,
     _file_classnames: &HashMap<PathBuf, HashSet<String>>,
 ) {
-    let existing_css: HashMap<String, String> = match fs::read_to_string(output_path) {
-        Ok(content) => content
-            .split('}')
-            .filter(|s| !s.trim().is_empty())
-            .map(|rule| {
-                let rule = rule.trim();
-                let class_name = rule[1..rule.find('{').unwrap()].to_string();
-                (class_name, rule.to_string() + "}")
-            })
-            .collect(),
-        Err(_) => HashMap::new(),
-    };
-
     let css_rules: Vec<_> = class_names
         .par_iter()
-        .filter_map(|cn| {
-            if let Some(existing) = existing_css.get(cn) {
-                if let Some(new_css) = engine.generate_css_for_class(cn) {
-                    if new_css == *existing {
-                        return Some(existing.to_string());
-                    }
-                }
-            }
-            engine.generate_css_for_class(cn)
-        })
+        .filter_map(|cn| engine.generate_css_for_class(cn))
         .collect();
 
-    let css_content = css_rules.join("\n");
+    let css_content = css_rules.join("\n\n");
+
+    // If there are no classes, ensure the file is empty.
+    if css_content.is_empty() {
+        let _ = fs::write(output_path, "");
+        return;
+    }
+
     let stylesheet =
         StyleSheet::parse(&css_content, ParserOptions::default()).expect("Failed to parse CSS");
 
@@ -52,9 +36,5 @@ pub fn generate_css(
         .expect("Failed to minify CSS")
         .code;
 
-    let file = File::create(output_path).expect("Failed to create output file");
-    let mut writer = BufWriter::new(file);
-    writer
-        .write_all(minified_css.as_bytes())
-        .expect("Failed to write CSS");
+    fs::write(output_path, minified_css).expect("Failed to write to output file");
 }

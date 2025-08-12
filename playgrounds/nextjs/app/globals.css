@@ -10,14 +10,14 @@
   height: 100vh;
 }
 
-.flex {
-  display: flex;
+.grid {
+  display: grid;
 }
 
 .absolute {
   position: absolute;
 }
 
-.place-content-start {
-  place-content: start;
+.place-content-center {
+  place-content: center;
 }
