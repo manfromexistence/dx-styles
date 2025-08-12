@@ -1,6 +1,8 @@
 # Dx
 Enhance Developer Experience
 
+make sure to use lightingcss to verify generated css is right
+
 ```bash
 taplo format --in-place --option sorted_keys=true styles.toml
 ```
