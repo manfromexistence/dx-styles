@@ -1,10 +1,10 @@
-use lightningcss::stylesheet::{ParserOptions, StyleSheet, PrinterOptions};
-use std::collections::{HashMap, HashSet};
 use crate::engine::StyleEngine;
-use std::path::{Path, PathBuf};
-use std::fs::{self, File};
+use lightningcss::stylesheet::{ParserOptions, PrinterOptions, StyleSheet};
 use rayon::prelude::*;
-use std::io::Write;
+use std::collections::{HashMap, HashSet};
+use std::fs::{self, File};
+use std::io::{BufWriter, Write};
+use std::path::{Path, PathBuf};
 
 pub fn generate_css(
     class_names: &HashSet<String>,
@@ -25,7 +25,8 @@ pub fn generate_css(
         Err(_) => HashMap::new(),
     };
 
-    let css_rules: Vec<_> = class_names.par_iter()
+    let css_rules: Vec<_> = class_names
+        .par_iter()
         .filter_map(|cn| {
             if let Some(existing) = existing_css.get(cn) {
                 if let Some(new_css) = engine.generate_css_for_class(cn) {
@@ -39,14 +40,21 @@ pub fn generate_css(
         .collect();
 
     let css_content = css_rules.join("\n");
-    let stylesheet = StyleSheet::parse(&css_content, ParserOptions::default()).expect("Failed to parse CSS");
+    let stylesheet =
+        StyleSheet::parse(&css_content, ParserOptions::default()).expect("Failed to parse CSS");
 
     let is_production = std::env::var("DX_ENV").map(|v| v == "production").unwrap_or(false);
-    let minified_css = stylesheet.to_css(PrinterOptions {
-        minify: is_production,
-        ..PrinterOptions::default()
-    }).expect("Failed to minify CSS").code;
+    let minified_css = stylesheet
+        .to_css(PrinterOptions {
+            minify: is_production,
+            ..PrinterOptions::default()
+        })
+        .expect("Failed to minify CSS")
+        .code;
 
-    let mut file = File::create(output_path).expect("Failed to create output file");
-    file.write_all(minified_css.as_bytes()).expect("Failed to write CSS");
+    let file = File::create(output_path).expect("Failed to create output file");
+    let mut writer = BufWriter::new(file);
+    writer
+        .write_all(minified_css.as_bytes())
+        .expect("Failed to write CSS");
 }

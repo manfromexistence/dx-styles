@@ -1,3 +1,7 @@
+.w-screen {
+  width: 100vw;
+}
+
 .place-items-center {
   place-items: center;
 }
@@ -6,18 +10,14 @@
   height: 100vh;
 }
 
-.place-content-center {
-  place-content: center;
+.flex {
+  display: flex;
 }
 
 .absolute {
   position: absolute;
 }
 
-.w-screen {
-  width: 100vw;
-}
-
-.grid {
-  display: grid;
+.place-content-start {
+  place-content: start;
 }

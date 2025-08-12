@@ -2,6 +2,7 @@ mod cache;
 mod data_manager;
 mod engine;
 mod generator;
+mod io;
 mod parser;
 mod utils;
 mod watcher;
@@ -10,7 +11,6 @@ use crate::cache::ClassnameCache;
 use colored::Colorize;
 use notify::RecursiveMode;
 use notify_debouncer_full::new_debouncer;
-use rayon::prelude::*;
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -97,45 +97,51 @@ fn main() {
     let scan_start = Instant::now();
     let files = utils::find_code_files(&dir);
     if !files.is_empty() {
-        let results: Vec<_> = files
-            .par_iter()
-            .filter_map(|file| match cache.compare_and_generate(file) {
-                Ok(Some(classnames)) => Some((file.clone(), classnames)),
-                _ => None,
-            })
-            .collect();
+        let batch_size = io::get_dynamic_batch_size();
+        println!("Using dynamic batch size: {}", batch_size);
 
         let mut total_added_in_files = 0;
         let mut total_removed_in_files = 0;
         let mut total_added_global = 0;
         let mut total_removed_global = 0;
 
-        for (file, current_classnames) in results {
-            let start = Instant::now();
-            let (added_file, removed_file, added_global, removed_global) =
-                data_manager::update_class_maps(
-                    &file,
-                    &current_classnames,
-                    &mut file_classnames,
-                    &mut classname_counts,
-                    &mut global_classnames,
-                );
-            total_added_in_files += added_file;
-            total_removed_in_files += removed_file;
-            total_added_global += added_global;
-            total_removed_global += removed_global;
-            if added_file > 0 || removed_file > 0 {
-                utils::log_change(
-                    &file,
-                    added_file,
-                    removed_file,
-                    &output_file,
-                    added_global,
-                    removed_global,
-                    start.elapsed().as_micros(),
-                );
+        for batch in files.chunks(batch_size) {
+            let results: Vec<_> = batch
+                .iter()
+                .filter_map(|file| match cache.compare_and_generate(file) {
+                    Ok(Some(classnames)) => Some((file.clone(), classnames)),
+                    _ => None,
+                })
+                .collect();
+
+            for (file, current_classnames) in results {
+                let start = Instant::now();
+                let (added_file, removed_file, added_global, removed_global) =
+                    data_manager::update_class_maps(
+                        &file,
+                        &current_classnames,
+                        &mut file_classnames,
+                        &mut classname_counts,
+                        &mut global_classnames,
+                    );
+                total_added_in_files += added_file;
+                total_removed_in_files += removed_file;
+                total_added_global += added_global;
+                total_removed_global += removed_global;
+                if added_file > 0 || removed_file > 0 {
+                    utils::log_change(
+                        &file,
+                        added_file,
+                        removed_file,
+                        &output_file,
+                        added_global,
+                        removed_global,
+                        start.elapsed().as_micros(),
+                    );
+                }
             }
         }
+
         if (total_added_global > 0 || total_removed_global > 0) && !global_classnames.is_empty() {
             generator::generate_css(
                 &global_classnames,
