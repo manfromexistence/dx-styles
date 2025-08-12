@@ -7,7 +7,7 @@ pub fn find_code_files(dir: &Path) -> Vec<PathBuf> {
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| is_code_file(e.path()))
-        .map(|e| e.path().to_path_buf())
+        .map(|e| e.path().canonicalize().unwrap_or_else(|_| e.path().to_path_buf()))
         .collect()
 }
 
@@ -29,8 +29,16 @@ pub fn log_change(
         return;
     }
 
-    let source_str = source_path.display().to_string();
-    let output_str = output_path.display().to_string();
+    let source_str = source_path
+        .canonicalize()
+        .unwrap_or_else(|_| source_path.to_path_buf())
+        .display()
+        .to_string();
+    let output_str = output_path
+        .canonicalize()
+        .unwrap_or_else(|_| output_path.to_path_buf())
+        .display()
+        .to_string();
 
     let file_changes = format!(
         "({}, {})",

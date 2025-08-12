@@ -35,5 +35,10 @@ pub fn update_class_maps(
     }
 
     file_classnames.insert(path.to_path_buf(), new_classnames.clone());
-    (added_in_file.len(), removed_in_file.len(), added_in_global, removed_in_global)
+    (
+        added_in_file.len(),
+        removed_in_file.len(),
+        added_in_global,
+        removed_in_global,
+    )
 }

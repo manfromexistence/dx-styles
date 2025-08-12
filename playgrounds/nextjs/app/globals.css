@@ -1,32 +1,31 @@
-.absolute {
-    position: absolute;
-}
-
-.flex {
-    display: flex;
-}
-
-.grid {
-    display: grid;
-}
-
-.h-screen {
-    height: 100vh;;
-}
-
-.place-content-center {
-    place-content: center;;
+.w-screen {
+    width: 100vw;;
 }
 
 .place-content-start {
     place-content: start;;
 }
 
+.absolute {
+    position: absolute;
+}
+
+.grid {
+    display: grid;
+}
+
+.place-content-center {
+    place-content: center;;
+}
+
 .place-items-center {
     place-items: center;;
 }
 
-.w-screen {
-    width: 100vw;;
+.h-screen {
+    height: 100vh;;
 }
 
+.place-items-start {
+    place-items: start;;
+}
