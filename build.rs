@@ -27,7 +27,7 @@ struct StyleRecord {
 }
 
 fn main() {
-    let fbs_files = ["styles.fbs", "cache.fbs"];
+    let fbs_files = ["styles.fbs"];
     let toml_path = "styles.toml";
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
@@ -36,13 +36,10 @@ fn main() {
     }
     println!("cargo:rerun-if-changed={}", toml_path);
 
-    let cache_out_dir = Path::new(&out_dir).join("cache");
-    fs::create_dir_all(&cache_out_dir).expect("Failed to create cache output directory");
-
     flatc_rust::run(flatc_rust::Args {
         lang: "rust",
         inputs: &fbs_files.iter().map(|s| Path::new(s)).collect::<Vec<_>>(),
-        out_dir: &cache_out_dir,
+        out_dir: Path::new(&out_dir),
         includes: &[Path::new("src")],
         ..Default::default()
     })

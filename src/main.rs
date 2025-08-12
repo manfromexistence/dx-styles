@@ -60,42 +60,55 @@ fn main() {
     };
     println!("{}", "✅ Dx Styles initialized with new Style Engine.".bold().green());
 
-    let cache = ClassnameCache::new(".dx", "playgrounds/nextjs/app/globals.css");
-    let dir = PathBuf::from("playgrounds/nextjs");
     let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
+    let cache = ClassnameCache::new(".dx", output_file.to_str().unwrap());
+    let dir = PathBuf::from("playgrounds/nextjs");
 
     let mut file_classnames: HashMap<PathBuf, HashSet<String>> = HashMap::new();
     let mut classname_counts: HashMap<String, u32> = HashMap::new();
     let mut global_classnames: HashSet<String> = HashSet::new();
+
+    {
+        let memory_cache = cache.memory_cache.read().unwrap();
+        for (path_str, fc) in memory_cache.iter() {
+            let path = PathBuf::from(path_str);
+            file_classnames.insert(path.clone(), fc.classnames.clone());
+            for cn in &fc.classnames {
+                *classname_counts.entry(cn.clone()).or_insert(0) += 1;
+                global_classnames.insert(cn.clone());
+            }
+        }
+    }
 
     let scan_start = Instant::now();
     let files = utils::find_code_files(&dir);
     if !files.is_empty() {
         let results: Vec<_> = files.par_iter()
             .filter_map(|file| {
-                let new_classnames = cache.compare_and_generate(file).expect("Failed to compare and generate classnames");
-                if new_classnames.is_empty() {
-                    None
-                } else {
-                    cache.update_from_classnames(file, &new_classnames).expect("Failed to update cache");
-                    Some((file.to_path_buf(), new_classnames))
-                }
+                let current_classnames = cache.compare_and_generate(file).ok()?;
+                Some((file.clone(), current_classnames))
             })
             .collect();
+
         let mut total_added_in_files = 0;
+        let mut total_removed_in_files = 0;
         let mut total_added_global = 0;
-        for (file, new_classnames) in results {
+        let mut total_removed_global = 0;
+
+        for (file, current_classnames) in results {
             let start = Instant::now();
             let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
                 &file,
-                &new_classnames,
+                &current_classnames,
                 &mut file_classnames,
                 &mut classname_counts,
                 &mut global_classnames,
             );
             total_added_in_files += added_file;
+            total_removed_in_files += removed_file;
             total_added_global += added_global;
-            if removed_file > 0 || added_global > 0 {
+            total_removed_global += removed_global;
+            if added_file > 0 || removed_file > 0 {
                 utils::log_change(
                     &file,
                     added_file,
@@ -107,15 +120,15 @@ fn main() {
                 );
             }
         }
-        if (total_added_in_files > 0 || total_added_global > 0) && !global_classnames.is_empty() {
+        if (total_added_global > 0 || total_removed_global > 0) && !global_classnames.is_empty() {
             generator::generate_css(&global_classnames, &output_file, &style_engine, &file_classnames);
             utils::log_change(
                 &dir,
                 total_added_in_files,
-                0,
+                total_removed_in_files,
                 &output_file,
                 total_added_global,
-                0,
+                total_removed_global,
                 scan_start.elapsed().as_micros(),
             );
         }
@@ -137,9 +150,9 @@ fn main() {
                     for path in &event.event.paths {
                         if utils::is_code_file(path) && *path != output_file {
                             if matches!(event.event.kind, notify::EventKind::Remove(_)) {
-                                watcher::process_file_remove(path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
+                                watcher::process_file_remove(&cache, path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
                             } else {
-                                watcher::process_file_change(path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
+                                watcher::process_file_change(&cache, path, &mut file_classnames, &mut classname_counts, &mut global_classnames, &output_file, &style_engine);
                             }
                         }
                     }

@@ -1,24 +1,23 @@
-// cache.rs
+cache.rs
 use std::collections::{HashMap, HashSet};
 use crate::parser::parse_classnames;
 use std::path::{Path, PathBuf};
 use std::sync::{Mutex, RwLock};
 use rayon::prelude::*;
 use std::fs;
-use rkyv::{Archive, Serialize as RkyvSerialize, Deserialize as RkyvDeserialize, rancor::Error};
+use rkyv::{Archive, Deserialize, Serialize as RkyvSerialize};
 
-// FIXED: Made the struct public so it can be accessed from other modules like `main.rs`.
-#[derive(Clone, Archive, RkyvSerialize, RkyvDeserialize)]
-pub struct FileCache {
-    pub modified: u64,
-    pub classnames: HashSet<String>,
+#[derive(Clone, Archive, RkyvSerialize, rkyv::Deserialize)]
+#[archive(derive(Hash, Eq, PartialEq))]
+struct FileCache {
+    modified: u64,
+    classnames: HashSet<String>,
 }
 
 pub struct ClassnameCache {
     cache_dir: PathBuf,
     pub memory_cache: RwLock<HashMap<String, FileCache>>,
-    // REMOVED: This field was unused.
-    // css_path: PathBuf,
+    css_path: PathBuf,
 }
 
 impl ClassnameCache {
@@ -40,8 +39,7 @@ impl ClassnameCache {
         Self {
             cache_dir: cache_dir_path,
             memory_cache: RwLock::new(memory_cache),
-            // REMOVED: Removed the unused field from initialization.
-            // css_path: css_path_buf,
+            css_path: css_path_buf,
         }
     }
 
@@ -65,20 +63,18 @@ impl ClassnameCache {
                 .collect();
 
             tsx_files.par_iter().for_each(|path| {
-                // This temporary instance creation is a bit unusual but required by the function signature.
-                // It's not causing the current error, so we'll leave it as is.
-                let temp_cache_instance = Self {
+                let classnames = parse_classnames(path, &Self {
                     cache_dir: cache_dir.to_path_buf(),
                     memory_cache: RwLock::new(HashMap::new()),
-                };
-                let classnames = parse_classnames(path, &temp_cache_instance);
+                    css_path: css_path.to_path_buf(),
+                });
                 let intersection: HashSet<String> = classnames
                     .intersection(&css_classnames)
                     .cloned()
                     .collect();
                 if !intersection.is_empty() {
                     if let Ok(metadata) = fs::metadata(path) {
-                        if let Ok(modified) = metadata.modified().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)).and_then(|m| m.duration_since(std::time::UNIX_EPOCH).map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))).map(|d| d.as_secs()) {
+                        if let Ok(modified) = metadata.modified().and_then(|m| Ok(m.duration_since(std::time::UNIX_EPOCH)?)).map(|d| d.as_secs()) {
                             let path_str = path.to_string_lossy().into_owned();
                             let mut cache_guard = cache.lock().unwrap();
                             cache_guard.insert(path_str, FileCache {
@@ -92,7 +88,7 @@ impl ClassnameCache {
         }
 
         let cache_data = cache.into_inner().unwrap();
-        let bytes = rkyv::to_bytes::<Error>(&cache_data).unwrap();
+        let bytes = rkyv::to_bytes(&cache_data).unwrap();
         fs::write(cache_dir.join("cache.bin"), bytes).expect("Failed to write cache.bin");
 
         cache_data
@@ -101,7 +97,7 @@ impl ClassnameCache {
     fn load_from_disk(cache_dir: &Path) -> HashMap<String, FileCache> {
         let cache_path = cache_dir.join("cache.bin");
         if let Ok(data) = fs::read(&cache_path) {
-            if let Ok(cache_data) = rkyv::from_bytes::<HashMap<String, FileCache>, Error>(&data) {
+            if let Ok(cache_data) = rkyv::from_bytes(&data) {
                 return cache_data;
             }
         }
@@ -113,7 +109,7 @@ impl ClassnameCache {
         let memory_cache = self.memory_cache.read().unwrap();
         if let Some(cached) = memory_cache.get(&path_str) {
             if let Ok(metadata) = fs::metadata(path) {
-                if let Ok(modified) = metadata.modified().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)).and_then(|m| m.duration_since(std::time::UNIX_EPOCH).map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))).map(|d| d.as_secs()) {
+                if let Ok(modified) = metadata.modified().and_then(|m| Ok(m.duration_since(std::time::UNIX_EPOCH)?)).map(|d| d.as_secs()) {
                     if cached.modified == modified {
                         return Some(cached.classnames.clone());
                     }
@@ -127,10 +123,8 @@ impl ClassnameCache {
         let path_str = path.to_string_lossy().into_owned();
         let modified = if path.exists() {
             fs::metadata(path)?
-                .modified()
-                .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?
-                .duration_since(std::time::UNIX_EPOCH)
-                .map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?
+                .modified()?
+                .duration_since(std::time::UNIX_EPOCH)?
                 .as_secs()
         } else {
             0
@@ -153,7 +147,7 @@ impl ClassnameCache {
 
     fn save_to_disk(&self) -> Result<(), Box<dyn std::error::Error>> {
         let memory_cache = self.memory_cache.read().unwrap();
-        let bytes = rkyv::to_bytes::<Error>(&*memory_cache).unwrap();
+        let bytes = rkyv::to_bytes(&*memory_cache).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
         fs::write(self.cache_dir.join("cache.bin"), bytes)?;
         Ok(())
     }
@@ -175,5 +169,88 @@ impl ClassnameCache {
         let current_classnames = parse_classnames(path, self);
         self.set(path, &current_classnames)?;
         Ok(current_classnames)
+    }
+}
+
+watcher.rs
+use std::collections::{HashMap, HashSet};
+use std::path::{Path, PathBuf};
+use std::time::Instant;
+use crate::{cache::ClassnameCache, data_manager, engine::StyleEngine, generator, utils};
+
+pub fn process_file_change(
+    cache: &ClassnameCache,
+    path: &Path,
+    file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
+    classname_counts: &mut HashMap<String, u32>,
+    global_classnames: &mut HashSet<String>,
+    output_path: &Path,
+    engine: &StyleEngine,
+) {
+    let start = Instant::now();
+    let current_classnames = match cache.compare_and_generate(path) {
+        Ok(names) => names,
+        Err(_) => return,
+    };
+
+    let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
+        path,
+        &current_classnames,
+        file_classnames,
+        classname_counts,
+        global_classnames,
+    );
+
+    if added_global > 0 || removed_global > 0 {
+        generator::generate_css(global_classnames, output_path, engine, file_classnames);
+        utils::log_change(
+            path,
+            added_file,
+            removed_file,
+            output_path,
+            added_global,
+            removed_global,
+            start.elapsed().as_micros(),
+        );
+    }
+}
+
+pub fn process_file_remove(
+    cache: &ClassnameCache,
+    path: &Path,
+    file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
+    classname_counts: &mut HashMap<String, u32>,
+    global_classnames: &mut HashSet<String>,
+    output_path: &Path,
+    engine: &StyleEngine,
+) {
+    if !file_classnames.contains_key(path) {
+        return;
+    }
+
+    let start = Instant::now();
+    let empty_classnames = HashSet::new();
+
+    let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
+        path,
+        &empty_classnames,
+        file_classnames,
+        classname_counts,
+        global_classnames,
+    );
+
+    cache.remove(path).ok();
+
+    if added_global > 0 || removed_global > 0 {
+        generator::generate_css(global_classnames, output_path, engine, file_classnames);
+        utils::log_change(
+            path,
+            added_file,
+            removed_file,
+            output_path,
+            added_global,
+            removed_global,
+            start.elapsed().as_micros(),
+        );
     }
 }
