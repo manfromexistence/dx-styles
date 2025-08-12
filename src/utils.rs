@@ -55,7 +55,7 @@ pub fn log_change(
     let time_str = if time_us < 1000 {
         format!("{}µs", time_us)
     } else {
-        format!("{}ms", time_us / 1000)
+        format!("{:.2}ms", time_us as f64 / 1000.0)
     };
 
     println!(

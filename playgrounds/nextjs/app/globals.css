@@ -1,31 +1,44 @@
-.w-screen {
-    width: 100vw;;
-}
-
-.place-content-start {
-    place-content: start;;
-}
-
 .absolute {
-    position: absolute;
+  position: absolute;
+}
+
+.flex {
+  display: flex;
 }
 
 .grid {
-    display: grid;
+  display: grid;
 }
 
-.place-content-center {
-    place-content: center;;
-}
-
-.place-items-center {
-    place-items: center;;
+.h-full {
+  height: 100%;;
 }
 
 .h-screen {
-    height: 100vh;;
+  height: 100vh;;
+}
+
+.place-content-center {
+  place-content: center;;
+}
+
+.place-content-start {
+  place-content: start;;
+}
+
+.place-items-center {
+  place-items: center;;
 }
 
 .place-items-start {
-    place-items: start;;
+  place-items: start;;
 }
+
+.w-full {
+  width: 100%;;
+}
+
+.w-screen {
+  width: 100vw;;
+}
+

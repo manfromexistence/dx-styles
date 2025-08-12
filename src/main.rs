@@ -99,9 +99,9 @@ fn main() {
     if !files.is_empty() {
         let results: Vec<_> = files
             .par_iter()
-            .filter_map(|file| match cache.compare_and_generate(file) {
-                Ok(Some(classnames)) => Some((file.clone(), classnames)),
-                _ => None,
+            .filter_map(|file| {
+                let classnames = parser::parse_classnames(file);
+                Some((file.clone(), classnames))
             })
             .collect();
 

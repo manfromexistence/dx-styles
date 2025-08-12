@@ -49,7 +49,7 @@ impl StyleEngine {
         }
 
         if let Some(css) = self.precompiled.get(class_name) {
-            let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+            let css_rule = format!(".{} {{\n  {}\n}}", class_name, css);
             let mut css_cache = self.css_cache.lock().unwrap();
             css_cache.put(class_name.to_string(), css_rule.clone());
             return Some(css_rule);
@@ -67,7 +67,7 @@ impl StyleEngine {
                     if let Ok(num_val) = value_str.parse::<f32>() {
                         let final_value = num_val * generator.multiplier();
                         let css = format!("{}: {}{};", property, final_value, unit);
-                        let css_rule = format!(".{} {{\n    {}\n}}", class_name, css);
+                        let css_rule = format!(".{} {{\n  {}\n}}", class_name, css);
                         let mut css_cache = self.css_cache.lock().unwrap();
                         css_cache.put(class_name.to_string(), css_rule.clone());
                         return Some(css_rule);

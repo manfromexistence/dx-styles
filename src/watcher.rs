@@ -1,4 +1,4 @@
-use crate::{data_manager, engine::StyleEngine, generator, parser::parse_classnames, utils};
+use crate::{cache::ClassnameCache, data_manager, engine::StyleEngine, generator, parser, utils};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
@@ -6,7 +6,7 @@ use std::{
 };
 
 pub fn process_file_change(
-    _cache: &crate::cache::ClassnameCache,
+    _cache: &ClassnameCache,
     path: &Path,
     file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
     classname_counts: &mut HashMap<String, u32>,
@@ -15,11 +15,11 @@ pub fn process_file_change(
     engine: &StyleEngine,
 ) {
     let start = Instant::now();
-    let new_classnames = parse_classnames(path);
+    let current_classnames = parser::parse_classnames(path);
 
     let (added_file, removed_file, added_global, removed_global) = data_manager::update_class_maps(
         path,
-        &new_classnames,
+        &current_classnames,
         file_classnames,
         classname_counts,
         global_classnames,
@@ -40,7 +40,7 @@ pub fn process_file_change(
 }
 
 pub fn process_file_remove(
-    _cache: &crate::cache::ClassnameCache,
+    cache: &ClassnameCache,
     path: &Path,
     file_classnames: &mut HashMap<PathBuf, HashSet<String>>,
     classname_counts: &mut HashMap<String, u32>,
@@ -62,6 +62,8 @@ pub fn process_file_remove(
         classname_counts,
         global_classnames,
     );
+
+    cache.remove(path).ok();
 
     if removed_global > 0 {
         generator::generate_css(global_classnames, output_path, engine, file_classnames);
