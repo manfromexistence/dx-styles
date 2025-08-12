@@ -29,8 +29,8 @@ fn main() {
         fs::write(
             &styles_toml_path,
             r#"[static]
-[dynamic]
-[generators]"#,
+            [dynamic]
+            [generators]"#,
         )
         .expect("Failed to create styles.toml!");
     }
