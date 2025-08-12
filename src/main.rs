@@ -73,7 +73,7 @@ fn main() {
     );
 
     let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
-    let cache = match ClassnameCache::new(".dx/sled_cache") {
+    let cache = match ClassnameCache::new(".dx/cache") {
         Ok(c) => c,
         Err(e) => {
             eprintln!("{} Failed to open cache database: {}", "Error:".red(), e);

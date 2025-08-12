@@ -1,1 +1,23 @@
+.place-items-center {
+  place-items: center;
+}
 
+.h-screen {
+  height: 100vh;
+}
+
+.place-content-center {
+  place-content: center;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.grid {
+  display: grid;
+}
