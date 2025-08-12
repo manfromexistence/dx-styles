@@ -1,190 +1,209 @@
-use std::env;
-use std::fs::{self, File, OpenOptions};
-use std::io::{self, BufWriter, Read, Write};
-use std::path::PathBuf;
-use std::time::{Duration, Instant};
+mod cache;
+mod data_manager;
+mod engine;
+mod generator;
+mod parser;
+mod utils;
+mod watcher;
 
-use libc::{cpu_set_t, sched_setaffinity, CPU_SET};
-use memmap2::MmapMut;
+use crate::cache::ClassnameCache;
+use colored::Colorize;
+use notify::RecursiveMode;
+use notify_debouncer_full::new_debouncer;
 use rayon::prelude::*;
-use sysinfo::System;
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+    path::PathBuf,
+    process,
+    sync::mpsc,
+    time::{Duration, Instant},
+};
 
-const NUM_FILES: usize = 10000;
-const CONTENT: &[u8] = b"initial content padded to simulate dx-check workload....................100 bytes..";
-const UPDATE_CONTENT: &[u8] = b"updated content padded to simulate dx-check workload....................100 bytes..";
+fn main() {
+    let styles_toml_path = PathBuf::from("styles.toml");
+    let styles_bin_path = PathBuf::from(".dx/styles.bin");
 
-fn get_dynamic_batch_size() -> usize {
-    const MEMORY_USAGE_FACTOR: f64 = 0.25;
-    const MEMORY_PER_FILE_ESTIMATE: u64 = (CONTENT.len() as u64) * 2;
-
-    let mut sys = System::new_all();
-    sys.refresh_memory();
-    let total_memory = sys.total_memory();
-
-    if total_memory == 0 || MEMORY_PER_FILE_ESTIMATE == 0 {
-        return 1024;
+    if !styles_toml_path.exists() {
+        println!("{}", "styles.toml not found, creating default...".yellow());
+        fs::write(
+            &styles_toml_path,
+            r#"[static]
+            [dynamic]
+            [generators]"#,
+        )
+        .expect("Failed to create styles.toml!");
     }
 
-    let target_memory_usage = (total_memory as f64 * MEMORY_USAGE_FACTOR) as u64;
-    let max_files_in_memory = (target_memory_usage / MEMORY_PER_FILE_ESTIMATE) as usize;
+    if !styles_bin_path.exists() {
+        println!(
+            "{}",
+            "styles.bin not found, running cargo build...".yellow()
+        );
+        let output = std::process::Command::new("cargo")
+            .arg("build")
+            .output()
+            .expect("Failed to run cargo build");
+        if !output.status.success() {
+            eprintln!(
+                "{} Failed to generate styles.bin: {}",
+                "Error:".red(),
+                String::from_utf8_lossy(&output.stderr)
+            );
+            process::exit(1);
+        }
+    }
 
-    max_files_in_memory.max(256).min(8192)
-}
+    let style_engine = match engine::StyleEngine::new() {
+        Ok(engine) => engine,
+        Err(e) => {
+            eprintln!(
+                "{} Failed to initialize StyleEngine: {}. Ensure styles.bin is valid.",
+                "Error:".red(),
+                e
+            );
+            process::exit(1);
+        }
+    };
+    println!(
+        "{}",
+        "✅ Dx Styles initialized with new Style Engine."
+            .bold()
+            .green()
+    );
 
-fn get_dir() -> PathBuf {
-    let mut path = env::temp_dir();
-    path.push("modules");
-    path
-}
+    let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
+    let cache = match ClassnameCache::new(".dx/cache") {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("{} Failed to open cache database: {}", "Error:".red(), e);
+            process::exit(1);
+        }
+    };
+    let dir = PathBuf::from("playgrounds/nextjs");
 
-fn pin_thread(core_id: usize) -> io::Result<()> {
-    #[cfg(target_os = "linux")]
-    {
-        unsafe {
-            let mut cpu_set: cpu_set_t = std::mem::zeroed();
-            CPU_SET(core_id, &mut cpu_set);
-            let result = sched_setaffinity(0, std::mem::size_of::<cpu_set_t>(), &cpu_set);
-            if result != 0 {
-                return Err(io::Error::last_os_error());
+    let mut file_classnames: HashMap<PathBuf, HashSet<String>> = HashMap::new();
+    let mut classname_counts: HashMap<String, u32> = HashMap::new();
+    let mut global_classnames: HashSet<String> = HashSet::new();
+
+    for (path, fc) in cache.iter() {
+        file_classnames.insert(path, fc.classnames.clone());
+        for cn in &fc.classnames {
+            *classname_counts.entry(cn.clone()).or_insert(0) += 1;
+            global_classnames.insert(cn.clone());
+        }
+    }
+
+    let scan_start = Instant::now();
+    let files = utils::find_code_files(&dir);
+    if !files.is_empty() {
+        let results: Vec<_> = files
+            .par_iter()
+            .filter_map(|file| match cache.compare_and_generate(file) {
+                Ok(Some(classnames)) => Some((file.clone(), classnames)),
+                _ => None,
+            })
+            .collect();
+
+        let mut total_added_in_files = 0;
+        let mut total_removed_in_files = 0;
+        let mut total_added_global = 0;
+        let mut total_removed_global = 0;
+
+        for (file, current_classnames) in results {
+            let start = Instant::now();
+            let (added_file, removed_file, added_global, removed_global) =
+                data_manager::update_class_maps(
+                    &file,
+                    &current_classnames,
+                    &mut file_classnames,
+                    &mut classname_counts,
+                    &mut global_classnames,
+                );
+            total_added_in_files += added_file;
+            total_removed_in_files += removed_file;
+            total_added_global += added_global;
+            total_removed_global += removed_global;
+            if added_file > 0 || removed_file > 0 {
+                utils::log_change(
+                    &file,
+                    added_file,
+                    removed_file,
+                    &output_file,
+                    added_global,
+                    removed_global,
+                    start.elapsed().as_micros(),
+                );
             }
         }
+        if (total_added_global > 0 || total_removed_global > 0) && !global_classnames.is_empty() {
+            generator::generate_css(
+                &global_classnames,
+                &output_file,
+                &style_engine,
+                &file_classnames,
+            );
+            utils::log_change(
+                &dir,
+                total_added_in_files,
+                total_removed_in_files,
+                &output_file,
+                total_added_global,
+                total_removed_global,
+                scan_start.elapsed().as_micros(),
+            );
+        }
+    } else {
+        println!(
+            "{}",
+            "No .tsx or .jsx files found in playgrounds/nextjs/.".yellow()
+        );
     }
-    Ok(())
-}
 
-fn run_in_pinned_pool<F>(benchmark_fn: F) -> io::Result<()>
-where
-    F: FnOnce() -> io::Result<()> + Send,
-{
-    let pool = rayon::ThreadPoolBuilder::new()
-        .num_threads(rayon::current_num_threads())
-        .build()
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+    println!(
+        "{}",
+        "Dx Styles is watching for file changes...".bold().cyan()
+    );
 
-    pool.install(|| {
-        (0..rayon::current_num_threads())
-            .into_par_iter()
-            .for_each(|id| {
-                let _ = pin_thread(id);
-            });
-        benchmark_fn()
-    })
-}
+    let (tx, rx) = mpsc::channel();
+    let mut watcher =
+        new_debouncer(Duration::from_millis(100), None, tx).expect("Failed to create watcher");
+    watcher
+        .watch(&dir, RecursiveMode::Recursive)
+        .expect("Failed to start watcher");
 
-fn create_files(paths: &[PathBuf]) {
-    paths.par_iter().for_each(|path| {
-        let result = (|| -> io::Result<()> {
-            let file = File::create(path)?;
-            let mut writer = BufWriter::new(file);
-            writer.write_all(CONTENT)?;
-            writer.flush()?;
-            Ok(())
-        })();
-        if let Err(e) = result {
-            eprintln!("Failed to create file {:?}: {}", path, e);
-        }
-    });
-}
-
-fn read_files(paths: &[PathBuf]) {
-    paths.par_iter().for_each(|path| {
-        let result = (|| -> io::Result<()> {
-            let mut file = File::open(path)?;
-            let mut buf = Vec::new();
-            file.read_to_end(&mut buf)?;
-            Ok(())
-        })();
-        if let Err(e) = result {
-            eprintln!("Failed to read file {:?}: {}", path, e);
-        }
-    });
-}
-
-fn update_files_smartly(paths: &[PathBuf]) {
-    paths.par_iter().for_each(|path| {
-        let result = (|| -> io::Result<()> {
-            let file = OpenOptions::new().read(true).write(true).open(path)?;
-            let mut mmap = unsafe { MmapMut::map_mut(&file)? };
-            if mmap.len() < UPDATE_CONTENT.len() {
-                file.set_len(UPDATE_CONTENT.len() as u64)?;
-                mmap = unsafe { MmapMut::map_mut(&file)? };
+    for res in rx {
+        match res {
+            Ok(events) => {
+                for event in events {
+                    for path in &event.paths {
+                        if utils::is_code_file(path) && *path != output_file {
+                            if matches!(event.kind, notify::event::EventKind::Remove(_)) {
+                                watcher::process_file_remove(
+                                    &cache,
+                                    path,
+                                    &mut file_classnames,
+                                    &mut classname_counts,
+                                    &mut global_classnames,
+                                    &output_file,
+                                    &style_engine,
+                                );
+                            } else {
+                                watcher::process_file_change(
+                                    &cache,
+                                    path,
+                                    &mut file_classnames,
+                                    &mut classname_counts,
+                                    &mut global_classnames,
+                                    &output_file,
+                                    &style_engine,
+                                );
+                            }
+                        }
+                    }
+                }
             }
-            mmap[..UPDATE_CONTENT.len()].copy_from_slice(UPDATE_CONTENT);
-            Ok(())
-        })();
-        if let Err(e) = result {
-            eprintln!("Failed to update file {:?}: {}", path, e);
+            Err(e) => println!("Watch error: {:?}", e),
         }
-    });
-}
-
-fn delete_files(paths: &[PathBuf]) {
-    paths.par_iter().for_each(|path| {
-        if let Err(e) = fs::remove_file(path) {
-            eprintln!("Failed to delete file {:?}: {}", path, e);
-        }
-    });
-}
-
-fn dx_io() -> io::Result<()> {
-    let dir_path = get_dir();
-    let file_paths: Vec<_> = (0..NUM_FILES)
-        .map(|i| dir_path.join(format!("file_{}.txt", i)))
-        .collect();
-
-    let batch_size = get_dynamic_batch_size();
-    println!("Using dynamic batch size: {}", batch_size);
-
-    let mut total_create_time = Duration::new(0, 0);
-    for batch in file_paths.chunks(batch_size) {
-        let start = Instant::now();
-        create_files(batch);
-        total_create_time += start.elapsed();
     }
-    let create_time = total_create_time.as_millis();
-
-    let mut total_read_time = Duration::new(0, 0);
-    for batch in file_paths.chunks(batch_size) {
-        let start = Instant::now();
-        read_files(batch);
-        total_read_time += start.elapsed();
-    }
-    let read_time = total_read_time.as_millis();
-
-    let mut total_update_time = Duration::new(0, 0);
-    for batch in file_paths.chunks(batch_size) {
-        let start = Instant::now();
-        update_files_smartly(batch);
-        total_update_time += start.elapsed();
-    }
-    let update_time = total_update_time.as_millis();
-
-    let mut total_delete_time = Duration::new(0, 0);
-    for batch in file_paths.chunks(batch_size) {
-        let start = Instant::now();
-        delete_files(batch);
-        total_delete_time += start.elapsed();
-    }
-    let delete_time = total_delete_time.as_millis();
-
-    println!(
-        "I/O operation times (ms): Create: {}, Read: {}, Update: {}, Delete: {}",
-        create_time, read_time, update_time, delete_time
-    );
-    println!(
-        "Total: {} ms",
-        create_time + read_time + update_time + delete_time
-    );
-    Ok(())
-}
-
-fn main() -> io::Result<()> {
-    let dir_path = get_dir();
-    fs::create_dir_all(&dir_path)?;
-
-    println!("\nRunning dx_io...");
-    run_in_pinned_pool(dx_io)?;
-
-    fs::remove_dir_all(&dir_path)?;
-    Ok(())
 }
