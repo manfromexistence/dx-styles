@@ -25,7 +25,7 @@ fn main() {
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
 
     if !styles_toml_path.exists() {
-        println!("{}", "styles.toml not found, creating default...".yellow());
+        println!("{}", "i styles.toml not found, creating a default for you...".yellow());
         fs::write(
             &styles_toml_path,
             r#"[static]
@@ -38,7 +38,7 @@ fn main() {
     if !styles_bin_path.exists() {
         println!(
             "{}",
-            "styles.bin not found, running cargo build...".yellow()
+            "i styles.bin not found, running cargo build to get things ready...".yellow()
         );
         let output = std::process::Command::new("cargo")
             .arg("build")
@@ -65,12 +65,6 @@ fn main() {
             process::exit(1);
         }
     };
-    println!(
-        "{}",
-        "✅ Dx Styles initialized with new Style Engine."
-            .bold()
-            .green()
-    );
 
     let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
     let cache = match ClassnameCache::new(".dx/cache") {
@@ -99,9 +93,9 @@ fn main() {
     if !files.is_empty() {
         let results: Vec<_> = files
             .par_iter()
-            .filter_map(|file| match cache.compare_and_generate(file) {
-                Ok(Some(classnames)) => Some((file.clone(), classnames)),
-                _ => None,
+            .filter_map(|file| {
+                let classnames = parser::parse_classnames(file);
+                Some((file.clone(), classnames))
             })
             .collect();
 
@@ -111,7 +105,6 @@ fn main() {
         let mut total_removed_global = 0;
 
         for (file, current_classnames) in results {
-            let start = Instant::now();
             let (added_file, removed_file, added_global, removed_global) =
                 data_manager::update_class_maps(
                     &file,
@@ -124,33 +117,36 @@ fn main() {
             total_removed_in_files += removed_file;
             total_added_global += added_global;
             total_removed_global += removed_global;
-            if added_file > 0 || removed_file > 0 {
-                utils::log_change(
-                    &file,
-                    added_file,
-                    removed_file,
-                    &output_file,
-                    added_global,
-                    removed_global,
-                    start.elapsed().as_micros(),
-                );
-            }
         }
-        if (total_added_global > 0 || total_removed_global > 0) && !global_classnames.is_empty() {
+        if (total_added_global > 0 || total_removed_global > 0) || !global_classnames.is_empty() {
+            let generate_start = Instant::now();
             generator::generate_css(
                 &global_classnames,
                 &output_file,
                 &style_engine,
                 &file_classnames,
             );
+            let generate_duration = generate_start.elapsed();
+            let total_duration = scan_start.elapsed();
+            let parse_and_update_duration = total_duration.saturating_sub(generate_duration);
+
+            let timings = utils::ChangeTimings {
+                total: total_duration,
+                parsing: parse_and_update_duration,
+                update_maps: Duration::new(0, 0),
+                generate_css: generate_duration,
+                cache_write: Duration::new(0, 0),
+            };
+
             utils::log_change(
+                "■",
                 &dir,
                 total_added_in_files,
                 total_removed_in_files,
                 &output_file,
                 total_added_global,
                 total_removed_global,
-                scan_start.elapsed().as_micros(),
+                timings,
             );
         }
     } else {
@@ -161,13 +157,14 @@ fn main() {
     }
 
     println!(
-        "{}",
-        "Dx Styles is watching for file changes...".bold().cyan()
+        "{} {}",
+        "▲".bold().green(),
+        "Dx Styles is now watching for file changes...".bold().green()
     );
 
     let (tx, rx) = mpsc::channel();
     let mut watcher =
-        new_debouncer(Duration::from_millis(100), None, tx).expect("Failed to create watcher");
+        new_debouncer(Duration::from_millis(50), None, tx).expect("Failed to create watcher");
     watcher
         .watch(&dir, RecursiveMode::Recursive)
         .expect("Failed to start watcher");
