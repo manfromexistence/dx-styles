@@ -34,12 +34,12 @@
   place-items: start;;
 }
 
-.text-5xl {
-  font-size: 3rem;;
+.text-3xl {
+  font-size: 1.875rem;;
 }
 
-.text-8xl {
-  font-size: 6rem;;
+.text-5xl {
+  font-size: 3rem;;
 }
 
 .w-full {

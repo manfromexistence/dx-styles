@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="flex h-screen w-full place-content-start place-items-start items-start justify-start absolute">
-      <span className="text-8xl font-bold">Dx Styles</span>
+      <span className="text-3xl font-bold">Dx Styles</span>
     </div>
   );
 }
