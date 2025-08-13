@@ -1,9 +1,9 @@
 use crate::engine::StyleEngine;
 use lightningcss::stylesheet::{ParserOptions, PrinterOptions, StyleSheet};
+use memmap2::MmapMut;
 use rayon::prelude::*;
 use std::collections::{HashMap, HashSet};
-use std::fs::{self, File};
-use std::io::{BufWriter, Write};
+use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 
 pub fn generate_css(
@@ -15,14 +15,15 @@ pub fn generate_css(
     let is_production = std::env::var("DX_ENV").map_or(false, |v| v == "production");
 
     if !is_production {
-        // Collect and sort class names for deterministic output, which is crucial for development.
-        let mut sorted_class_names: Vec<_> = class_names.iter().collect();
-        sorted_class_names.sort_unstable(); // This is a fast, in-place sort.
+        // --- Development path optimized with parallel generation and memory-mapped I/O ---
 
-        // Generate the CSS rules in parallel to speed up computation.
-        // The engine's internal cache is thread-safe.
+        // 1. Sort class names for deterministic output, which is good for debugging.
+        let mut sorted_class_names: Vec<_> = class_names.iter().collect();
+        sorted_class_names.sort_unstable();
+
+        // 2. Generate CSS rules in parallel.
         let css_rules: Vec<String> = sorted_class_names
-            .par_iter() // Use Rayon's parallel iterator
+            .par_iter()
             .filter_map(|class_name| engine.generate_css_for_class(class_name))
             .collect();
 
@@ -30,18 +31,47 @@ pub fn generate_css(
             fs::write(output_path, "").expect("Failed to write empty CSS file");
             return;
         }
-        
-        // Join the results and write to the file efficiently.
-        let final_css = css_rules.join("\n\n");
-        let file = File::create(output_path).expect("Failed to create CSS file");
-        let mut writer = BufWriter::new(file);
-        writer.write_all(final_css.as_bytes()).expect("Failed to write CSS");
-        writer.write_all(b"\n").expect("Failed to write final newline");
-        writer.flush().expect("Failed to flush writer");
+
+        // 3. Calculate the exact size needed for the memory-mapped file.
+        let total_size = css_rules.iter().map(|s| s.len()).sum::<usize>() // Size of all rules
+            + (css_rules.len().saturating_sub(1)) * 2 // Size of "\n\n" separators
+            + 1; // Size of final "\n"
+
+        // 4. Create the file, set its length, and memory-map it.
+        let file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(output_path)
+            .expect("Failed to open output file for memory-mapping");
+
+        file.set_len(total_size as u64)
+            .expect("Failed to set file length");
+
+        let mut mmap = unsafe { MmapMut::map_mut(&file).expect("Failed to memory-map output file") };
+
+        // 5. Write the CSS rules directly into the memory map.
+        let mut cursor = 0;
+        for (i, rule) in css_rules.iter().enumerate() {
+            let rule_bytes = rule.as_bytes();
+            let end = cursor + rule_bytes.len();
+            mmap[cursor..end].copy_from_slice(rule_bytes);
+            cursor = end;
+
+            if i < css_rules.len() - 1 {
+                mmap[cursor..cursor + 2].copy_from_slice(b"\n\n");
+                cursor += 2;
+            }
+        }
+        mmap[cursor..cursor + 1].copy_from_slice(b"\n");
+
+        // 6. Flush the memory map to ensure data is written to disk.
+        // mmap.flush().expect("Failed to flush memory map");
         return;
     }
 
-    // Production path remains the same for minification.
+    // --- Production path remains the same for minification ---
     let css_rules: Vec<String> = class_names
         .par_iter()
         .filter_map(|cn| engine.generate_css_for_class(cn))
