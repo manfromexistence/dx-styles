@@ -82,8 +82,8 @@ pub fn generate_css(
             minify: true,
             ..Default::default()
         })
-        .expect("Failed to minify CSS")
-        .code;
+        .expect("Failed to minify CSS");
 
-    fs::write(output_path, minified_css).expect("Failed to write minified CSS");
+    fs::write(output_path, minified_css.code.as_bytes())
+        .expect("Failed to write minified CSS");
 }

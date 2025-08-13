@@ -2,6 +2,10 @@
   position: absolute;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .font-bold {
   font-weight: 700;
 }
