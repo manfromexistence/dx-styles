@@ -1,11 +1,35 @@
 # Dx
 Enhance Developer Experience
 
+
+
+
 1. the initial scan is looking bad both visually and make sure its optimized correctly    
 2. currently we are using rkyv for cache but its very slow - so use we can assign every styles in styles.toml from means styles.bin a number like 1,2,3 so we are referring classnames as numbers so instead of writing long classnames to rkyv we can use a memory HashMap and make it as cache storing what classnames has already been used in the project and we will compare it with styles.bin so its very fast.
 
-
 make sure to use lightingcss to verify generated css is right
+
+```rust
+mod header;
+mod platform;
+pub use crate::platform::{dimensions, dimensions_stderr, dimensions_stdin, dimensions_stdout};
+
+fn main() {
+    header::render("Base");
+
+    let font = header::DXCliFont::default().expect("Failed to load the default font.");
+
+    if let Some(figure) = font.figure("DX-CLI") {
+        let centered_figure = figure.align(header::Alignment::Center);
+        println!("{}", centered_figure);
+    }
+
+    if let Some(figure) = font.figure("Rust Forge") {
+        let right_aligned_figure = figure.align(header::Alignment::Right);
+        println!("{}", right_aligned_figure);
+    }
+}
+```
 
 ```bash
 taplo format --in-place --option sorted_keys=true styles.toml
