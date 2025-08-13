@@ -14,6 +14,10 @@
   height: 100vh;;
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
 .place-content-center {
   place-content: center;;
 }

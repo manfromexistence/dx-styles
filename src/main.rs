@@ -21,11 +21,13 @@ use std::{
 };
 
 fn main() {
+    println!("{}", "🚀 Welcome to Dx Styles".bright_purple().bold());
+
     let styles_toml_path = PathBuf::from("styles.toml");
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
 
     if !styles_toml_path.exists() {
-        println!("{}", "styles.toml not found, creating default...".yellow());
+        println!("{}", "✨ styles.toml not found, creating a default for you...".yellow());
         fs::write(
             &styles_toml_path,
             r#"[static]
@@ -38,7 +40,7 @@ fn main() {
     if !styles_bin_path.exists() {
         println!(
             "{}",
-            "styles.bin not found, running cargo build...".yellow()
+            "🛠️ styles.bin not found, running cargo build to get things ready...".yellow()
         );
         let output = std::process::Command::new("cargo")
             .arg("build")
@@ -65,12 +67,6 @@ fn main() {
             process::exit(1);
         }
     };
-    println!(
-        "{}",
-        "✅ Dx Styles initialized with new Style Engine."
-            .bold()
-            .green()
-    );
 
     let output_file = PathBuf::from("playgrounds/nextjs/app/globals.css");
     let cache = match ClassnameCache::new(".dx/cache") {
@@ -111,7 +107,6 @@ fn main() {
         let mut total_removed_global = 0;
 
         for (file, current_classnames) in results {
-            let start = Instant::now();
             let (added_file, removed_file, added_global, removed_global) =
                 data_manager::update_class_maps(
                     &file,
@@ -124,17 +119,6 @@ fn main() {
             total_removed_in_files += removed_file;
             total_added_global += added_global;
             total_removed_global += removed_global;
-            if added_file > 0 || removed_file > 0 {
-                utils::log_change(
-                    &file,
-                    added_file,
-                    removed_file,
-                    &output_file,
-                    added_global,
-                    removed_global,
-                    start.elapsed().as_micros(),
-                );
-            }
         }
         if (total_added_global > 0 || total_removed_global > 0) || !global_classnames.is_empty() {
             generator::generate_css(
@@ -162,7 +146,7 @@ fn main() {
 
     println!(
         "{}",
-        "Dx Styles is watching for file changes...".bold().cyan()
+        "👀 Dx Styles is now watching for file changes...".bold().cyan()
     );
 
     let (tx, rx) = mpsc::channel();

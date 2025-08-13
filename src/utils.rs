@@ -30,26 +30,27 @@ pub fn log_change(
     }
 
     let source_str = source_path
-        .canonicalize()
-        .unwrap_or_else(|_| source_path.to_path_buf())
+        .strip_prefix(std::env::current_dir().unwrap())
+        .unwrap_or(source_path)
         .display()
         .to_string();
+
     let output_str = output_path
-        .canonicalize()
-        .unwrap_or_else(|_| output_path.to_path_buf())
+        .strip_prefix(std::env::current_dir().unwrap())
+        .unwrap_or(output_path)
         .display()
         .to_string();
 
     let file_changes = format!(
-        "({}, {})",
-        format!("+{}", added_file).bright_green(),
-        format!("-{}", removed_file).bright_red()
+        "({},{})",
+        format!("+{}", added_file).green(),
+        format!("-{}", removed_file).red()
     );
 
     let output_changes = format!(
-        "({}, {})",
-        format!("+{}", added_global).bright_green(),
-        format!("-{}", removed_global).bright_red()
+        "({},{})",
+        format!("+{}", added_global).green(),
+        format!("-{}", removed_global).red()
     );
 
     let time_str = if time_us < 1000 {
@@ -59,11 +60,13 @@ pub fn log_change(
     };
 
     println!(
-        "{} {} -> {} {} · {}",
+        "{} {} {} {} {} {} {}",
+        "✅".bright_yellow(),
         source_str.bright_cyan(),
         file_changes,
+        "->".bright_white(),
         output_str.bright_magenta(),
         output_changes,
-        time_str.yellow()
+        format!("· {}", time_str).yellow()
     );
 }
