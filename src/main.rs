@@ -21,13 +21,13 @@ use std::{
 };
 
 fn main() {
-    println!("{}", "🚀 Welcome to Dx Styles".bright_purple().bold());
+    println!("{}", "◆ Welcome to Dx Styles".bright_purple().bold());
 
     let styles_toml_path = PathBuf::from("styles.toml");
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
 
     if !styles_toml_path.exists() {
-        println!("{}", "✨ styles.toml not found, creating a default for you...".yellow());
+        println!("{}", "i styles.toml not found, creating a default for you...".yellow());
         fs::write(
             &styles_toml_path,
             r#"[static]
@@ -40,7 +40,7 @@ fn main() {
     if !styles_bin_path.exists() {
         println!(
             "{}",
-            "🛠️ styles.bin not found, running cargo build to get things ready...".yellow()
+            "i styles.bin not found, running cargo build to get things ready...".yellow()
         );
         let output = std::process::Command::new("cargo")
             .arg("build")
@@ -128,6 +128,7 @@ fn main() {
                 &file_classnames,
             );
             utils::log_change(
+                "»",
                 &dir,
                 total_added_in_files,
                 total_removed_in_files,
@@ -146,7 +147,7 @@ fn main() {
 
     println!(
         "{}",
-        "👀 Dx Styles is now watching for file changes...".bold().cyan()
+        "⊙ Dx Styles is now watching for file changes...".bold().cyan()
     );
 
     let (tx, rx) = mpsc::channel();

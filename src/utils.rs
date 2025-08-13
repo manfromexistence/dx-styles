@@ -17,6 +17,7 @@ pub fn is_code_file(path: &Path) -> bool {
 }
 
 pub fn log_change(
+    icon: &str,
     source_path: &Path,
     added_file: usize,
     removed_file: usize,
@@ -61,7 +62,7 @@ pub fn log_change(
 
     println!(
         "{} {} {} {} {} {} {}",
-        "✅".bright_yellow(),
+        icon.bright_yellow(),
         source_str.bright_cyan(),
         file_changes,
         "->".bright_white(),
