@@ -3,7 +3,6 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 use walkdir::WalkDir;
 
-/// Holds the duration of each step in the file processing pipeline.
 pub struct ChangeTimings {
     pub total: Duration,
     pub parsing: Duration,
@@ -26,7 +25,6 @@ pub fn is_code_file(path: &Path) -> bool {
         .map_or(false, |ext| ext == "tsx" || ext == "jsx")
 }
 
-/// Formats a Duration into a human-readable string (µs, ms, or s).
 fn format_duration(d: Duration) -> String {
     let time_us = d.as_micros();
     if time_us < 1000 {
@@ -76,7 +74,6 @@ pub fn log_change(
         format!("-{}", removed_global).red()
     );
 
-    // Build the detailed timing string, only showing steps that took time.
     let mut details = vec![format!("Total: {}", format_duration(timings.total).bold())];
     if timings.parsing.as_nanos() > 0 {
         details.push(format!("Parse: {}", format_duration(timings.parsing)));

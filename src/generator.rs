@@ -15,13 +15,9 @@ pub fn generate_css(
     let is_production = std::env::var("DX_ENV").map_or(false, |v| v == "production");
 
     if !is_production {
-        // --- Development path optimized with parallel generation and memory-mapped I/O ---
-
-        // 1. Sort class names for deterministic output, which is good for debugging.
         let mut sorted_class_names: Vec<_> = class_names.iter().collect();
         sorted_class_names.sort_unstable();
 
-        // 2. Generate CSS rules in parallel.
         let css_rules: Vec<String> = sorted_class_names
             .par_iter()
             .filter_map(|class_name| engine.generate_css_for_class(class_name))
@@ -32,12 +28,10 @@ pub fn generate_css(
             return;
         }
 
-        // 3. Calculate the exact size needed for the memory-mapped file.
-        let total_size = css_rules.iter().map(|s| s.len()).sum::<usize>() // Size of all rules
-            + (css_rules.len().saturating_sub(1)) * 2 // Size of "\n\n" separators
-            + 1; // Size of final "\n"
+        let total_size = css_rules.iter().map(|s| s.len()).sum::<usize>()
+            + (css_rules.len().saturating_sub(1)) * 2
+            + 1;
 
-        // 4. Create the file, set its length, and memory-map it.
         let file = OpenOptions::new()
             .read(true)
             .write(true)
@@ -51,7 +45,6 @@ pub fn generate_css(
 
         let mut mmap = unsafe { MmapMut::map_mut(&file).expect("Failed to memory-map output file") };
 
-        // 5. Write the CSS rules directly into the memory map.
         let mut cursor = 0;
         for (i, rule) in css_rules.iter().enumerate() {
             let rule_bytes = rule.as_bytes();
@@ -66,12 +59,9 @@ pub fn generate_css(
         }
         mmap[cursor..cursor + 1].copy_from_slice(b"\n");
 
-        // 6. Flush the memory map to ensure data is written to disk.
-        // mmap.flush().expect("Failed to flush memory map");
         return;
     }
 
-    // --- Production path remains the same for minification ---
     let css_rules: Vec<String> = class_names
         .par_iter()
         .filter_map(|cn| engine.generate_css_for_class(cn))

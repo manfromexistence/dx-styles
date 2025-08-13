@@ -106,7 +106,7 @@ pub fn process_file_remove(
 
     let timings = utils::ChangeTimings {
         total: total_start.elapsed(),
-        parsing: Duration::new(0, 0), // No parsing on remove
+        parsing: Duration::new(0, 0),
         update_maps: update_maps_duration,
         generate_css: generate_css_duration,
         cache_write: cache_remove_duration,
