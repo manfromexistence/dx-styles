@@ -115,14 +115,14 @@ impl ClassnameCache {
 
         let encoded = bincode::encode_to_vec(&file_cache, standard())?;
         self.db.insert(path_key.as_bytes(), encoded)?;
-        self.db.flush()?;
+        // self.db.flush()?; // REMOVED: This was blocking and causing slowdowns.
         Ok(())
     }
 
     pub fn remove(&self, path: &Path) -> Result<(), CacheError> {
         let path_key = path.to_string_lossy();
         self.db.remove(path_key.as_bytes())?;
-        self.db.flush()?;
+        // self.db.flush()?; // REMOVED: This was blocking and causing slowdowns.
         Ok(())
     }
 
