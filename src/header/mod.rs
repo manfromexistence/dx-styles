@@ -78,7 +78,7 @@ pub struct Figure<'a> {
 impl DXCliFont {
     #[must_use]
     pub fn default() -> Result<Self, FontError> {
-        let contents = std::include_str!("../default.dx");
+        let contents = std::include_str!("../../fonts/default.dx");
         parser::parse_font(contents)
     }
 
