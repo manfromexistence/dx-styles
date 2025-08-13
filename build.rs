@@ -48,13 +48,6 @@ fn main() {
     let toml_content = fs::read_to_string(toml_path).expect("Failed to read styles.toml");
     let toml_data: TomlConfig = toml::from_str(&toml_content).expect("Failed to parse styles.toml");
 
-    for (key, _values) in &toml_data.dynamic {
-        let parts: Vec<&str> = key.split('|').collect();
-        if parts.len() != 2 {
-            panic!("Invalid dynamic key format in styles.toml: '{}'. Expected 'prefix|property'.", key);
-        }
-    }
-
     let mut precompiled_styles = Vec::new();
 
     for (name, css) in toml_data.static_styles {
@@ -63,12 +56,25 @@ fn main() {
 
     for (key, values) in toml_data.dynamic {
         let parts: Vec<&str> = key.split('|').collect();
-        let prefix = parts[0];
-        let property = parts[1];
-        for (suffix, value) in values {
-            let name = format!("{}-{}", prefix, suffix);
-            let css = format!("{}: {}", property, value);
-            precompiled_styles.push(StyleRecord { name, css });
+        let (prefixes, property) = match parts.len() {
+            2 => (vec![parts[0]], parts[1]),
+            3 => (vec![parts[0], parts[1]], parts[2]),
+            _ => {
+                println!("cargo:warning=Invalid dynamic key format in styles.toml: '{}'. Skipping.", key);
+                continue;
+            }
+        };
+
+        for prefix in prefixes {
+            for (suffix, value) in &values {
+                let name = if suffix.is_empty() {
+                    prefix.to_string()
+                } else {
+                    format!("{}-{}", prefix, suffix)
+                };
+                let css = format!("{}: {}", property, value);
+                precompiled_styles.push(StyleRecord { name, css });
+            }
         }
     }
 
@@ -92,19 +98,28 @@ fn main() {
     let mut generator_offsets = Vec::new();
     for (key, config) in toml_data.generators {
         let parts: Vec<&str> = key.split('|').collect();
-        if parts.len() != 2 { continue; }
+        let (prefixes, property_str) = match parts.len() {
+            2 => (vec![parts[0]], parts[1]),
+            3 => (vec![parts[0], parts[1]], parts[2]),
+            _ => {
+                 println!("cargo:warning=Invalid generator key format in styles.toml: '{}'. Skipping.", key);
+                continue;
+            }
+        };
         
-        let prefix_offset = builder.create_string(parts[0]);
-        let property_offset = builder.create_string(parts[1]);
-        let unit_offset = builder.create_string(&config.unit);
+        for prefix in prefixes {
+            let prefix_offset = builder.create_string(prefix);
+            let property_offset = builder.create_string(property_str);
+            let unit_offset = builder.create_string(&config.unit);
 
-        let table_wip = builder.start_table();
-        builder.push_slot(4, prefix_offset, WIPOffset::new(0));
-        builder.push_slot(6, property_offset, WIPOffset::new(0));
-        builder.push_slot(8, config.multiplier, 0.0f32);
-        builder.push_slot(10, unit_offset, WIPOffset::new(0));
-        let gen_offset = builder.end_table(table_wip);
-        generator_offsets.push(gen_offset);
+            let table_wip = builder.start_table();
+            builder.push_slot(4, prefix_offset, WIPOffset::new(0));
+            builder.push_slot(6, property_offset, WIPOffset::new(0));
+            builder.push_slot(8, config.multiplier, 0.0f32);
+            builder.push_slot(10, unit_offset, WIPOffset::new(0));
+            let gen_offset = builder.end_table(table_wip);
+            generator_offsets.push(gen_offset);
+        }
     }
     let generators_vec = builder.create_vector(&generator_offsets);
 
