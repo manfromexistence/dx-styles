@@ -77,7 +77,7 @@ impl ClassnameCache {
         Ok(Self { db })
     }
 
-    #[allow(dead_code)] // This function will be used by the main application logic.
+    #[allow(dead_code)]
     pub fn get(&self, path: &Path) -> Result<Option<HashSet<String>>, CacheError> {
         let path_key = path.to_string_lossy();
         let Some(data) = self.db.get(path_key.as_bytes())? else {
@@ -96,7 +96,7 @@ impl ClassnameCache {
         }
     }
 
-    #[allow(dead_code)] // This function will be used by the main application logic.
+    #[allow(dead_code)]
     pub fn set(&self, path: &Path, classnames: &HashSet<String>) -> Result<(), CacheError> {
         let path_key = path.to_string_lossy();
         let modified = if path.exists() {
@@ -136,7 +136,7 @@ impl ClassnameCache {
         })
     }
 
-    #[allow(dead_code)] // This function will be used by the main application logic.
+    #[allow(dead_code)]
     pub fn compare_and_generate(
         &self,
         path: &Path,

@@ -21,8 +21,6 @@ use std::{
 };
 
 fn main() {
-    // println!("{}", "Welcome to Dx Styles".bright_purple().bold());
-
     let styles_toml_path = PathBuf::from("styles.toml");
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
 
