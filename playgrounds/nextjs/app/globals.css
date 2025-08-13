@@ -6,6 +6,10 @@
   display: flex;
 }
 
+.font-bold {
+  font-weight: 700;;
+}
+
 .grid {
   display: grid;
 }
@@ -28,6 +32,14 @@
 
 .place-items-start {
   place-items: start;;
+}
+
+.text-5xl {
+  font-size: 3rem;;
+}
+
+.text-9xl {
+  font-size: 8rem;;
 }
 
 .w-full {
