@@ -22,7 +22,14 @@ pub fn generate_css(
             .filter_map(|class_name| engine.generate_css_for_class(class_name))
             .collect();
 
-        let final_css = css_rules.join("\n\n");
+        if css_rules.is_empty() {
+            fs::write(output_path, "").expect("Failed to write empty CSS file");
+            return;
+        }
+
+        let mut final_css = css_rules.join("\n\n");
+        final_css.push('\n');
+
         fs::write(output_path, final_css).expect("Failed to write CSS file");
         return;
     }
