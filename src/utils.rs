@@ -1,6 +1,16 @@
 use colored::Colorize;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
 use walkdir::WalkDir;
+
+/// Holds the duration of each step in the file processing pipeline.
+pub struct ChangeTimings {
+    pub total: Duration,
+    pub parsing: Duration,
+    pub update_maps: Duration,
+    pub generate_css: Duration,
+    pub cache_write: Duration,
+}
 
 pub fn find_code_files(dir: &Path) -> Vec<PathBuf> {
     WalkDir::new(dir)
@@ -16,6 +26,18 @@ pub fn is_code_file(path: &Path) -> bool {
         .map_or(false, |ext| ext == "tsx" || ext == "jsx")
 }
 
+/// Formats a Duration into a human-readable string (µs, ms, or s).
+fn format_duration(d: Duration) -> String {
+    let time_us = d.as_micros();
+    if time_us < 1000 {
+        format!("{}µs", time_us)
+    } else if time_us < 1_000_000 {
+        format!("{:.2}ms", time_us as f64 / 1000.0)
+    } else {
+        format!("{:.2}s", time_us as f64 / 1_000_000.0)
+    }
+}
+
 pub fn log_change(
     icon: &str,
     source_path: &Path,
@@ -24,7 +46,7 @@ pub fn log_change(
     output_path: &Path,
     added_global: usize,
     removed_global: usize,
-    time_us: u128,
+    timings: ChangeTimings,
 ) {
     if added_file == 0 && removed_file == 0 && added_global == 0 && removed_global == 0 {
         return;
@@ -54,11 +76,21 @@ pub fn log_change(
         format!("-{}", removed_global).red()
     );
 
-    let time_str = if time_us < 1000 {
-        format!("{}µs", time_us)
-    } else {
-        format!("{:.2}ms", time_us as f64 / 1000.0)
-    };
+    // Build the detailed timing string, only showing steps that took time.
+    let mut details = vec![format!("Total: {}", format_duration(timings.total).bold())];
+    if timings.parsing.as_nanos() > 0 {
+        details.push(format!("Parse: {}", format_duration(timings.parsing)));
+    }
+    if timings.update_maps.as_nanos() > 0 {
+        details.push(format!("Update: {}", format_duration(timings.update_maps)));
+    }
+    if timings.generate_css.as_nanos() > 0 {
+        details.push(format!("CSS: {}", format_duration(timings.generate_css)));
+    }
+    if timings.cache_write.as_nanos() > 0 {
+        details.push(format!("Cache: {}", format_duration(timings.cache_write)));
+    }
+    let timing_details = details.join(", ");
 
     println!(
         "{} {} {} {} {} {} {}",
@@ -68,6 +100,6 @@ pub fn log_change(
         "->".bright_white(),
         output_str.magenta(),
         output_changes,
-        format!("· {}", time_str).green(),
+        format!("· ({})", timing_details).green(),
     );
 }

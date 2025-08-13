@@ -119,12 +119,25 @@ fn main() {
             total_removed_global += removed_global;
         }
         if (total_added_global > 0 || total_removed_global > 0) || !global_classnames.is_empty() {
+            let generate_start = Instant::now();
             generator::generate_css(
                 &global_classnames,
                 &output_file,
                 &style_engine,
                 &file_classnames,
             );
+            let generate_duration = generate_start.elapsed();
+            let total_duration = scan_start.elapsed();
+            let parse_and_update_duration = total_duration.saturating_sub(generate_duration);
+
+            let timings = utils::ChangeTimings {
+                total: total_duration,
+                parsing: parse_and_update_duration,
+                update_maps: Duration::new(0, 0),
+                generate_css: generate_duration,
+                cache_write: Duration::new(0, 0),
+            };
+
             utils::log_change(
                 "■",
                 &dir,
@@ -133,7 +146,7 @@ fn main() {
                 &output_file,
                 total_added_global,
                 total_removed_global,
-                scan_start.elapsed().as_micros(),
+                timings,
             );
         }
     } else {
