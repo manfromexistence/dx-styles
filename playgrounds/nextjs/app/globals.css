@@ -14,8 +14,8 @@
   height: 100vh;;
 }
 
-.p-10 {
-  padding: 2.5rem;
+.p-20 {
+  padding: 5rem;
 }
 
 .place-content-center {
@@ -32,6 +32,10 @@
 
 .place-items-start {
   place-items: start;;
+}
+
+.text-4xl {
+  font-size: 2.25rem;;
 }
 
 .text-5xl {

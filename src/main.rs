@@ -21,7 +21,7 @@ use std::{
 };
 
 fn main() {
-    println!("{}", "◆ Welcome to Dx Styles".bright_purple().bold());
+    // println!("{}", "Welcome to Dx Styles".bright_purple().bold());
 
     let styles_toml_path = PathBuf::from("styles.toml");
     let styles_bin_path = PathBuf::from(".dx/styles.bin");
@@ -128,7 +128,7 @@ fn main() {
                 &file_classnames,
             );
             utils::log_change(
-                "»",
+                "■",
                 &dir,
                 total_added_in_files,
                 total_removed_in_files,
@@ -146,8 +146,9 @@ fn main() {
     }
 
     println!(
-        "{}",
-        "⊙ Dx Styles is now watching for file changes...".bold().cyan()
+        "{} {}",
+        "▲".bold().green(),
+        "Dx Styles is now watching for file changes...".bold().green()
     );
 
     let (tx, rx) = mpsc::channel();

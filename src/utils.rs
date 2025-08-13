@@ -62,12 +62,12 @@ pub fn log_change(
 
     println!(
         "{} {} {} {} {} {} {}",
-        icon.bright_yellow(),
-        source_str.bright_cyan(),
+        icon.bright_green().bold(),
+        source_str.blue(),
         file_changes,
         "->".bright_white(),
-        output_str.bright_magenta(),
+        output_str.magenta(),
         output_changes,
-        format!("· {}", time_str).yellow()
+        format!("· {}", time_str).green(),
     );
 }

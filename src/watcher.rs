@@ -36,7 +36,7 @@ pub fn process_file_change(
     }
 
     utils::log_change(
-        "✨",
+        "✓",
         path,
         added_file,
         removed_file,
