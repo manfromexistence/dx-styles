@@ -1,9 +1,17 @@
 # Inspirations
 
+Generate a asgi text art of these texts one by one!!!
+1. Base
+2. Layout
+3. Module
+4. State
+5. Theme
+
 ```bash
 cargo run --release
 cargo add notify oxc_parser oxc_allocator oxc_span oxc_ast colored walkdir flatbuffers serde toml flatc_rust
 
+git clone https://github.com/manfromexistence/dx && cd dx && rm -rf .git && cd ..
 git clone https://github.com/parcel-bundler/lightningcss && cd lightningcss && rm -rf .git && cd ..
 git clone https://github.com/oxc-project/oxc && cd oxc && rm -rf .git && cd ..
 git clone https://github.com/biomejs/biome && cd biome && rm -rf .git && cd ..
