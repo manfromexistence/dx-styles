@@ -3,7 +3,7 @@
 }
 
 .font-bold {
-  font-weight: 700;;
+  font-weight: 700;
 }
 
 .grid {
@@ -11,7 +11,7 @@
 }
 
 .h-screen {
-  height: 100vh;;
+  height: 100vh;
 }
 
 .p-20 {
@@ -19,34 +19,34 @@
 }
 
 .place-content-center {
-  place-content: center;;
+  place-content: center;
 }
 
 .place-content-start {
-  place-content: start;;
+  place-content: start;
 }
 
 .place-items-center {
-  place-items: center;;
+  place-items: center;
 }
 
 .place-items-start {
-  place-items: start;;
+  place-items: start;
 }
 
 .text-4xl {
-  font-size: 2.25rem;;
+  font-size: 2.25rem;
 }
 
 .text-5xl {
-  font-size: 3rem;;
+  font-size: 3rem;
 }
 
 .w-full {
-  width: 100%;;
+  width: 100%;
 }
 
 .w-screen {
-  width: 100vw;;
+  width: 100vw;
 }
 
