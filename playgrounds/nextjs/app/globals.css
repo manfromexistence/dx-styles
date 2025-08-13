@@ -2,10 +2,6 @@
   position: absolute;
 }
 
-.flex {
-  display: flex;
-}
-
 .font-bold {
   font-weight: 700;;
 }
@@ -32,10 +28,6 @@
 
 .place-items-start {
   place-items: start;;
-}
-
-.text-3xl {
-  font-size: 1.875rem;;
 }
 
 .text-5xl {
