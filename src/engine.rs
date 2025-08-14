@@ -1,3 +1,4 @@
+// manfromexistence/dx-styles/dx-styles-7735b0e55b9f95aa5e4f4cc8f86c68e98e63c6c3/src/engine.rs
 use lru::LruCache;
 use std::collections::HashMap;
 use std::fs;
@@ -148,9 +149,16 @@ impl StyleEngine {
         if let Some(css) = core_css {
             let selector = format!(".{}{}", class_name.replace(":", "\\:"), pseudo_classes);
             let css_body = format!("{} {{\n  {}\n}}", selector, css);
-            let final_css = media_queries
-                .iter()
-                .rfold(css_body, |acc, mq| format!("{} {{\n  {}\n}}", mq, acc));
+
+            let final_css = media_queries.iter().rfold(css_body, |acc, mq| {
+                let indented_acc = acc
+                    .lines()
+                    .map(|line| format!("  {}", line))
+                    .collect::<Vec<String>>()
+                    .join("\n");
+                format!("{} {{\n{}\n}}", mq, indented_acc)
+            });
+
             self.css_cache
                 .lock()
                 .unwrap()
@@ -171,11 +179,12 @@ impl StyleEngine {
 
                 if class_name.starts_with(&format!("{}-", prefix)) {
                     let value_str = &class_name[prefix.len() + 1..];
-                    let (value_str, is_negative) = if let Some(stripped) = value_str.strip_prefix('-') {
-                        (stripped, true)
-                    } else {
-                        (value_str, false)
-                    };
+                    let (value_str, is_negative) =
+                        if let Some(stripped) = value_str.strip_prefix('-') {
+                            (stripped, true)
+                        } else {
+                            (value_str, false)
+                        };
 
                     let num_val: f32 = if value_str.is_empty() {
                         1.0
@@ -185,13 +194,14 @@ impl StyleEngine {
                         continue;
                     };
 
-                    let final_value = num_val * generator.multiplier() * if is_negative { -1.0 } else { 1.0 };
+                    let final_value =
+                        num_val * generator.multiplier() * if is_negative { -1.0 } else { 1.0 };
                     let css_value = if unit.is_empty() {
                         format!("{}", final_value)
                     } else {
                         format!("{}{}", final_value, unit)
                     };
-                    let core_css = Some(format!("{}: {}", property, css_value));
+                    let core_css = Some(format!("{}: {};", property, css_value));
                     return core_css;
                 }
             }

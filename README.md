@@ -1,6 +1,32 @@
 # Dx
 Enhance Developer Experience
 
+Good, update this page.tsx so that I can use container queries of our dx-styles and test our dx-styles using this page.tsx file
+
+```page.tsx
+
+export default function Home() {
+
+  return (
+
+    <div className="flex flex-col md:p-5 hover:h-screen w-full place-content-start place-items-start items-start justify-start absolute">
+
+      <span className="text-5xl font-bold">Dx Styles</span>
+
+    </div>
+
+  );
+
+}
+```
+
+
+
+
+
+
+
+
 1. the initial scan is looking bad both visually and make sure its optimized correctly    
 2. currently we are using rkyv for cache but its very slow - so use we can assign every styles in styles.toml from means styles.bin a number like 1,2,3 so we are referring classnames as numbers so instead of writing long classnames to rkyv we can use a memory HashMap and make it as cache storing what classnames has already been used in the project and we will compare it with styles.bin so its very fast.
 
