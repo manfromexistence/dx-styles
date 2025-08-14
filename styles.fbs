@@ -1,14 +1,10 @@
-// The schema is now upgraded to support responsive screens, states, and container queries.
-
 namespace StyleSchema;
 
-// A pre-compiled static style with a class name and its CSS.
 table Style {
   name: string (key, required);
   css: string (required);
 }
 
-// A rule for generating styles on the fly (e.g., p-4, m-10).
 table Generator {
   prefix: string (key, required);
   property: string (required);
@@ -16,7 +12,6 @@ table Generator {
   unit: string (required);
 }
 
-// A dynamic style with a map of suffixes to CSS values.
 table Dynamic {
   key: string (key, required);
   property: string (required);
@@ -28,25 +23,21 @@ table DynamicValue {
     value: string (required);
 }
 
-// A responsive breakpoint for media queries.
 table Screen {
     name: string (key, required);
     value: string (required);
 }
 
-// A pseudo-class state variant (e.g., :hover, :focus).
 table State {
     name: string (key, required);
     value: string (required);
 }
 
-// A container query breakpoint.
 table ContainerQuery {
     name: string (key, required);
     value: string (required);
 }
 
-// The root configuration object that holds the entire style system's configuration.
 table Config {
   styles: [Style];
   generators: [Generator];
@@ -56,5 +47,4 @@ table Config {
   container_queries: [ContainerQuery];
 }
 
-// We define 'Config' as the new root type for our styles.bin file.
 root_type Config;
