@@ -2,54 +2,14 @@
   position: absolute;
 }
 
-.flex {
-  display: flex;
-}
-
 .flex-col {
   flex-direction: column;
-}
-
-.font-bold {
-  font-weight: 700;
 }
 
 .grid {
   display: grid;
 }
 
-.h-screen {
-  height: 100vh;
-}
-
-.p-9 {
-  padding: 2.25rem;
-}
-
-.place-content-center {
-  place-content: center;
-}
-
-.place-content-start {
-  place-content: start;
-}
-
-.place-items-center {
-  place-items: center;
-}
-
-.place-items-start {
-  place-items: start;
-}
-
-.text-5xl {
-  font-size: 3rem;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.w-screen {
-  width: 100vw;
+.p-8 {
+  padding: 2rem;
 }

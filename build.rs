@@ -12,18 +12,18 @@ struct TomlConfig {
     dynamic: HashMap<String, HashMap<String, String>>,
     #[serde(default)]
     generators: HashMap<String, GeneratorConfig>,
+    #[serde(default)]
+    screens: HashMap<String, String>,
+    #[serde(default)]
+    states: HashMap<String, String>,
+    #[serde(default)]
+    container_queries: HashMap<String, String>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
 struct GeneratorConfig {
     multiplier: f32,
     unit: String,
-}
-
-#[derive(Debug, Clone)]
-struct StyleRecord {
-    name: String,
-    css: String,
 }
 
 fn main() {
@@ -48,15 +48,26 @@ fn main() {
     let toml_content = fs::read_to_string(toml_path).expect("Failed to read styles.toml");
     let toml_data: TomlConfig = toml::from_str(&toml_content).expect("Failed to parse styles.toml");
 
-    let mut precompiled_styles = Vec::new();
+    let mut builder = FlatBufferBuilder::new();
 
+    // Process static styles
+    let mut style_offsets = Vec::new();
     for (name, css) in toml_data.static_styles {
-        precompiled_styles.push(StyleRecord { name, css });
+        let name_offset = builder.create_string(&name);
+        let css_offset = builder.create_string(&css);
+        let table_wip = builder.start_table();
+        builder.push_slot(4, name_offset, WIPOffset::new(0));
+        builder.push_slot(6, css_offset, WIPOffset::new(0));
+        let style_offset = builder.end_table(table_wip);
+        style_offsets.push(style_offset);
     }
 
+    // Process dynamic styles
+    let mut dynamic_offsets = Vec::new();
     for (key, values) in toml_data.dynamic {
         let parts: Vec<&str> = key.split('|').collect();
-        let (prefixes, property) = match parts.len() {
+        let (_prefixes, property) = match parts.len() {
+            1 => (vec![parts[0]], parts[0]),
             2 => (vec![parts[0]], parts[1]),
             3 => (vec![parts[0], parts[1]], parts[2]),
             _ => {
@@ -65,36 +76,30 @@ fn main() {
             }
         };
 
-        for prefix in prefixes {
-            for (suffix, value) in &values {
-                let name = if suffix.is_empty() {
-                    prefix.to_string()
-                } else {
-                    format!("{}-{}", prefix, suffix)
-                };
-                let css = format!("{}: {}", property, value);
-                precompiled_styles.push(StyleRecord { name, css });
-            }
+        let key_offset = builder.create_string(&key);
+        let property_offset = builder.create_string(property);
+
+        let mut value_offsets = Vec::new();
+        for (suffix, value) in values {
+            let suffix_offset = builder.create_string(&suffix);
+            let value_offset = builder.create_string(&value);
+            let table_wip = builder.start_table();
+            builder.push_slot(4, suffix_offset, WIPOffset::new(0));
+            builder.push_slot(6, value_offset, WIPOffset::new(0));
+            let value_offset = builder.end_table(table_wip);
+            value_offsets.push(value_offset);
         }
-    }
+        let values_vec = builder.create_vector(&value_offsets);
 
-    precompiled_styles.sort_by(|a, b| a.name.cmp(&b.name));
-
-    let mut builder = FlatBufferBuilder::new();
-
-    let mut style_offsets = Vec::new();
-    for style in &precompiled_styles {
-        let name_offset = builder.create_string(&style.name);
-        let css_offset = builder.create_string(&style.css);
-        
         let table_wip = builder.start_table();
-        builder.push_slot(4, name_offset, WIPOffset::new(0));
-        builder.push_slot(6, css_offset, WIPOffset::new(0));
-        let style_offset = builder.end_table(table_wip);
-        style_offsets.push(style_offset);
+        builder.push_slot(4, key_offset, WIPOffset::new(0));
+        builder.push_slot(6, property_offset, WIPOffset::new(0));
+        builder.push_slot(8, values_vec, WIPOffset::new(0));
+        let dynamic_offset = builder.end_table(table_wip);
+        dynamic_offsets.push(dynamic_offset);
     }
-    let styles_vec = builder.create_vector(&style_offsets);
 
+    // Process generators
     let mut generator_offsets = Vec::new();
     for (key, config) in toml_data.generators {
         let parts: Vec<&str> = key.split('|').collect();
@@ -102,11 +107,11 @@ fn main() {
             2 => (vec![parts[0]], parts[1]),
             3 => (vec![parts[0], parts[1]], parts[2]),
             _ => {
-                 println!("cargo:warning=Invalid generator key format in styles.toml: '{}'. Skipping.", key);
+                println!("cargo:warning=Invalid generator key format in styles.toml: '{}'. Skipping.", key);
                 continue;
             }
         };
-        
+
         for prefix in prefixes {
             let prefix_offset = builder.create_string(prefix);
             let property_offset = builder.create_string(property_str);
@@ -121,11 +126,59 @@ fn main() {
             generator_offsets.push(gen_offset);
         }
     }
-    let generators_vec = builder.create_vector(&generator_offsets);
 
+    // Process screens
+    let mut screen_offsets = Vec::new();
+    for (name, value) in toml_data.screens {
+        let name_offset = builder.create_string(&name);
+        let value_offset = builder.create_string(&value);
+        let table_wip = builder.start_table();
+        builder.push_slot(4, name_offset, WIPOffset::new(0));
+        builder.push_slot(6, value_offset, WIPOffset::new(0));
+        let screen_offset = builder.end_table(table_wip);
+        screen_offsets.push(screen_offset);
+    }
+
+    // Process states
+    let mut state_offsets = Vec::new();
+    for (name, value) in toml_data.states {
+        let name_offset = builder.create_string(&name);
+        let value_offset = builder.create_string(&value);
+        let table_wip = builder.start_table();
+        builder.push_slot(4, name_offset, WIPOffset::new(0));
+        builder.push_slot(6, value_offset, WIPOffset::new(0));
+        let state_offset = builder.end_table(table_wip);
+        state_offsets.push(state_offset);
+    }
+
+    // Process container queries
+    let mut cq_offsets = Vec::new();
+    for (name, value) in toml_data.container_queries {
+        let name_offset = builder.create_string(&name);
+        let value_offset = builder.create_string(&value);
+        let table_wip = builder.start_table();
+        builder.push_slot(4, name_offset, WIPOffset::new(0));
+        builder.push_slot(6, value_offset, WIPOffset::new(0));
+        let cq_offset = builder.end_table(table_wip);
+        cq_offsets.push(cq_offset);
+    }
+
+    // Create vectors for flatbuffers
+    let styles_vec = builder.create_vector(&style_offsets);
+    let dynamic_vec = builder.create_vector(&dynamic_offsets);
+    let generators_vec = builder.create_vector(&generator_offsets);
+    let screens_vec = builder.create_vector(&screen_offsets);
+    let states_vec = builder.create_vector(&state_offsets);
+    let cq_vec = builder.create_vector(&cq_offsets);
+
+    // Create Config table
     let table_wip = builder.start_table();
     builder.push_slot(4, styles_vec, WIPOffset::new(0));
     builder.push_slot(6, generators_vec, WIPOffset::new(0));
+    builder.push_slot(8, dynamic_vec, WIPOffset::new(0));
+    builder.push_slot(10, screens_vec, WIPOffset::new(0));
+    builder.push_slot(12, states_vec, WIPOffset::new(0));
+    builder.push_slot(14, cq_vec, WIPOffset::new(0));
     let config_root = builder.end_table(table_wip);
 
     builder.finish(config_root, None);
