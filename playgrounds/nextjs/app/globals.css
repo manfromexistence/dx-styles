@@ -10,6 +10,8 @@
   display: grid;
 }
 
-.p-8 {
-  padding: 2rem;
+@media (min-width: 768px) {
+  .md\:p-5 {
+  padding: 1.25rem;
+}
 }
