@@ -2,6 +2,10 @@
   position: absolute;
 }
 
+.flex {
+  display: flex;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -18,8 +22,8 @@
   height: 100vh;
 }
 
-.p-5 {
-  padding: 1.25rem;
+.p-9 {
+  padding: 2.25rem;
 }
 
 .place-content-center {
