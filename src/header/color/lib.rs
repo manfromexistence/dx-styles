@@ -1,16 +1,3 @@
-//! # `Lolcrab`
-//!
-//! Like [`lolcat`](https://github.com/busyloop/lolcat) but with [noise](https://en.wikipedia.org/wiki/OpenSimplex_noise) and more colorful.
-//!
-//! ## Using `lolcrab` as a Library
-//!
-//! Add this to your Cargo.toml
-//!
-//! ```toml
-//! lolcrab = { version = "0.4", default-features = "false" }
-//! ```
-//!
-
 use std::f32::consts::TAU;
 use std::io::{prelude::*, Write};
 use std::{thread, time};
@@ -30,27 +17,6 @@ mod cli;
 #[cfg(feature = "cli")]
 pub use cli::{Gradient, Opt};
 
-/// # Example
-///
-/// ```
-/// # use std::error::Error;
-/// use lolcrab::Lolcrab;
-///
-/// # fn main() -> Result<(), Box<dyn Error>> {
-/// let stdout = std::io::stdout();
-/// let mut stdout = stdout.lock();
-///
-/// // Initialize Lolcrab using default gradient and default noise
-/// let mut lol = Lolcrab::new(None, None);
-///
-/// lol.colorize_str("Lolcrab is the best", &mut stdout)?;
-///
-/// lol.set_invert(true);
-/// lol.randomize_position();
-/// lol.colorize_str("Lolcrab is the best", &mut stdout)?;
-/// # Ok(())
-/// # }
-/// ```
 pub struct Lolcrab {
     pub gradient: Box<dyn colorgrad::Gradient>,
     pub noise: Box<dyn noise::NoiseFn<f64, 2>>,
@@ -100,32 +66,26 @@ impl Lolcrab {
         }
     }
 
-    /// Noise scale. Try value between 0.01 .. 0.2
     pub fn set_noise_scale(&mut self, scale: f64) {
         self.noise_scale = scale.clamp(0.001, 0.25);
     }
 
-    /// Colorize the background if set to true
     pub fn set_invert(&mut self, invert: bool) {
         self.invert = invert;
     }
 
-    /// Tab stop width (default: 4)
     pub fn set_tab_width(&mut self, width: usize) {
         self.tab_width = width as isize;
     }
 
-    /// Animation speed (30..200)
     pub fn set_anim_speed(&mut self, speed: u8) {
         self.anim_sleep = time::Duration::from_millis(speed.clamp(30, 200) as u64);
     }
 
-    /// Animation duration (1..30)
     pub fn set_anim_duration(&mut self, duration: usize) {
         self.anim_duration = duration.clamp(1, 30);
     }
 
-    /// Linear mode
     pub fn set_linear(&mut self, b: bool) {
         self.linear = b;
     }
@@ -135,19 +95,16 @@ impl Lolcrab {
         self.shift_y = self.angle.sin() * self.distance;
     }
 
-    /// Sets angle in degrees (0..360)
     pub fn set_angle(&mut self, angle: f32) {
         self.angle = angle.to_radians();
         self.calc_shift();
     }
 
-    /// Sets spread (0..100)
     pub fn set_spread(&mut self, distance: f32) {
         self.distance = remap(distance, 0.0, 100.0, 0.005, 0.1);
         self.calc_shift();
     }
 
-    /// Sets color gradient offset (0..1)
     pub fn set_offset(&mut self, offset: f32) {
         self.offset = offset.clamp(0.0, 1.0);
     }
@@ -167,13 +124,11 @@ impl Lolcrab {
         self.x = 0;
     }
 
-    /// Reset noise position
     pub fn reset_position(&mut self) {
         self.x = 0;
         self.y = 0;
     }
 
-    /// Randomize noise position
     pub fn randomize_position(&mut self) {
         self.x = 0;
         self.y = fastrand::isize(-999_999..999_999);
@@ -252,7 +207,6 @@ impl Lolcrab {
         Ok(escaping)
     }
 
-    // TODO
     fn colorize_anim(&mut self, text: &[u8], out: &mut impl Write) -> std::io::Result<()> {
         let mut text_len: isize = 0;
         for g in text.graphemes() {
@@ -278,9 +232,6 @@ impl Lolcrab {
         out.flush()
     }
 
-    /// # Errors
-    ///
-    /// Will return `Err` if `out` causes I/O erros
     pub fn colorize(&mut self, text: &[u8], out: &mut impl Write) -> std::io::Result<()> {
         let mut escaping = false;
         for grapheme in text.graphemes() {
@@ -307,9 +258,6 @@ impl Lolcrab {
         out.flush()
     }
 
-    /// # Errors
-    ///
-    /// Will return `Err` if `out` causes I/O erros
     pub fn colorize_str(&mut self, text: &str, out: &mut impl Write) -> std::io::Result<()> {
         let mut escaping = false;
         for grapheme in UnicodeSegmentation::graphemes(text, true) {
@@ -336,15 +284,11 @@ impl Lolcrab {
         out.flush()
     }
 
-    /// # Errors
-    ///
-    /// Will return `Err` if `input` or `out` cause I/O errors
     pub fn colorize_read_anim(
         &mut self,
         input: &mut impl BufRead,
         out: &mut impl Write,
     ) -> std::io::Result<()> {
-        // hide the cursor
         out.write_all(b"\x1B[?25l")?;
 
         input.for_byte_line(|line| {
@@ -352,14 +296,10 @@ impl Lolcrab {
             Ok(true)
         })?;
 
-        // show the cursor
         out.write_all(b"\x1B[?25h")?;
         Ok(())
     }
 
-    /// # Errors
-    ///
-    /// Will return `Err` if `input` or `out` cause I/O errors
     pub fn colorize_read(
         &mut self,
         input: &mut impl BufRead,
@@ -453,7 +393,6 @@ fn random_color() -> Color {
     }
 }
 
-// Reference http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
 fn color_luminance(col: &Color) -> f32 {
     fn lum(t: f32) -> f32 {
         if t <= 0.03928 {
@@ -466,7 +405,6 @@ fn color_luminance(col: &Color) -> f32 {
     0.2126 * lum(col.r) + 0.7152 * lum(col.g) + 0.0722 * lum(col.b)
 }
 
-// Map t from range [a, b] to range [c, d]
 fn remap(t: f32, a: f32, b: f32, c: f32, d: f32) -> f32 {
     (t - a) * ((d - c) / (b - a)) + c
 }
@@ -518,8 +456,6 @@ mod tests {
         lol.reset_col();
         lol.colorize_str("  ", &mut out).unwrap();
         assert_eq!(lol.x, 2);
-
-        // Tab characters
 
         lol.reset_col();
         lol.colorize_str("\t", &mut out).unwrap();

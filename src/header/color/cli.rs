@@ -82,11 +82,9 @@ fn build_gradient(colors: &[&str]) -> Box<dyn colorgrad::Gradient> {
     disable_version_flag = true
 )]
 pub struct Opt {
-    /// Files to read
     #[arg(name = "File", default_value = "-", value_parser = clap::value_parser!(path::PathBuf))]
     pub files: Vec<path::PathBuf>,
 
-    /// Set color gradient
     #[arg(
         short,
         long,
@@ -97,75 +95,57 @@ pub struct Opt {
     )]
     pub gradient: Gradient,
 
-    /// Show all preset gradients
     #[arg(long)]
     pub presets: bool,
 
-    /// Custom gradient in CSS gradient format
     #[arg(short = 'c', long, value_name = "CSS Gradient")]
     pub custom: Option<String>,
 
-    /// Sharp gradient
     #[arg(long, value_name = "NUM")]
     pub sharp: Option<u8>,
 
-    /// Noise scale (0.01..0.1)
     #[arg(short, long, default_value = "0.034", value_name = "FLOAT")]
     pub scale: f64,
 
-    /// Random seed [default: random]
     #[arg(short = 'S', long, value_name = "NUM")]
     pub seed: Option<u64>,
 
-    /// Colorize the background
     #[arg(short = 'i', long)]
     pub invert: bool,
 
-    /// Use random colors as custom gradient (1..15)
     #[arg(short = 'r', long, value_name = "NUM", value_parser = clap::value_parser!(u8).range(1..=15))]
     pub random_colors: Option<u8>,
 
-    /// Lolcat mode (equal to: --linear --gradient lolcat)
     #[arg(short = 'L', long)]
     pub lolcat: bool,
 
-    /// Enable animation mode
     #[arg(short = 'a', long)]
     pub animate: bool,
 
-    /// Animation duration (1..30) [default: 5]
     #[arg(short = 'd', long, value_name = "NUM")]
     pub duration: Option<u8>,
 
-    /// Animation speed (30..200) [default: 150]
     #[arg(long)]
     pub speed: Option<u8>,
 
-    /// Activate linear mode
     #[arg(short = 'l', long, help_heading = Some("Linear Mode"))]
     pub linear: bool,
 
-    /// Angle in degrees (0..360) [default: random]
     #[arg(short = 'A', long, value_name = "ANGLE", help_heading = Some("Linear Mode"))]
     pub angle: Option<f32>,
 
-    /// Gradient spread (0..100) [default: 13]
     #[arg(long, help_heading = Some("Linear Mode"))]
     pub spread: Option<f32>,
 
-    /// Gradient offset (0..1) [default: random]
     #[arg(long, help_heading = Some("Linear Mode"))]
     pub offset: Option<f32>,
 
-    /// Print config file location
     #[arg(long)]
     pub config_file: bool,
 
-    /// Print help
     #[arg(short = 'h', long)]
     pub help: bool,
 
-    /// Print version
     #[arg(short = 'V', long)]
     pub version: bool,
 }
