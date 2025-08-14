@@ -1,4 +1,3 @@
-// manfromexistence/dx-styles/dx-styles-7735b0e55b9f95aa5e4f4cc8f86c68e98e63c6c3/src/engine.rs
 use lru::LruCache;
 use std::collections::HashMap;
 use std::fs;
@@ -37,7 +36,10 @@ impl StyleEngine {
                 let name = style.name();
                 let css = style.css();
                 if !name.is_empty() && !css.is_empty() {
-                    precompiled.insert(name.to_string(), css.to_string());
+                    precompiled.insert(
+                        name.to_string(),
+                        css.trim_end().trim_end_matches(';').to_string(),
+                    );
                 }
             }
         }
@@ -56,11 +58,14 @@ impl StyleEngine {
                         } else {
                             format!("{}-{}", key, suffix)
                         };
-                        if name.is_empty() {
-                            continue;
+                        if !name.is_empty() {
+                            let css = format!(
+                                "{}: {}",
+                                property,
+                                value_str.trim_end().trim_end_matches(';')
+                            );
+                            precompiled.insert(name, css);
                         }
-                        let css = format!("{}: {}", property, value_str);
-                        precompiled.insert(name, css);
                     }
                 }
             }
@@ -68,45 +73,22 @@ impl StyleEngine {
 
         let screens = config.screens().map_or_else(HashMap::new, |s| {
             s.iter()
-                .filter_map(|screen| {
-                    let name = screen.name();
-                    let value = screen.value();
-                    if !name.is_empty() && !value.is_empty() {
-                        Some((name.to_string(), value.to_string()))
-                    } else {
-                        None
-                    }
-                })
+                .map(|screen| (screen.name().to_string(), screen.value().to_string()))
                 .collect()
         });
 
         let states = config.states().map_or_else(HashMap::new, |s| {
             s.iter()
-                .filter_map(|state| {
-                    let name = state.name();
-                    let value = state.value();
-                    if !name.is_empty() && !value.is_empty() {
-                        Some((name.to_string(), value.to_string()))
-                    } else {
-                        None
-                    }
-                })
+                .map(|state| (state.name().to_string(), state.value().to_string()))
                 .collect()
         });
 
-        let container_queries = config.container_queries().map_or_else(HashMap::new, |c| {
-            c.iter()
-                .filter_map(|cq| {
-                    let name = cq.name();
-                    let value = cq.value();
-                    if !name.is_empty() && !value.is_empty() {
-                        Some((name.to_string(), value.to_string()))
-                    } else {
-                        None
-                    }
-                })
-                .collect()
-        });
+        let container_queries =
+            config.container_queries().map_or_else(HashMap::new, |c| {
+                c.iter()
+                    .map(|cq| (cq.name().to_string(), cq.value().to_string()))
+                    .collect()
+            });
 
         Ok(Self {
             precompiled,
@@ -147,8 +129,12 @@ impl StyleEngine {
             .or_else(|| self.generate_dynamic_css(base_class));
 
         if let Some(css) = core_css {
-            let selector = format!(".{}{}", class_name.replace(":", "\\:"), pseudo_classes);
-            let css_body = format!("{} {{\n  {}\n}}", selector, css);
+            let selector = format!(
+                ".{}{}",
+                class_name.replace(":", "\\:").replace("@", "\\@"),
+                pseudo_classes
+            );
+            let css_body = format!("{} {{\n  {};\n}}", selector, css);
 
             let final_css = media_queries.iter().rfold(css_body, |acc, mq| {
                 let indented_acc = acc
@@ -201,8 +187,7 @@ impl StyleEngine {
                     } else {
                         format!("{}{}", final_value, unit)
                     };
-                    let core_css = Some(format!("{}: {};", property, css_value));
-                    return core_css;
+                    return Some(format!("{}: {}", property, css_value));
                 }
             }
         }

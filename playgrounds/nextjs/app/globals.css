@@ -1,17 +1,17 @@
 @container (min-width: 42rem) {
-  .@2xl\:text-3xl {
+  .\@2xl\:text-3xl {
     font-size: 1.875rem;
   }
 }
 
 @container (min-width: 32rem) {
-  .@lg\:text-2xl {
+  .\@lg\:text-2xl {
     font-size: 1.5rem;
   }
 }
 
 @container (min-width: 24rem) {
-  .@sm\:text-xl {
+  .\@sm\:text-xl {
     font-size: 1.25rem;
   }
 }
@@ -44,6 +44,10 @@
   height: 100vh;
 }
 
+.hover\:mt-5:hover {
+  margin-top: 1.25rem;
+}
+
 .max-w-5xl {
   max-width: 64rem;
 }
@@ -70,10 +74,6 @@
 
 .mt-2 {
   margin-top: 0.5rem;
-}
-
-.mt-4 {
-  margin-top: 1rem;
 }
 
 .mt-8 {

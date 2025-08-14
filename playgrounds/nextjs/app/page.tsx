@@ -5,7 +5,7 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl font-bold">
           Dx Styles Container Queries
         </h1>
-        <p className="mt-4 text-lg text-gray-600">
+        <p className="hover:mt-5 text-lg text-gray-600">
           Resize the container below by dragging its bottom-right corner. The
           inner element will change its background color and text size based on
           the container's width, not the viewport's width.
